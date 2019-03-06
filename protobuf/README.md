@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.com/uilianries/conan-protobuf-example.svg?branch=master)](https://travis-ci.com/uilianries/conan-protobuf-example)
-[![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
 # Conan Protobuf Example
 
@@ -23,5 +22,3 @@ To build this project using cmake:
 - C++ compiler with C++11 support (Protobuf requirement)
 - Conan >=1.9.1
 
-#### License
-[MIT](LICENSE)
