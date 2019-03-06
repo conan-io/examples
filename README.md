@@ -11,7 +11,7 @@ Example how to use Conan Workspaces.
 
 Documentation: https://docs.conan.io/en/latest/developing_packages/workspaces.html
 
-#### [Protobuf](protobuf)
+#### [Serializing your data with Protobuf](serializing-your-data-with-protobuf)
 
 Demonstrate how to use Protobuf to serialize data between C++ and Python.
 
