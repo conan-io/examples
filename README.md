@@ -23,6 +23,5 @@ Demonstrate how to use Folly to validate an URI using Futures, FBString, Executo
 
 Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
-
 #### LICENSE
 [MIT](LICENSE)
