@@ -8,7 +8,7 @@
 To build this project using cmake:
 
     git clone https://github.com/conan-io/examples.git conan-examples
-    cd conan-examples/protobuf/sensor
+    cd conan-examples/libraries/protobuf/serialization
     mkdir build && cd build
     conan install ..
     cmake ..

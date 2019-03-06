@@ -9,7 +9,7 @@
 To build this project using cmake:
 
     git clone https://github.com/conan-io/examples.git conan-examples
-    cd conan-examples/folly/future
+    cd conan-examples/libraries/folly/basic
     mkdir build && cd build
     conan install ..
     cmake ..
