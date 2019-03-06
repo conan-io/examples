@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/uilianries/conan-protobuf-example.svg?branch=master)](https://travis-ci.com/uilianries/conan-protobuf-example)
-
 # Conan Protobuf Example
 
 ## Protobuf example using Conan for blog post
@@ -9,8 +7,8 @@
 #### How to build
 To build this project using cmake:
 
-    git clone https://github.com/uilianries/conan-protobuf-example.git
-    cd conan-protobuf-example
+    git clone https://github.com/conan-io/examples.git conan-examples
+    cd conan-examples/protobuf
     mkdir build && cd build
     conan install ..
     cmake ..
@@ -21,4 +19,3 @@ To build this project using cmake:
 - CMake >=3.1.3
 - C++ compiler with C++11 support (Protobuf requirement)
 - Conan >=1.9.1
-
