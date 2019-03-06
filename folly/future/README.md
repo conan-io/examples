@@ -1,21 +1,22 @@
-# Conan Protobuf Example
+# Conan Folly Example
 
-## Protobuf example using Conan for blog post
+## Folly example using Conan for blog post
 
 - Conan.io blog: https://blog.conan.io
+- Blog post about Folly: https://blog.conan.io/2018/11/19/Using-Facebook-Folly-with-Conan.html
 
 #### How to build
 To build this project using cmake:
 
     git clone https://github.com/conan-io/examples.git conan-examples
-    cd conan-examples/protobuf/sensor
+    cd conan-examples/folly/future
     mkdir build && cd build
     conan install ..
     cmake ..
     cmake --build .
-    bin/sensor
+    bin/folly_example
 
 #### Requirements
 - CMake >=3.1.3
-- C++ compiler with C++11 support (Protobuf requirement)
+- C++ compiler with C++14 support (Folly requirement)
 - Conan >=1.9.1
