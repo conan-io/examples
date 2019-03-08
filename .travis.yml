@@ -12,27 +12,15 @@ matrix:
         <<: *linux
         install:
           - .ci/travis/install.sh
-          - pip install protobuf
         before_script:
           - conan profile new default --detect
           - conan profile update settings.compiler.libcxx=libstdc++11 default
         script:
-          - cd libraries/protobuf/serialization && mkdir build && cd build
-          - conan install ..
-          - cmake .. -DCMAKE_BUILD_TYPE=Release
-          - cmake --build .
-          - bin/sensor
-          - cd ..
-          - python main.py
+          - cd libraries/protobuf/serialization
+          - python build.py
       - <<: *osx
         install:
-          - cd libraries/protobuf/serialization && mkdir build && cd build
-          - .ci/travis/install.sh
-          - pip install protobuf
+          - cd libraries/protobuf/serialization
+          - ${TRAVIS_BUILD_DIR}/.ci/travis/install.sh
         script:
-          - conan install ..
-          - cmake .. -DCMAKE_BUILD_TYPE=Release
-          - cmake --build .
-          - bin/sensor
-          - cd ..
-          - python main.py
+          - python build.py

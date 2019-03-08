@@ -4,16 +4,19 @@ environment:
     PYTHON: "C:\\Python37"
 
     matrix:
+        # Serializing your data with Protobuf
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          install:
-            - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
-            - pip.exe install conan protobuf --upgrade
-            - conan user
-          build:
-            - cd libraries/protobuf/serialization; mkdir build; cd build
-            - conan install ..
-            - cmake .. -G "Visual Studio 14 2015 Win64"
-            - cmake --build . --config Release
-            - bin/sensor.exe
-            - cd ..
-            - python main.py
+          PROJECT_DIR: libraries/protobuf/serialization
+          CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+          PROJECT_DIR: libraries/protobuf/serialization
+
+install:
+  - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
+  - pip.exe install conan --upgrade
+  - conan user
+
+test_script:
+  - cd %PROJECT_DIR%
+  - python build.py
