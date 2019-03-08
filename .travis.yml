@@ -3,42 +3,49 @@ linux: &linux
    dist: xenial
    language: python
    python: "3.7"
+   install:
+     - .ci/travis/install.sh
    before_script:
      - conan profile new default --detect
      - conan profile update settings.compiler.libcxx=libstdc++11 default
+
 osx: &osx
    os: osx
    language: generic
+   install:
+     - .ci/travis/install.sh
    before_script:
      - eval "$(pyenv init -)"
      - pyenv activate conan
+
 matrix:
    include:
-
       - stage: Serializing your data with Protobuf
-        <<: *osx
-        install:
-          - .ci/travis/install.sh
+        <<: *linux
         script:
           - cd libraries/protobuf/serialization
           - python build.py
-      - <<: *linux
-        install:
-          - .ci/travis/install.sh
+      - <<: *osx
         script:
           - cd libraries/protobuf/serialization
           - python build.py
 
       - stage: Using Facebook Folly with Conan
-        <<: *osx
-        install:
-          - .ci/travis/install.sh
+        <<: *linux
         script:
           - cd libraries/folly/basic
           - python build.py
-      - <<: *linux
-        install:
-          - .ci/travis/install.sh
+      - <<: *osx
         script:
           - cd libraries/folly/basic
+          - python build.py
+
+      - stage: Conan Workspaces
+        <<: *linux
+        script:
+          - cd features/wokspace/cmake
+          - python build.py
+      - <<: *osx
+        script:
+          - cd features/wokspace/cmake
           - python build.py
