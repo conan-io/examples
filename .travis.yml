@@ -19,19 +19,19 @@ matrix:
         script:
           - cd libraries/protobuf/serialization && mkdir build && cd build
           - conan install ..
-          - cmake ..
+          - cmake .. -DCMAKE_BUILD_TYPE=Release
           - cmake --build .
           - bin/sensor
           - cd ..
           - python main.py
       - <<: *osx
         install:
+          - cd libraries/protobuf/serialization && mkdir build && cd build
           - .ci/travis/install.sh
           - pip install protobuf
         script:
-          - cd libraries/protobuf/serialization && mkdir build && cd build
           - conan install ..
-          - cmake ..
+          - cmake .. -DCMAKE_BUILD_TYPE=Release
           - cmake --build .
           - bin/sensor
           - cd ..

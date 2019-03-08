@@ -1,0 +1,19 @@
+build: false
+
+environment:
+    PYTHON: "C:\\Python37"
+
+    matrix:
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+          install:
+            - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
+            - pip.exe install conan protobuf --upgrade
+            - conan user
+          build:
+            - cd libraries/protobuf/serialization; mkdir build; cd build
+            - conan install ..
+            - cmake .. -G "Visual Studio 14 2015 Win64"
+            - cmake --build . --config Release
+            - bin/sensor.exe
+            - cd ..
+            - python main.py
