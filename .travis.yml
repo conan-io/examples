@@ -3,6 +3,9 @@ linux: &linux
    dist: xenial
    language: python
    python: "3.7"
+   before_script:
+     - conan profile new default --detect
+     - conan profile update settings.compiler.libcxx=libstdc++11 default
 osx: &osx
    os: osx
    language: generic
@@ -17,14 +20,25 @@ matrix:
           - pip install protobuf
         script:
           - python build.py
-
       - <<: *linux
         install:
           - .ci/travis/install.sh
           - pip install protobuf
-        before_script:
-          - conan profile new default --detect
-          - conan profile update settings.compiler.libcxx=libstdc++11 default
         script:
           - cd libraries/protobuf/serialization
+          - python build.py
+
+      - stage: Using Facebook Folly with Conan
+        <<: *osx
+        install:
+          - cd libraries/folly/basic
+          - ${TRAVIS_BUILD_DIR}/.ci/travis/install.sh
+        script:
+          - python build.py
+
+      - <<: *linux
+        install:
+          - .ci/travis/install.sh
+        script:
+          - cd libraries/folly/basic
           - python build.py

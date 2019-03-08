@@ -11,6 +11,10 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
           PROJECT_DIR: libraries/protobuf/serialization
+        # Using Facebook Folly with Conan
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+          PROJECT_DIR: libraries/folly/basic
 
 install:
   - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
