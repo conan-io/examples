@@ -17,8 +17,8 @@ matrix:
           - conan profile new default --detect
           - conan profile update settings.compiler.libcxx=libstdc++11 default
         script:
-          - mkdir build && cd build
-          - conan install ..
+          - cd libraries/protobuf/serialization && mkdir build && cd build
+          - conan install
           - cmake ..
           - cmake --build .
           - bin/sensor
@@ -29,7 +29,7 @@ matrix:
           - .ci/travis/install.sh
           - pip install protobuf
         script:
-          - mkdir build && cd build
+          - cd libraries/protobuf/serialization && mkdir build && cd build
           - conan install ..
           - cmake ..
           - cmake --build .
