@@ -1,0 +1,38 @@
+linux: &linux
+   os: linux
+   dist: xenial
+   language: python
+   python: "3.7"
+osx: &osx
+   os: osx
+   language: generic
+matrix:
+   include:
+      - stage: Serializing your data with Protobuf
+        <<: *linux
+        install:
+          - .ci/travis/install.sh
+          - pip install protobuf
+        before_script:
+          - conan profile new default --detect
+          - conan profile update settings.compiler.libcxx=libstdc++11 default
+        script:
+          - mkdir build && cd build
+          - conan install ..
+          - cmake ..
+          - cmake --build .
+          - bin/sensor
+          - cd ..
+          - python main.py
+      - <<: *osx
+        install:
+          - .ci/travis/install.sh
+          - pip install protobuf
+        script:
+          - mkdir build && cd build
+          - conan install ..
+          - cmake ..
+          - cmake --build .
+          - bin/sensor
+          - cd ..
+          - python main.py
