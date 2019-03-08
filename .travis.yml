@@ -18,7 +18,7 @@ matrix:
           - conan profile update settings.compiler.libcxx=libstdc++11 default
         script:
           - cd libraries/protobuf/serialization && mkdir build && cd build
-          - conan install
+          - conan install ..
           - cmake ..
           - cmake --build .
           - bin/sensor
