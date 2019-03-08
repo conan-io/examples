@@ -20,6 +20,16 @@ osx: &osx
 
 matrix:
    include:
+      - stage: Conan Workspaces
+        <<: *linux
+        script:
+          - cd features/workspace/cmake
+          - python build.py
+      - <<: *osx
+        script:
+          - cd features/workspace/cmake
+          - python build.py
+
       - stage: Serializing your data with Protobuf
         <<: *linux
         script:
@@ -38,14 +48,4 @@ matrix:
       - <<: *osx
         script:
           - cd libraries/folly/basic
-          - python build.py
-
-      - stage: Conan Workspaces
-        <<: *linux
-        script:
-          - cd features/wokspace/cmake
-          - python build.py
-      - <<: *osx
-        script:
-          - cd features/wokspace/cmake
           - python build.py

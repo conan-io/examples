@@ -20,7 +20,7 @@ def init_folders():
 if __name__ == "__main__":
     init_folders()
     if platform.system() == "Windows":
-        cmake_generator = os.getenv("CMAKE_GENERATOR")
+        cmake_generator = os.getenv("CMAKE_GENERATOR", "Visual Studio 15 2017 Win64")
         if "Visual Studio" in cmake_generator:
             print("Windows Visual Studio build")
             os.chdir("build")
@@ -29,8 +29,9 @@ if __name__ == "__main__":
             run('cmake .. -G "%s"' % cmake_generator)
             run('cmake --build . --config Release')
             run('cmake --build . --config Debug')
-            run('Release\\app.exe')
-            run('build\\Debug\\app.exe')
+            os.chdir("..")
+            run(os.path.join('chat', 'build', 'Release', 'app.exe'))
+            run(os.path.join('chat', 'build', 'Debug', 'app.exe'))
         else:
             print("Windows MinGW build")
             os.mkdir("build_release")
@@ -59,4 +60,4 @@ if __name__ == "__main__":
         run('cmake .. -DCMAKE_BUILD_TYPE=Release')
         run('cmake --build .')
         os.chdir("..")
-        run('chat/build/Release/app')
+        run(os.path.join('chat', 'build', 'Release', 'app'))
