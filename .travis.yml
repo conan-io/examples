@@ -9,21 +9,21 @@ linux: &linux
 osx: &osx
    os: osx
    language: generic
+   before_script:
+     - source /Users/travis/.pyenv/shims/activate
 matrix:
    include:
 
       - stage: Serializing your data with Protobuf
         <<: *osx
         install:
-          - cd libraries/protobuf/serialization
-          - ${TRAVIS_BUILD_DIR}/.ci/travis/install.sh
-          - pip install protobuf
+          - .ci/travis/install.sh
         script:
+          - cd libraries/protobuf/serialization
           - python build.py
       - <<: *linux
         install:
           - .ci/travis/install.sh
-          - pip install protobuf
         script:
           - cd libraries/protobuf/serialization
           - python build.py
@@ -31,11 +31,10 @@ matrix:
       - stage: Using Facebook Folly with Conan
         <<: *osx
         install:
-          - cd libraries/folly/basic
-          - ${TRAVIS_BUILD_DIR}/.ci/travis/install.sh
+          - .ci/travis/install.sh
         script:
+          - cd libraries/folly/basic
           - python build.py
-
       - <<: *linux
         install:
           - .ci/travis/install.sh

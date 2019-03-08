@@ -5,6 +5,7 @@ import os
 import platform
 
 if __name__ == "__main__":
+    subprocess.run("pip install -U protobuf", shell=True, check=True)
     subprocess.run("mkdir build", shell=True, check=True)
     os.chdir("build")
 
