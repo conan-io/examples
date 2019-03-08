@@ -10,7 +10,8 @@ osx: &osx
    os: osx
    language: generic
    before_script:
-     - source /Users/travis/.pyenv/shims/activate
+     - eval "$(pyenv init -)"
+     - pyenv activate conan
 matrix:
    include:
 
