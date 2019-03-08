@@ -16,7 +16,7 @@ if __name__ == "__main__":
         subprocess.run("conan install ..", shell=True, check=True)
         subprocess.run('cmake .. -G "%s"' % cmake_generator, shell=True, check=True)
         subprocess.run("cmake --build . --config Release", shell=True, check=True)
-        subprocess.run("bin/sensor.exe", shell=True, check=True)
+        subprocess.run("bin\\sensor.exe", shell=True, check=True)
         open("__init__.py", 'a').close()
         os.chdir("..")
         subprocess.run("python main.py", shell=True, check=True)
