@@ -5,13 +5,12 @@ import os
 import platform
 
 if __name__ == "__main__":
-    subprocess.run("pip install protobuf", shell=True, check=True)
     subprocess.run("mkdir build", shell=True, check=True)
     os.chdir("build")
 
     if platform.system() == "Windows":
         print("Windows build")
-
+        subprocess.run("pip install protobuf", shell=True, check=True)
         cmake_generator = os.getenv("CMAKE_GENERATOR", "Visual Studio 14 2015 Win64")
         subprocess.run("conan install ..", shell=True, check=True)
         subprocess.run('cmake .. -G "%s"' % cmake_generator, shell=True, check=True)

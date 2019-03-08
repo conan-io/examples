@@ -8,19 +8,23 @@ osx: &osx
    language: generic
 matrix:
    include:
+
       - stage: Serializing your data with Protobuf
-        <<: *linux
+        <<: *osx
+        install:
+          - cd libraries/protobuf/serialization
+          - ${TRAVIS_BUILD_DIR}/.ci/travis/install.sh
+          - pip install protobuf
+        script:
+          - python build.py
+
+      - <<: *linux
         install:
           - .ci/travis/install.sh
+          - pip install protobuf
         before_script:
           - conan profile new default --detect
           - conan profile update settings.compiler.libcxx=libstdc++11 default
         script:
           - cd libraries/protobuf/serialization
-          - python build.py
-      - <<: *osx
-        install:
-          - cd libraries/protobuf/serialization
-          - ${TRAVIS_BUILD_DIR}/.ci/travis/install.sh
-        script:
           - python build.py
