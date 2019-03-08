@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
         cmake_generator = os.getenv("CMAKE_GENERATOR", "Visual Studio 14 2015 Win64")
         subprocess.run("conan install ..", shell=True, check=True)
-        subprocess.run("cmake .. -G %s" % cmake_generator, shell=True, check=True)
+        subprocess.run('cmake .. -G "%s"' % cmake_generator, shell=True, check=True)
         subprocess.run("cmake --build . --config Release", shell=True, check=True)
         subprocess.run("bin/sensor.exe", shell=True, check=True)
         open("__init__.py", 'a').close()
