@@ -24,28 +24,28 @@ matrix:
         <<: *linux
         script:
           - cd features/workspace/cmake
-          - python build.py
+          - ./build/.sh
       - <<: *osx
         script:
           - cd features/workspace/cmake
-          - python build.py
+          - ./build/.sh
 
       - stage: Serializing your data with Protobuf
         <<: *linux
         script:
           - cd libraries/protobuf/serialization
-          - python build.py
+          - ./build/.sh
       - <<: *osx
         script:
           - cd libraries/protobuf/serialization
-          - python build.py
+          - ./build/.sh
 
       - stage: Using Facebook Folly with Conan
         <<: *linux
         script:
           - cd libraries/folly/basic
-          - python build.py
+          - ./build/.sh
       - <<: *osx
         script:
           - cd libraries/folly/basic
-          - python build.py
+          - ./build/.sh

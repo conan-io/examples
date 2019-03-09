@@ -30,4 +30,4 @@ install:
 
 test_script:
   - cd %PROJECT_DIR%
-  - python build.py
+  - build.bat
