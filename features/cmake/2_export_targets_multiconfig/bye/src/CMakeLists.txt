@@ -7,10 +7,26 @@ set(TARGET_NAME ${PROJECT_NAME})
 set(${TARGET_NAME}_SRC bye.cpp)
 set(${TARGET_NAME}_HEADERS bye.h)
 set(TARGETS_TO_FIND hello)
-set(DEBUG_LIBRARY_SUFFIX "")
+set(DEBUG_LIBRARY_SUFFIX "d")
 
 
 # GENERIC PART
+
+if(CONAN_LINK_RUNTIME)
+    foreach(flag CMAKE_C_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELEASE
+                 CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO
+                 CMAKE_C_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_MINSIZEREL)
+        if(DEFINED ${flag})
+            string(REPLACE "/MD" ${CONAN_LINK_RUNTIME} ${flag} "${${flag}}")
+        endif()
+    endforeach()
+    foreach(flag CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG)
+        if(DEFINED ${flag})
+            string(REPLACE "/MDd" ${CONAN_LINK_RUNTIME} ${flag} "${${flag}}")
+        endif()
+    endforeach()
+endif()
+
 add_library(${TARGET_NAME} ${${TARGET_NAME}_SRC} ${${TARGET_NAME}_HEADERS})
 set_target_properties(${TARGET_NAME} PROPERTIES
                        PUBLIC_HEADER "${${TARGET_NAME}_HEADERS}"
