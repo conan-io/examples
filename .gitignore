@@ -1,3 +1,4 @@
 *.pyc
 .idea
 **/test_package/build
+**/project/build
