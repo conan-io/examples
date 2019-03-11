@@ -1,5 +1,5 @@
-Using unobtrusive CMake exported targets with Conan and find_package
-=====================================================================
+Using unobtrusive multi-config CMake with exported targets & find_package
+=========================================================================
 
 In this example
 ---------------
