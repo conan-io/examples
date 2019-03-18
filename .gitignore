@@ -35,8 +35,10 @@ test_package/build/*
 build/*
 *.pyc
 tmp/
-libraries/protobuf/serialization/build/*
-libraries/folly/basic/build/*
+features/workspace/build*
+libraries/protobuf/serialization/build*
+libraries/folly/basic/build*
+libraries/poco/md5/build*
 
 # IDE
 .idea/*
