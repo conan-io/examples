@@ -20,6 +20,16 @@ osx: &osx
 
 matrix:
    include:
+      - stage: Conan Getting Started
+        <<: *linux
+        script:
+          - cd libraries/poco/md5
+          - ./build.sh
+      - <<: *osx
+        script:
+          - cd libraries/poco/md5
+          - ./build.sh
+
       - stage: Conan Workspaces
         <<: *linux
         script:
