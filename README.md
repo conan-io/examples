@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/conan-io/examples.svg?branch=master)](https://travis-ci.com/conan-io/examples)
+[![Build Status](https://travis-ci.org/conan-io/examples.svg?branch=master)](https://travis-ci.org/conan-io/examples)
 [![Build Status AppVeyor](https://ci.appveyor.com/api/projects/status/github/conan-io/examples?svg=true)](https://ci.appveyor.com/project/ConanCIintegration/examples)
 
 # Conan Examples
@@ -6,6 +6,12 @@
 ## Several conan examples, to extend the docs.
 
 # Examples
+
+#### [Getting started with Conan](libraries/poco/md5)
+
+Example how to use Conan to consume binaries.
+
+Documentation: https://docs.conan.io/en/latest/getting_started.html
 
 #### [Workspace](features/workspace)
 
