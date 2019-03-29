@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
 pushd hello
 conan create . user/channel -s build_type=Debug
 conan create . user/channel -s build_type=Release
@@ -10,16 +13,20 @@ popd
 
 pushd project
 
-rd /s /q "build"
+rm -rf "build"
 mkdir build
-pushd BUILD
+pushd build
+
 conan install .. -s build_type=Debug
 conan install .. -s build_type=Release
-cmake .. -G "Visual Studio 15 2017 Win64"
-cmake --build . --config Debug
-cmake --build . --config Release
-Debug\example.exe
-Release\example.exe
+
+cmake .. -DCMAKE_BUILD_TYPE=Debug
+cmake --build .
+./example
+
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+./example
 
 popd
 popd
