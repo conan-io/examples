@@ -49,6 +49,6 @@ Cons
 How to try it
 -------------
 
- - Open the "run.bat" or "run.sh" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
+ - Open the "build.bat" or "build.sh" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
  and will build the "project" changing the build_type and verifying that the linked dependencies are correct for the selected build_type.
  - If you are using Linux or Mac you can use almost the same steps in the run.bat adapted to your OSS
