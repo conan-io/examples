@@ -20,25 +20,36 @@ osx: &osx
 
 matrix:
    include:
-     - stage: CMake reuse exported targets multiconfig.
+      - stage: CMake reuse exported targets multiconfig.
         <<: *linux
         script:
          - cd features/cmake/find_package/exported_targets_multiconfig
          - ./build.sh
-     - <<: *osx
+      - <<: *osx
         script:
          - cd features/cmake/find_package/exported_targets_multiconfig
          - ./build.sh
-     - stage: CMake cmake_find_package_multi generator
+      - stage: CMake cmake_find_package_multi generator
         <<: *linux
         script:
           - cd features/cmake/find_package/find_cmake_multi_generator_targets
           - ./build.sh
-     - <<: *osx
+      - <<: *osx
         script:
           - cd features/cmake/find_package/find_cmake_multi_generator_targets
           - ./build.sh
-     - stage: Conan Workspaces
+      - stage: Conan Getting Started
+        <<: *linux
+        script:
+          - cd libraries/poco/md5
+          - ./build.sh
+      - <<: *osx
+        script:
+          - cd libraries/poco/md5
+          - ./build.sh
+
+      - stage: Conan Workspaces
+
         <<: *linux
         script:
           - cd features/workspace/cmake

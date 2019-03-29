@@ -1,5 +1,7 @@
+
 **/test_package/build
 **/project*/build
+!*/build.sh
 
 # Compiled Object files
 *.slo
@@ -38,8 +40,10 @@ test_package/build/*
 build/*
 *.pyc
 tmp/
+features/workspace/build/*
 libraries/protobuf/serialization/build/*
 libraries/folly/basic/build/*
+libraries/poco/md5/build/*
 
 # IDE
 .idea/*
