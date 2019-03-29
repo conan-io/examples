@@ -4,7 +4,7 @@ Using unobtrusive multi-config CMake with cmake_find_package_generator_multi
 In this example
 ---------------
 
-We are using Conan to create for us the necessary findXXX scripts both for Release and Debug. 
+We are using Conan to create for us the necessary ``XXXConfig.cmake`` scripts both for Release and Debug. 
 Everything is based on the ``find_package`` feature and working with  multiconfig packages (Release/Debug) to avoid 
 installing the dependencies every time we change from Debug to Release in the Visual Studio IDE.
 
@@ -12,8 +12,7 @@ installing the dependencies every time we change from Debug to Release in the Vi
  - The "hello" library has a ``package_info()`` method declaring the "hello" library name for the consumers.
  - The conan recipe uses a different binary package for any ``build_type``, one package for Debug and other for Release.
  - The same for the "bye" library.
- - There are two consumer projects, one using targets (CMake 3.x) and other following the global approach (2.8), both
-   work with multiconfig.
+ - There is a project using targets (CMake 3.x) and linking with "bye" (and hello because of the transitivity)
  
 Some useful details of this example
 ------------------------------------
@@ -38,7 +37,6 @@ Pros
 - You don't need to change anything in the ``CMakeLists.txt`` related to Conan.
 - The multi-config mechanism works good, it is very comfortable, You call ``conan install`` for debug and other for Release
   and you are done.
-- It works for target approach (CMake 3) and global approach (CMake 2.8).
  
 Cons
 ----
@@ -51,6 +49,6 @@ Cons
 How to try it
 -------------
 
- - Open the "run.bat" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
+ - Open the "run.bat" or "run.sh" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
  and will build the "project" changing the build_type and verifying that the linked dependencies are correct for the selected build_type.
- 
+ - If you are using Linux or Mac you can use almost the same steps in the run.bat adapted to your OSS

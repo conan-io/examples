@@ -53,12 +53,9 @@ Cons
  - You need to build packages containing all the build_types in the same Conan binary package. The ``find_package``
  mechanism will find only one ``XXXConfig.cmake`` file, so all the ```XXXTarget-{build_type}``` have to be together.
  
- - You have to take care of adjusting the runtime in the CMakeLists.txt to avoid conflicts.
- 
- 
+
 How to try it
 -------------
 
- - Open the "run.bat" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
+ - Open the "run.bat" or "run.sh" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
  and will build the "project" changing the build_type and verifying that the linked dependencies are correct for the selected build_type.
- 
