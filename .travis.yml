@@ -20,7 +20,7 @@ osx: &osx
 
 matrix:
    include:
-     - stage: CMake reuse exported targets multiconfig
+     - stage: CMake reuse exported targets multiconfig.
        <<: *linux
        script:
          - cd features/cmake/find_package/exported_targets_multiconfig
