@@ -28,9 +28,6 @@ matrix:
       - name: Conan Workspaces
         <<: *linux
         env: FOLDER=features/workspace/cmake
-      - name: Python requires
-        <<: *linux
-        env: FOLDER=features/python_requires/reuse_conanfile
       - name: Serializing your data with Protobuf
         <<: *linux
         env: FOLDER=libraries/protobuf/serialization
@@ -46,9 +43,6 @@ matrix:
       - name: Conan Workspaces
         <<: *osx
         env: FOLDER=features/workspace/cmake
-      - name: Python requires
-        <<: *osx
-        env: FOLDER=features/python_requires/reuse_conanfile
       - name: Serializing your data with Protobuf
         <<: *osx
         env: FOLDER=libraries/protobuf/serialization
