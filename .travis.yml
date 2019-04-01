@@ -40,6 +40,16 @@ matrix:
           - cd features/workspace/cmake
           - ./build.sh
 
+      - stage: Python requires
+        <<: *linux
+        script:
+          - cd features/python_requires/reuse_conanfile
+          - ./build.sh
+      - <<: *osx
+        script:
+          - cd features/python_requires/reuse_conanfile
+          - ./build.sh
+
       - stage: Serializing your data with Protobuf
         <<: *linux
         script:
