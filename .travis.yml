@@ -58,4 +58,5 @@ matrix:
 
 script:
  - cd $EXAMPLE_FOLDER
+ - chmod +x build.sh
  - ./build.sh
