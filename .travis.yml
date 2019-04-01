@@ -20,52 +20,42 @@ osx: &osx
 
 matrix:
    include:
-      - stage: Conan Getting Started
+      # All Linux first in parallel
+      - stage: Linux builds
+        name: Getting started
         <<: *linux
-        script:
-          - cd libraries/poco/md5
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd libraries/poco/md5
-          - ./build.sh
+        env: FOLDER=ibraries/poco/md5
+      - name: Conan Workspaces
+        <<: *linux
+        env: FOLDER=features/workspace/cmake
+      - name: Python requires
+        <<: *linux
+        env: FOLDER=features/python_requires/reuse_conanfile
+      - name: Serializing your data with Protobuf
+        <<: *linux
+        env: FOLDER=libraries/protobuf/serialization
+      - name: Using Facebook Folly with Conan
+        <<: *linux
+        env: FOLDER: libraries/folly/basic
 
-      - stage: Conan Workspaces
-        <<: *linux
-        script:
-          - cd features/workspace/cmake
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd features/workspace/cmake
-          - ./build.sh
+      # All Macs later
+      - stage: Macos builds
+        name: Getting started
+        <<: *osx
+        env: FOLDER=ibraries/poco/md5
+      - name: Conan Workspaces
+        <<: *osx
+        env: FOLDER=features/workspace/cmake
+      - name: Python requires
+        <<: *osx
+        env: FOLDER=features/python_requires/reuse_conanfile
+      - name: Serializing your data with Protobuf
+        <<: *osx
+        env: FOLDER=libraries/protobuf/serialization
+      - name: Using Facebook Folly with Conan
+        <<: *osx
+        env: FOLDER: libraries/folly/basic
 
-      - stage: Python requires
-        <<: *linux
-        script:
-          - cd features/python_requires/reuse_conanfile
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd features/python_requires/reuse_conanfile
-          - ./build.sh
-
-      - stage: Serializing your data with Protobuf
-        <<: *linux
-        script:
-          - cd libraries/protobuf/serialization
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd libraries/protobuf/serialization
-          - ./build.sh
-
-      - stage: Using Facebook Folly with Conan
-        <<: *linux
-        script:
-          - cd libraries/folly/basic
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd libraries/folly/basic
-          - ./build.sh
+script:
+ - cd $EXAMPLE_FOLDER
+ - ./build.sh
