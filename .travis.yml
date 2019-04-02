@@ -24,7 +24,7 @@ matrix:
       - stage: Linux builds
         name: Getting started
         <<: *linux
-        env: FOLDER=ibraries/poco/md5
+        env: FOLDER=libraries/poco/md5
       - name: Conan Workspaces
         <<: *linux
         env: FOLDER=features/workspace/cmake
@@ -39,7 +39,7 @@ matrix:
       - stage: Macos builds
         name: Getting started
         <<: *osx
-        env: FOLDER=ibraries/poco/md5
+        env: FOLDER=libraries/poco/md5
       - name: Conan Workspaces
         <<: *osx
         env: FOLDER=features/workspace/cmake
@@ -51,6 +51,6 @@ matrix:
         env: FOLDER: libraries/folly/basic
 
 script:
- - cd $EXAMPLE_FOLDER
+ - cd "${FOLDER}"
  - chmod +x build.sh
  - ./build.sh
