@@ -33,7 +33,7 @@ matrix:
         env: FOLDER=libraries/protobuf/serialization
       - name: Using Facebook Folly with Conan
         <<: *linux
-        env: FOLDER: libraries/folly/basic
+        env: FOLDER=libraries/folly/basic
 
       # All Macs later
       - stage: Macos builds
@@ -48,7 +48,7 @@ matrix:
         env: FOLDER=libraries/protobuf/serialization
       - name: Using Facebook Folly with Conan
         <<: *osx
-        env: FOLDER: libraries/folly/basic
+        env: FOLDER=libraries/folly/basic
 
 script:
  - cd "${FOLDER}"
