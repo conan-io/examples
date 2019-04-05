@@ -40,6 +40,16 @@ matrix:
           - cd features/workspace/cmake
           - ./build.sh
 
+      - stage: Package development flow
+        <<: *linux
+        script:
+          - cd features/package_development_flow
+          - python demo.py
+      - <<: *osx
+        script:
+          - cd features/package_development_flow
+          - python demo.py
+
       - stage: Serializing your data with Protobuf
         <<: *linux
         script:

@@ -13,6 +13,12 @@ Example how to use Conan to consume binaries.
 
 Documentation: https://docs.conan.io/en/latest/getting_started.html
 
+#### [Package development flow](features/package_development_flow)
+
+Example how to use Conan commands to develop a package recipe.
+
+Documentation: https://docs.conan.io/en/latest/developing_packages/package_dev_flow.html
+
 #### [Workspace](features/workspace)
 
 Example how to use Conan Workspaces.
@@ -33,8 +39,8 @@ Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
 #### How can I reproduce the build steps?
 
-All our examples can be built on Windows, Linux and Mac. If you are insterested to reproduce
-the examples in your enviroment, please follow the CI scripts:
+All our examples can be built on Windows, Linux and Mac. If you are interested to reproduce
+the examples in your environment, please follow the CI scripts:
 
 * Linux / MacOS: [travis.yml](.travis.yml)
 * Windows: [appveyor](appveyor.yml)
