@@ -1,11 +1,11 @@
-Using unobtrusive multi-config CMake with cmake_find_package_generator_multi
-============================================================================
+Using non-intrusive multi-config CMake with cmake_find_package_generator_multi
+==============================================================================
 
 In this example
 ---------------
 
 We are using Conan to create for us the necessary ``XXXConfig.cmake`` scripts both for Release and Debug. 
-Everything is based on the ``find_package`` feature and working with  multiconfig packages (Release/Debug) to avoid 
+Everything is based on the ``find_package`` feature and working with  multi-config packages (Release/Debug) to avoid 
 installing the dependencies every time we change from Debug to Release in the Visual Studio IDE.
 
  - We have a "hello" library consumed by a "bye" library and a project that uses the "bye" function.
@@ -37,14 +37,20 @@ Pros
 - You don't need to change anything in the ``CMakeLists.txt`` related to Conan.
 - The multi-config mechanism works good, it is very comfortable, You call ``conan install`` for debug and other for Release
   and you are done.
+- The generated targets are **completely transitive** and contain all the information about the dependencies. So you need
+  call ``find_package`` for your direct dependency packages. With the classic CMake targets, you typically need to specify one ``find_package``
+  for each dependency that you need, directly or indirectly. 
+   
  
 Cons
 ----
  
- - The name of the targets that the ``cmake_find_package_multi`` generates cannot be configured. They are ``package_name::package_name``,
-   so maybe it doesn't match the "standard" find script provided by CMake and you might need to change your code or create an alias target.
- - You still have to take care of adjusting the runtime in the CMakeLists.txt to avoid conflicts. The ``cmake`` generator 
-   do it automatically, but STILL not the ``cmake_find_package`` nor ``cmake_find_package_multi``. 
+ - You have to assume that the cmake scripts created by this generator **ARE NOT** the same as the `CMake` installation modules files and they 
+   are not replaceable in most cases:
+       
+   - Because of the transitivity of the targets (you will need to change your CMakeLists if you were calling ``find_package`` for all the transitive deps)   
+   - The name of the targets and the library name to be used at `find_package(NAME)` might be different for the "official" one.
+ 
  
 How to try it
 -------------
