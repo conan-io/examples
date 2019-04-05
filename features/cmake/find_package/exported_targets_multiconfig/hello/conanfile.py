@@ -10,11 +10,6 @@ class HelloConan(ConanFile):
     generators = "cmake"
     exports_sources = "src/*"
 
-    def configure(self):
-        # it is also necessary to remove the VS runtime
-        if self.settings.compiler == "Visual Studio":
-            del self.settings.compiler.runtime
-
     def build(self):
         for bt in ("Debug", "Release"):
             cmake = CMake(self, build_type=bt)
