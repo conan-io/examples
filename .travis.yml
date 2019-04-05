@@ -31,9 +31,6 @@ matrix:
         - name: Package development flow
           <<: *linux
           env: FOLDER=features/package_development_flow
-          script:
-            - cd "${FOLDER}"
-            - python demo.py
         - name: Serializing your data with Protobuf
           <<: *linux
           env: FOLDER=libraries/protobuf/serialization
@@ -52,9 +49,6 @@ matrix:
         - name: Package Development Flow
           <<: *osx
           env: FOLDER=features/package_development_flow
-          script:
-            - cd "${FOLDER}"
-            - python demo.py
         - name: Serializing your data with Protobuf
           <<: *osx
           env: FOLDER=libraries/protobuf/serialization

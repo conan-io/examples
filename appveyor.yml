@@ -22,15 +22,9 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
           PROJECT_DIR: features/package_development_flow
-          test_script:
-            - cd %PROJECT_DIR%
-            - python demo.py
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
           PROJECT_DIR: features/package_development_flow
-          test_script:
-            - cd %PROJECT_DIR%
-            - python demo.py
         # Serializing your data with Protobuf
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
