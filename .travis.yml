@@ -20,61 +20,49 @@ osx: &osx
 
 matrix:
    include:
-      - stage: CMake reuse exported targets multiconfig.
+      # All Linux first in parallel
+      - stage: Linux builds
+        name: Getting started
         <<: *linux
-        script:
-         - cd features/cmake/find_package/exported_targets_multiconfig
-         - ./build.sh
-      - <<: *osx
-        script:
-         - cd features/cmake/find_package/exported_targets_multiconfig
-         - ./build.sh
-      - stage: CMake cmake_find_package_multi generator
+        env: FOLDER=libraries/poco/md5
+      - name: Conan Workspaces
         <<: *linux
-        script:
-          - cd features/cmake/find_package/find_cmake_multi_generator_targets
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd features/cmake/find_package/find_cmake_multi_generator_targets
-          - ./build.sh
-      - stage: Conan Getting Started
+        env: FOLDER=features/workspace/cmake
+      - name: Serializing your data with Protobuf
         <<: *linux
-        script:
-          - cd libraries/poco/md5
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd libraries/poco/md5
-          - ./build.sh
+        env: FOLDER=libraries/protobuf/serialization
+      - name: Using Facebook Folly with Conan
+        <<: *linux
+        env: FOLDER=libraries/folly/basic
+      - name: CMake reuse exported targets multiconfig
+        <<: *linux
+        env: FOLDER=features/cmake/find_package/exported_targets_multiconfig
+      - name: CMake cmake_find_package_multi generator
+        <<: *linux
+        env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_targets
 
-      - stage: Conan Workspaces
+      # All Macs later
+      - stage: Macos builds
+        name: Getting started
+        <<: *osx
+        env: FOLDER=libraries/poco/md5
+      - name: Conan Workspaces
+        <<: *osx
+        env: FOLDER=features/workspace/cmake
+      - name: Serializing your data with Protobuf
+        <<: *osx
+        env: FOLDER=libraries/protobuf/serialization
+      - name: Using Facebook Folly with Conan
+        <<: *osx
+        env: FOLDER=libraries/folly/basic
+      - name: CMake reuse exported targets multiconfig
+        <<: *osx
+        env: FOLDER=features/cmake/find_package/exported_targets_multiconfig
+      - name: CMake cmake_find_package_multi generator
+        <<: *osx
+        env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_target
 
-        <<: *linux
-        script:
-          - cd features/workspace/cmake
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd features/workspace/cmake
-          - ./build.sh
-
-      - stage: Serializing your data with Protobuf
-        <<: *linux
-        script:
-          - cd libraries/protobuf/serialization
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd libraries/protobuf/serialization
-          - ./build.sh
-
-      - stage: Using Facebook Folly with Conan
-        <<: *linux
-        script:
-          - cd libraries/folly/basic
-          - ./build.sh
-      - <<: *osx
-        script:
-          - cd libraries/folly/basic
-          - ./build.sh
+script:
+ - cd "${FOLDER}"
+ - chmod +x build.sh
+ - ./build.sh
