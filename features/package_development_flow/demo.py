@@ -25,7 +25,7 @@ run("conan package . --source-folder=tmp/source --build-folder=tmp/build --packa
 # NOTE: Use --force to prevent ERROR: Package already exists
 run("conan export-pkg . user/testing --source-folder=tmp/source --build-folder=tmp/build --force")
 # You can also test the package that was just exported
-run("conan test test_package Hello/1.1@user/testing")
+run("conan test test_package Hello/1.0@user/testing")
 
 # Finally, run a full create, does all of the above + test_package
 run('conan create . user/testing')
