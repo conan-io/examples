@@ -60,7 +60,7 @@ matrix:
         env: FOLDER=features/cmake/find_package/exported_targets_multiconfig
       - name: CMake cmake_find_package_multi generator
         <<: *osx
-        env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_target
+        env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_targets
 
 script:
  - cd "${FOLDER}"
