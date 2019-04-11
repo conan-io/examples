@@ -28,6 +28,9 @@ matrix:
       - name: Conan Workspaces
         <<: *linux
         env: FOLDER=features/workspace/cmake
+      - name: Package development flow
+        <<: *linux
+        env: FOLDER=features/package_development_flow
       - name: Serializing your data with Protobuf
         <<: *linux
         env: FOLDER=libraries/protobuf/serialization
@@ -49,6 +52,9 @@ matrix:
       - name: Conan Workspaces
         <<: *osx
         env: FOLDER=features/workspace/cmake
+      - name: Package Development Flow
+        <<: *osx
+        env: FOLDER=features/package_development_flow
       - name: Serializing your data with Protobuf
         <<: *osx
         env: FOLDER=libraries/protobuf/serialization
