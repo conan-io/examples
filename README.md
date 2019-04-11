@@ -31,6 +31,17 @@ Demonstrate how to use Folly to validate an URI using Futures, FBString, Executo
 
 Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
+#### [Exporting targets with CMake and reuse with find_package()](features/cmake/find_package/exported_targets_multiconfig)
+
+Use CMake to declare, export and install the targets of some libraries and using Conan to reuse them with
+``find_package`` and the multi-configuration project.
+
+#### [Using the cmake_find_package_multi generator](features/cmake/find_package/find_cmake_multi_generator_targets)
+
+Demonstrate how to use the ``cmake_find_package_multi`` generator to integrate seamlessly CMake with Conan
+using ``find_package`` in a multi-configuration project.
+
+
 #### How can I reproduce the build steps?
 
 All our examples can be built on Windows, Linux and Mac. If you are insterested to reproduce

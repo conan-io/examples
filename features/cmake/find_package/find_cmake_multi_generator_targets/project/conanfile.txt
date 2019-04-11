@@ -1,0 +1,5 @@
+[requires]
+bye/1.0@user/channel
+
+[generators]
+cmake_find_package_multi

@@ -34,6 +34,12 @@ matrix:
       - name: Using Facebook Folly with Conan
         <<: *linux
         env: FOLDER=libraries/folly/basic
+      - name: CMake reuse exported targets multiconfig
+        <<: *linux
+        env: FOLDER=features/cmake/find_package/exported_targets_multiconfig
+      - name: CMake cmake_find_package_multi generator
+        <<: *linux
+        env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_targets
 
       # All Macs later
       - stage: Macos builds
@@ -49,6 +55,12 @@ matrix:
       - name: Using Facebook Folly with Conan
         <<: *osx
         env: FOLDER=libraries/folly/basic
+      - name: CMake reuse exported targets multiconfig
+        <<: *osx
+        env: FOLDER=features/cmake/find_package/exported_targets_multiconfig
+      - name: CMake cmake_find_package_multi generator
+        <<: *osx
+        env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_targets
 
 script:
  - cd "${FOLDER}"
