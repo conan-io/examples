@@ -3,7 +3,7 @@
 set -e
 set -x
 
-rm -rf build
+rm -rf tmp
 
 conan source  . --source-folder=tmp/source
 conan install . --install-folder=tmp/build
