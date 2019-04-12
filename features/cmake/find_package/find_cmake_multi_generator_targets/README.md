@@ -1,0 +1,60 @@
+Using non-intrusive multi-config CMake with cmake_find_package_generator_multi
+==============================================================================
+
+In this example
+---------------
+
+We are using Conan to create for us the necessary ``XXXConfig.cmake`` scripts both for Release and Debug. 
+Everything is based on the ``find_package`` feature and working with  multi-config packages (Release/Debug) to avoid 
+installing the dependencies every time we change from Debug to Release in the Visual Studio IDE.
+
+ - We have a "hello" library consumed by a "bye" library and a project that uses the "bye" function.
+ - The "hello" library has a ``package_info()`` method declaring the "hello" library name for the consumers.
+ - The conan recipe uses a different binary package for any ``build_type``, one package for Debug and other for Release.
+ - The same for the "bye" library.
+ - There is a project using targets (CMake 3.x) and linking with "bye" (and hello because of the transitivity)
+ 
+Some useful details of this example
+------------------------------------
+
+ - The ``CMakeLists.txt`` files for ``bye`` and ``hello`` are very simple, we are not installing nor exporting anything.
+ 
+  This is the one for ``bye``: 
+  ```cmake
+  find_package(hello)
+  add_library(bye bye.cpp)
+  target_link_libraries(bye hello::hello)
+  ```
+
+ - The recipes are using ``package_info()``  method for the consumers
+ - The recipes are using ``package()`` method to extract the libraries and headers, instead of using cmake install.
+
+Pros
+----
+
+- You can consume the conan packages for ``hello`` and ``bye`` from any build system only specifying the generator
+  that matches your needs. 
+- You don't need to change anything in the ``CMakeLists.txt`` related to Conan.
+- The multi-config mechanism works good, it is very comfortable, You call ``conan install`` for debug and other for Release
+  and you are done.
+- The generated targets are **completely transitive** and contain all the information about the dependencies. So you need
+  call ``find_package`` for your direct dependency packages. With the classic CMake targets, you typically need to specify one ``find_package``
+  for each dependency that you need, directly or indirectly. 
+   
+ 
+Cons
+----
+ 
+ - You have to assume that the cmake scripts created by this generator **ARE NOT** the same as the `CMake` installation modules files and they 
+   are not replaceable in most cases:
+       
+   - Because of the transitivity of the targets (you will need to change your CMakeLists if you were calling ``find_package`` for all the transitive deps)   
+   - The name of the targets and the library name to be used at `find_package(NAME)` might be different for the "official" one.
+ 
+ 
+How to try it
+-------------
+
+ - Open the "build.bat" or "build.sh" to see the steps of the example. If you run it, it will create the packages for "hello" and "bye" 
+ and will build the "project" changing the build_type and verifying that the linked dependencies are correct for the selected build_type.
+ - If you are using Linux or Mac you can use almost the same steps in the run.bat adapted to your OSS
