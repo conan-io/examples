@@ -1,0 +1,8 @@
+[requires]
+conan-hello-emscripten/1.0@conan/testing
+[generators]
+virtualenv
+[imports]
+bin, *.html -> ./bin
+bin, *.wasm -> ./bin
+bin, *.js -> ./bin
