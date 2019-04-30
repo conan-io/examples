@@ -44,6 +44,10 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
           PROJECT_DIR: features/cmake/find_package/find_cmake_multi_generator_targets
+        # Emscripten
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+          PROJECT_DIR: features/emscripten
 
 install:
   - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
