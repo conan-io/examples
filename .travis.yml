@@ -45,7 +45,7 @@ matrix:
         env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_targets
       - name: Python requires (reuse conanfile)
         <<: *linux
-        env: FOLDER=features/features/python_requires/reuse_conanfile
+        env: FOLDER=features/python_requires/reuse_conanfile
 
       # All Macs later
       - stage: Macos builds
@@ -72,7 +72,7 @@ matrix:
         env: FOLDER=features/cmake/find_package/find_cmake_multi_generator_targets
       - name: Python requires (reuse conanfile)
         <<: *osx
-        env: FOLDER=features/features/python_requires/reuse_conanfile
+        env: FOLDER=features/python_requires/reuse_conanfile
 
 script:
  - cd "${FOLDER}"
