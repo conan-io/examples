@@ -1,0 +1,10 @@
+bin
+conaninfo.txt
+conanbuildinfo.txt
+conan_imports_manifest.txt
+activate.ps1
+activate.bat
+activate.sh
+deactivate.ps1
+deactivate.bat
+deactivate.sh
