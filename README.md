@@ -37,6 +37,12 @@ Demonstrate how to use Folly to validate an URI using Futures, FBString, Executo
 
 Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
+#### [Using package flow with GTest](libraries/gtest/encryption)
+
+Demonstrate how to use GTest to test a project with CMake using package development flow
+
+Documentation: https://docs.conan.io/en/latest/developing_packages/package_dev_flow.html
+
 #### [Exporting targets with CMake and reuse with find_package()](features/cmake/find_package/exported_targets_multiconfig)
 
 Use CMake to declare, export and install the targets of some libraries and using Conan to reuse them with

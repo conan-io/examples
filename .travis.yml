@@ -37,6 +37,9 @@ matrix:
       - name: Using Facebook Folly with Conan
         <<: *linux
         env: FOLDER=libraries/folly/basic
+      - name: GTest encryption example
+        <<: *linux
+        env: FOLDER=libraries/gtest/encryption
       - name: CMake reuse exported targets multiconfig
         <<: *linux
         env: FOLDER=features/cmake/find_package/exported_targets_multiconfig
@@ -67,6 +70,9 @@ matrix:
       - name: Using Facebook Folly with Conan
         <<: *osx
         env: FOLDER=libraries/folly/basic
+      - name: GTest encryption example
+        <<: *osx
+        env: FOLDER=libraries/gtest/encryption
       - name: CMake reuse exported targets multiconfig
         <<: *osx
         env: FOLDER=features/cmake/find_package/exported_targets_multiconfig

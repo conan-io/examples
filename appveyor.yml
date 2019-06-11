@@ -36,6 +36,10 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
           PROJECT_DIR: libraries/folly/basic
+        # GTest encryption example
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+          PROJECT_DIR: libraries/gtest/encryption
         # Using Conan with find_package and exported targets
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
