@@ -50,7 +50,7 @@ using ``find_package`` in a multi-configuration project.
 
 ### [Multi-configuration package (N configs -> 1 package)](features/multi_config)
 
-Example on how to create multi-configuration packages covering the N configs -> 1 package use case:
+Example on how to create multi-configuration debug/release packages covering the N configs -> 1 package use case:
 
 - Remove the ``build_type`` from settings.
 - Have a CMake script that differentiate debug and release artifacts (``set_target_properties(hello PROPERTIES DEBUG_POSTFIX _d)``).
@@ -58,7 +58,6 @@ Example on how to create multi-configuration packages covering the N configs -> 
 - Have a ``package_info()`` method that accounts for both configs ``self.cpp_info.debug.libs``, etc.
 
 Documentation: https://docs.conan.io/en/latest/creating_packages/package_approaches.html#n-configs-1-package
-
 
 ## How can I reproduce the build steps?
 
