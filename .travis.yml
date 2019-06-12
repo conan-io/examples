@@ -83,7 +83,7 @@ matrix:
         <<: *osx
         env: FOLDER=features/python_requires/reuse_conanfile
       - name: Multi config package (N configs -> 1 package)
-        <<: *linux
+        <<: *osx
         env: FOLDER=features/multi_config
 
 script:
