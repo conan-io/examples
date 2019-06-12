@@ -49,6 +49,9 @@ matrix:
       - name: Python requires (reuse conanfile)
         <<: *linux
         env: FOLDER=features/python_requires/reuse_conanfile
+      - name: Multi config package (N configs -> 1 package)
+        <<: *linux
+        env: FOLDER=features/multi_config
 
       # All Macs later
       - stage: Macos builds
@@ -79,6 +82,9 @@ matrix:
       - name: Python requires (reuse conanfile)
         <<: *osx
         env: FOLDER=features/python_requires/reuse_conanfile
+      - name: Multi config package (N configs -> 1 package)
+        <<: *linux
+        env: FOLDER=features/multi_config
 
 script:
  - cd "${FOLDER}"
