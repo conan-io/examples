@@ -1,4 +1,5 @@
 import os
+from six import StringIO
 from conans import ConanFile, CMake
 
 
@@ -13,4 +14,6 @@ class HelloTestConan(ConanFile):
 
     def test(self):
         os.chdir("bin")
-        self.run(".%sexample" % os.sep, run_environment=True)
+        output = StringIO()
+        self.run(".%sexample" % os.sep, run_environment=True, output=output)
+        assert "Hello World {}!".format(str(self.settings.build_type)) in output.getvalue()
