@@ -57,6 +57,8 @@ Example on how to create multi-configuration packages covering the N configs -> 
 - Have a ``build()`` that builds both configs.
 - Have a ``package_info()`` method that accounts for both configs ``self.cpp_info.debug.libs``, etc.
 
+Documentation: https://docs.conan.io/en/latest/creating_packages/package_approaches.html#n-configs-1-package
+
 
 ## How can I reproduce the build steps?
 
