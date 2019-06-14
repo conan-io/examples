@@ -22,8 +22,5 @@ conan_basic_setup()
 #     endforeach()
 # endif()
 
-message("CONAN_LINK_RUNTIME_MULTI: " ${CONAN_LINK_RUNTIME_MULTI})
-message("CONAN_LINK_RUNTIME: " ${CONAN_LINK_RUNTIME})
-
 add_library(hello hello.cpp)
 set_target_properties(hello PROPERTIES DEBUG_POSTFIX _d)
