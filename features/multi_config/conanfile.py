@@ -1,4 +1,5 @@
-from conans import ConanFile, CMake
+import os
+from conans import ConanFile, CMake, tools
 
 
 class HelloConan(ConanFile):
@@ -32,12 +33,29 @@ class HelloConan(ConanFile):
         cmake_release.configure()
         cmake_release.build()
 
+        self.output.info("*"*30)
+        self.output.info("DEBUG")
+        self.output.info("*"*30)
+        self.output.info(tools.load(os.path.join(self.build_folder, 'compile_commands.json')))
+        self.output.info("*"*30)
+        self.output.info(tools.load(os.path.join(self.build_folder, 'CMakeCache.txt')))
+        self.output.info("*"*30)
+
         cmake_debug = CMake(self, build_type="Release")
         # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
         # cmake_debug.defintions["CONAN_LINK_RUNTIME_MULTI"] = cmake_release.definitions["CONAN_LINK_RUNTIME"]
         # cmake_debug.definitions["CONAN_LINK_RUNTIME"] = False
         cmake_debug.configure()
         cmake_debug.build()
+
+        self.output.info("*"*30)
+        self.output.info("RELEASE")
+        self.output.info("*"*30)
+        self.output.info(tools.load(os.path.join(self.build_folder, 'compile_commands.json')))
+        self.output.info("*"*30)
+        self.output.info(tools.load(os.path.join(self.build_folder, 'CMakeCache.txt')))
+        self.output.info("*"*30)
+
 
     def package(self):
         self.copy("*.h", dst="include")
