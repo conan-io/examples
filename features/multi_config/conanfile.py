@@ -36,9 +36,7 @@ class HelloConan(ConanFile):
         self.output.info("*"*30)
         self.output.info("DEBUG")
         self.output.info("*"*30)
-        self.output.info(tools.load(os.path.join(self.build_folder, 'compile_commands.json')))
-        self.output.info("*"*30)
-        self.output.info(tools.load(os.path.join(self.build_folder, 'CMakeCache.txt')))
+        self.run("strings lib/libhello_d.a | grep Hello")
         self.output.info("*"*30)
 
         cmake_debug = CMake(self, build_type="Release")
@@ -51,9 +49,7 @@ class HelloConan(ConanFile):
         self.output.info("*"*30)
         self.output.info("RELEASE")
         self.output.info("*"*30)
-        self.output.info(tools.load(os.path.join(self.build_folder, 'compile_commands.json')))
-        self.output.info("*"*30)
-        self.output.info(tools.load(os.path.join(self.build_folder, 'CMakeCache.txt')))
+        self.run("strings lib/libhello.a | grep Hello")
         self.output.info("*"*30)
 
 
