@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(MyHello CXX)
 
+message(">>>>pre: CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
+
+message(">>>>post: CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 # if(CONAN_LINK_RUNTIME_MULTI)
 #     string(REPLACE "d" "" ${CONAN_LINK_RUNTIME_MULTI} "${${CONAN_LINK_RUNTIME_MULTI}}")
