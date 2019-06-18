@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(MyHello CXX)
 
-message(">>>>pre: CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
