@@ -33,11 +33,8 @@ class HelloConan(ConanFile):
         cmake_release.configure()
         cmake_release.build()
 
-        self.output.info("*"*30)
-        self.output.info("DEBUG")
-        self.output.info("*"*30)
-        self.run("strings lib/libhello_d.a | grep Hello")
-        self.output.info("*"*30)
+        if self.settings.os != "Windows":
+            print_strings("lib/libhello_d.a", "DEBUG")
 
         cmake_debug = CMake(self, build_type="Release")
         # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
@@ -46,12 +43,8 @@ class HelloConan(ConanFile):
         cmake_debug.configure()
         cmake_debug.build()
 
-        self.output.info("*"*30)
-        self.output.info("RELEASE")
-        self.output.info("*"*30)
-        self.run("strings lib/libhello.a | grep Hello")
-        self.output.info("*"*30)
-
+        if self.settings.os != "Windows":
+            print_strings("lib/libhello.a", "RELEASE")
 
     def package(self):
         self.copy("*.h", dst="include")
@@ -64,3 +57,13 @@ class HelloConan(ConanFile):
     def package_info(self):
         self.cpp_info.release.libs = ["hello"]
         self.cpp_info.debug.libs = ["hello_d"]
+
+def print_strings(library, build_type):
+    # This function is printing the strings contained in the binary
+    #  trying to add insights about a issue related to the multi_config
+    #  generator in Mac CI
+    self.output.info("*"*30)
+    self.output.info(build_type)
+    self.output.info("*"*30)
+    self.run("strings {} | grep Hello".format(library))
+    self.output.info("*"*30)
