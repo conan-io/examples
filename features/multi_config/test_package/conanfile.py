@@ -16,4 +16,4 @@ class HelloTestConan(ConanFile):
         os.chdir("bin")
         output = StringIO()
         self.run(".%sexample" % os.sep, run_environment=True, output=output)
-        assert "Hello World {}!".format(str(self.settings.build_type)) in output.getvalue()
+        assert ("Hello World {}!".format(str(self.settings.build_type)) in output.getvalue()), output.getvalue()
