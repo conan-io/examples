@@ -31,11 +31,15 @@ Demonstrate how to use Protobuf to serialize data between C++ and Python.
 
 Blog Post: https://blog.conan.io/2019/03/06/Serializing-your-data-with-Protobuf.html
 
-### [Using Facebook Folly with Conan](libraries/folly/basic)
+### [Using Facebook Folly with Conan](libraries/dear-imgui/basic)
 
 Demonstrate how to use Folly to validate an URI using Futures, FBString, Executors, and Format.
 
 Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
+
+### [An introduction to Dear ImGui and how to use with Conan](libraries/dear-imgui/basic)
+
+Demonstrate how to use Dear ImGui with Conan to add a GUI to and OpenGL3 application. 
 
 ### [Exporting targets with CMake and reuse with find_package()](features/cmake/find_package/exported_targets_multiconfig)
 
