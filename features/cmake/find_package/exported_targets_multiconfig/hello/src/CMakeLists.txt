@@ -22,7 +22,7 @@ target_include_directories(${TARGET_NAME} PUBLIC
                            "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
 
 foreach(dep ${TARGETS_TO_FIND})
-    find_package(${dep})
+    find_package(${dep} CONFIG)
     target_link_libraries(${TARGET_NAME} ${dep}::${dep})
 endforeach()
 
