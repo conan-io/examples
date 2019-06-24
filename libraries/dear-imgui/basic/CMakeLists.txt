@@ -12,15 +12,15 @@ find_package(glew CONFIG)
 add_executable( dear-imgui-conan 
                 main.cpp 
                 opengl_shader.cpp
-				file_manager.cpp
+                file_manager.cpp
                 opengl_shader.h 
-				file_manager.h 
+                file_manager.h 
                 bindings/imgui_impl_glfw.cpp
                 bindings/imgui_impl_opengl3.cpp
                 bindings/imgui_impl_glfw.h
                 bindings/imgui_impl_opengl3.h 
-				assets/simple-shader.vs
-				assets/simple-shader.fs )
+                assets/simple-shader.vs
+                assets/simple-shader.fs )
 
 add_custom_command(TARGET dear-imgui-conan
     POST_BUILD
