@@ -28,6 +28,6 @@ add_custom_command(TARGET dear-imgui-conan
     COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/assets/simple-shader.fs ${PROJECT_BINARY_DIR}
 )
 
-add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+target_compile_definitions(dear-imgui-conan PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW)
 
 target_link_libraries(dear-imgui-conan imgui::imgui glfw::glfw glew::glew)
