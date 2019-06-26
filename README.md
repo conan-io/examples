@@ -37,6 +37,10 @@ Demonstrate how to use Folly to validate an URI using Futures, FBString, Executo
 
 Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
+### [An introduction to Dear ImGui and how to use with Conan](libraries/dear-imgui/basic)
+
+Demonstrate how to use Dear ImGui with Conan to add a GUI to an OpenGL3 application. 
+
 ### [Exporting targets with CMake and reuse with find_package()](features/cmake/find_package/exported_targets_multiconfig)
 
 Use CMake to declare, export and install the targets of some libraries and using Conan to reuse them with
