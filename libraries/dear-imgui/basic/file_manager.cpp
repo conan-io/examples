@@ -13,7 +13,7 @@ std::string FileManager::read(const std::string& filename) {
     file.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 	std::stringstream file_stream;
 	try {
-		file.open(filename);
+		file.open(filename.c_str());
     	file_stream << file.rdbuf();
 		file.close();
     }
