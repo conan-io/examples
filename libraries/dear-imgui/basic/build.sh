@@ -10,5 +10,3 @@ pushd build
 conan install ..
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
-
-./dear-imgui-conan

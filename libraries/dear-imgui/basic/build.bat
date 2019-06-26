@@ -7,5 +7,3 @@ PUSHD build
 conan install ..
 cmake .. -G "%CMAKE_GENERATOR%"
 cmake --build . --config Release
-
-Release\dear-imgui-conan.exe
