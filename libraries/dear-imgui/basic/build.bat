@@ -5,7 +5,7 @@ MKDIR build
 PUSHD build
 
 conan install ..
-cmake .. -G "%CMAKE_GENERATOR%"
+cmake .. -G "Visual Studio 15 2017 Win64"
 cmake --build . --config Release
 
-bin\dear-imgui-conan.exe
+Release\dear-imgui-conan.exe
