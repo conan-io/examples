@@ -1,4 +1,4 @@
-import os, json
+import os, json, shutil
 
 def run(cmd):
     ret = os.system(cmd)
@@ -9,9 +9,16 @@ def load(filename):
     with open(filename, "r") as f:
         return f.read()
 
-run("rm -rf release bo.json build_server_folder")
-run('conan remove "*" -f')
+def rm(path):
+    if os.path.isfile(path):
+        os.remove(path)
+    elif os.path.isdir(path):
+        shutil.rmtree(path)
 
+rm("release")
+rm("build_server_folder")
+rm("bo.json")
+run('conan remove "*" -f')
 
 run("conan config set general.default_package_id_mode=full_version_mode")
 run("cd PkgZ && conan create . PkgZ/0.1@user/testing")
@@ -38,7 +45,7 @@ build_order = json.loads(load("bo.json"))
 while build_order:
     # Simulates building in a different build server
     os.makedirs("build_server_folder/release")
-    run("cp release/conan.lock build_server_folder/release")
+    shutil.copy2("release/conan.lock", "build_server_folder/release")
     os.chdir("build_server_folder")
     print("\nBuild order is: %s" % build_order)
     _, pkg_ref = build_order[0][0]
@@ -48,7 +55,7 @@ while build_order:
     run("conan install %s --build=%s --lockfile=release" % (pkg_ref, pkg_ref))
     os.chdir("..")
     run("conan graph update-lock release build_server_folder/release")
-    run("rm -rf build_server_folder")
+    rm("build_server_folder")
     # Update the build order after changes
     run("conan graph build-order ./release --json=bo.json --build=missing")
     build_order = json.loads(load("bo.json"))        

@@ -55,6 +55,9 @@ matrix:
       - name: Multi config package (N configs -> 1 package)
         <<: *linux
         env: FOLDER=features/multi_config
+      - name: lockfiles/ci
+        <<: *linux
+        env: FOLDER=lockfiles/ci
 
       # All Macs later
       - stage: Macos builds
@@ -91,6 +94,9 @@ matrix:
       - name: Multi config package (N configs -> 1 package)
         <<: *osx
         env: FOLDER=features/multi_config
+      - name: lockfile/ci
+        <<: *osx
+        env: FOLDER=lockfile/ci
 
 script:
  - cd "${FOLDER}"

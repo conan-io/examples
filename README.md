@@ -63,6 +63,22 @@ Example on how to create multi-configuration debug/release packages covering the
 
 Documentation: https://docs.conan.io/en/latest/creating_packages/package_approaches.html#n-configs-1-package
 
+
+### Lockfiles
+
+#### [Using lockfiles in CI to rebuild a whole project](features/lockfiles/ci)
+
+When a package in a dependency graph is modified and a new version or revision is created, it
+is sometimes desired to test if that new version works well within a larger product or project,
+that is, when that package is part of a larger dependency graph. The packages that depend on 
+the modified one might need to be rebuilt, but if something else changed, it is impossible to
+achieve reproducible builds.
+
+Using lockfiles can enforce the same upstream dependencies, to ensure reproducible builds and to re-build and test such scenarios.
+
+Documentation: https://docs.conan.io/en/latest/versioning/lockfiles.html#how-to-use-lockfiles-in-ci
+
+
 ## How can I reproduce the build steps?
 
 All our examples can be built on Windows, Linux and Mac. If you are interested to reproduce
