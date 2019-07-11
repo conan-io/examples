@@ -2,67 +2,8 @@ build: false
 
 environment:
     PYTHON: "C:\\Python37"
-
-    matrix:
-        # Conan Getting Started
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
-          PROJECT_DIR: libraries/poco/md5
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: libraries/poco/md5
-        # Conan Workspaces
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
-          PROJECT_DIR: features/workspace/cmake
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/workspace/cmake
-        # Package Development flow
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
-          PROJECT_DIR: features/package_development_flow
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/package_development_flow
-        # Serializing your data with Protobuf
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
-          PROJECT_DIR: libraries/protobuf/serialization
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: libraries/protobuf/serialization
-        # Using Facebook Folly with Conan
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: libraries/folly/basic
-        # Introduction to Dear ImGui
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
-          PROJECT_DIR: libraries/dear-imgui/basic
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: libraries/dear-imgui/basic
-        # Using Conan with find_package and exported targets
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/cmake/find_package/exported_targets_multiconfig
-        # Using the cmake_find_package_multi generator
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/cmake/find_package/find_cmake_multi_generator_targets
-        # Emscripten
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/emscripten
-        # Python requires: reusing a conanfile
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/python_requires/reuse_conanfile
-        # Multi config package (N configs -> 1 package)
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-          PROJECT_DIR: features/multi_config
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
 
 install:
   - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
@@ -70,5 +11,4 @@ install:
   - conan user
 
 test_script:
-  - cd %PROJECT_DIR%
-  - build.bat
+  - python .ci/build.py

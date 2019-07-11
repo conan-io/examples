@@ -30,9 +30,10 @@ def chdir(dir_path):
 
 def get_build_list():
     builds = []
+    script = "build.bat" if platform.system() == "Windows" else "build.sh"
     for root, dirs, files in os.walk("."):
         for file in files:
-            if os.path.basename(file) == "build.sh":
+            if os.path.basename(file) == script:
                 builds.append(os.path.join(root, file))
     return builds
 
