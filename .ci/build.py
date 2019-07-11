@@ -4,12 +4,14 @@
 import os
 import sys
 import stat
+import platform
 import subprocess
 import tempfile
 import logging
 from contextlib import contextmanager
 
 
+FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
@@ -44,6 +46,7 @@ def chmod_x(script):
 def get_conan_env():
     temp_folder = tempfile.mkdtemp(prefix="conan-", suffix="-home")
     os.environ["CONAN_USER_HOME"] = temp_folder
+    logging.debug("CONAN_USER_HOME: {}".format(temp_folder))
     return os.environ
 
 
@@ -51,9 +54,10 @@ def configure_profile():
     subprocess.check_output("conan profile new default --detect",
                             stderr=subprocess.STDOUT,
                             shell=True)
-    subprocess.check_output("conan profile update settings.compiler.libcxx=libstdc++11 default",
-                            stderr=subprocess.STDOUT,
-                            shell=True)
+    if platform.system() == "Linux":
+        subprocess.check_output("conan profile update settings.compiler.libcxx=libstdc++11 default",
+                                stderr=subprocess.STDOUT,
+                                shell=True)
 
 
 def run_scripts(scripts):
@@ -65,7 +69,10 @@ def run_scripts(scripts):
         configure_profile()
         with chdir(os.path.dirname(script)):
             logging.debug("run {}".format(abspath))
-            results[script] = subprocess.call(abspath, env=env)
+            result = subprocess.call(abspath, env=env)
+            results[script] = result
+            if result != 0 and FAIL_FAST:
+                break
     return results
 
 
