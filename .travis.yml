@@ -4,9 +4,6 @@ matrix:
       dist: xenial
       language: python
       python: "3.7"
-      before_script:
-        - conan profile new default --detect
-        - conan profile update settings.compiler.libcxx=libstdc++11 default
     - os: osx
       language: generic
       before_script:
@@ -16,4 +13,4 @@ matrix:
 install:
   - .ci/travis/install.sh
 script:
- - python .ci/build.py
+  - python .ci/build.py
