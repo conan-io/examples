@@ -60,8 +60,8 @@ def run_scripts(scripts):
 def print_results(results):
     print("\n\n=== CONAN EXAMPLES: RESULTS ===")
     for build, result in results.items():
-        build_name = os.path.basename(build)[2:].upper()
-        message = "{}: {}".format(build, "OK" if result == 0 else "ERROR")
+        build_name = os.path.dirname(build)[2:].upper()
+        message = "{}: {}".format(build_name, "OK" if result == 0 else "ERROR")
         print(message)
 
 
