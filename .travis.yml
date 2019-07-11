@@ -1,22 +1,19 @@
-linux: &linux
-   os: linux
-   dist: xenial
-   language: python
-   python: "3.7"
-   install:
-     - .ci/travis/install.sh
-   before_script:
-     - conan profile new default --detect
-     - conan profile update settings.compiler.libcxx=libstdc++11 default
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      language: python
+      python: "3.7"
+      before_script:
+        - conan profile new default --detect
+        - conan profile update settings.compiler.libcxx=libstdc++11 default
+    - os: osx
+      language: generic
+      before_script:
+        - eval "$(pyenv init -)"
+        - pyenv activate conan
 
-osx: &osx
-   os: osx
-   language: generic
-   install:
-     - .ci/travis/install.sh
-   before_script:
-     - eval "$(pyenv init -)"
-     - pyenv activate conan
-
+install:
+  - .ci/travis/install.sh
 script:
  - python .ci/build.py
