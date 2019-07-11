@@ -50,8 +50,10 @@ def run_scripts(scripts):
     results = {}
     for script in scripts:
         chmod_x(script)
+        abspath = os.path.abspath(script)
         with chdir(os.path.dirname(script)):
-            results[script] = subprocess.call(script, env=get_conan_env())
+            logging.debug("run {}".format(abspath))
+            results[script] = subprocess.call(abspath, env=get_conan_env())
     return results
 
 
