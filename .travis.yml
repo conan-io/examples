@@ -58,6 +58,9 @@ matrix:
       - name: lockfiles/ci
         <<: *linux
         env: FOLDER=features/lockfiles/ci
+      - name: Integrate a build-system in Conan
+        <<: *linux
+        env: FOLDER=features/integrate_build_system
 
       # All Macs later
       - stage: Macos builds
@@ -97,6 +100,9 @@ matrix:
       - name: lockfile/ci
         <<: *osx
         env: FOLDER=features/lockfiles/ci
+      - name: Integrate a build-system in Conan
+        <<: *osx
+        env: FOLDER=features/integrate_build_system
 
 script:
  - cd "${FOLDER}"

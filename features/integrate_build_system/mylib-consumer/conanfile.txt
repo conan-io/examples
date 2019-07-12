@@ -1,0 +1,5 @@
+[requires]
+mylib-waf/1.0@user/channel
+[generators]
+cmake
+

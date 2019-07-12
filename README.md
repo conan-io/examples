@@ -78,6 +78,10 @@ Using lockfiles can enforce the same upstream dependencies, to ensure reproducib
 
 Documentation: https://docs.conan.io/en/latest/versioning/lockfiles.html#how-to-use-lockfiles-in-ci
 
+### [Integrate a build system in Conan](features/integrate_build_system)
+
+Demonstrate how to integrate a build-system in Conan using an *installer* a *build-helpers* and a *custom
+generator*. 
 
 ## How can I reproduce the build steps?
 

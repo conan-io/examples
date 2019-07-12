@@ -65,6 +65,10 @@ environment:
           PROJECT_DIR: features/multi_config
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           PROJECT_DIR: features/lockfiles/ci
+        # Integrate a build-system in Conan
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+          PROJECT_DIR: features/integrate_build_system
 
 install:
   - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
