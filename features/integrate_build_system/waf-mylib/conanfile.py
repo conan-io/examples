@@ -25,6 +25,10 @@ class MyLibConan(base.get_conanfile()):
     def package(self):
         self.copy("*.hpp", dst="include", src="include", keep_path=False)
         self.copy("*.lib", dst="lib", src="build", keep_path=False)
+        self.copy("*.dll", dst="bin", keep_path=False)
+        self.copy("*.dylib*", dst="lib", src="build", keep_path=False)
+        self.copy("*.so", dst="lib", src="build", keep_path=False)
+        self.copy("*.a", dst="lib", src="build", keep_path=False)
         self.copy("LICENSE", dst="licenses", src=".", keep_path=False)
 
     def package_info(self):
