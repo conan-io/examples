@@ -13,4 +13,4 @@ matrix:
 install:
   - .ci/travis/install.sh
 script:
-  - python .ci/build.py
+  - python .ci/run.py

@@ -11,4 +11,4 @@ install:
   - conan user
 
 test_script:
-  - python .ci/build.py
+  - python .ci/run.py

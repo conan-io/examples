@@ -32,9 +32,14 @@ def get_build_list():
     builds = []
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
     for root, dirs, files in os.walk("."):
+        if "build.py" in [os.path.basename(file) for file in files]:
+            builds.append(os.path.join(root, "build.py"))
+            continue
+
         for file in files:
             if os.path.basename(file) == script:
                 builds.append(os.path.join(root, file))
+
     return builds
 
 
@@ -65,7 +70,7 @@ def print_build(script):
     dir_name = os.path.dirname(script)
     dir_name = dir_name[2:] if dir_name.startswith('.') else dir_name
     print("================================================================")
-    print("=== {} ===".format(dir_name.upper()))
+    print("* {}".format(dir_name.upper()))
     print("================================================================")
 
 
@@ -79,7 +84,10 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             logging.debug("run {}".format(abspath))
             print_build(script)
-            result = subprocess.call(abspath, env=env)
+            if abspath.endswith(".py"):
+                result = subprocess.call(["python", abspath], env=env)
+            else:
+                result = subprocess.call(abspath, env=env)
             results[script] = result
             if result != 0 and FAIL_FAST:
                 break
