@@ -47,8 +47,9 @@ class WafBuildEnvironment(object):
         sections.append("       conf.env.LINKFLAGS = []")
         if "Visual Studio" in self._compiler:
             # first we set the options for the compiler, then load
-            sections.append("    conf.env.MSVC_VERSION = '{}.0'".format(
-                self._compiler_version))
+            if self._compiler_version:
+                sections.append("    conf.env.MSVC_VERSION = '{}.0'".format(
+                    self._compiler_version))
             try:
                 sections.append("    conf.env.MSVC_TARGETS = '{}'".format(
                     self._arch_conan2waf[self._arch_build]))
@@ -102,8 +103,10 @@ class WafBuildEnvironment(object):
     def configure(self, args=None):
         self._save_toolchain_file()
         args = args or []
-        command = 'waf configure --msvc_version="msvc {}.0"'.format(
-            self._compiler_version) + " ".join(arg for arg in args)
+        command = "waf configure " + " ".join(arg for arg in args)
+        if self._compiler_version:
+            command = command + \
+                '--msvc_version="msvc {}.0"'.format(self._compiler_version)
         self._run(command)
 
     def build(self, args=None):
