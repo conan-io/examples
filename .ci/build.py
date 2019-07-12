@@ -61,6 +61,14 @@ def configure_profile():
                                 shell=True)
 
 
+def print_build(script):
+    dir_name = os.path.dirname(script)
+    dir_name = dir_name[2:] if dir_name.startswith('.') else dir_name
+    print("================================================================")
+    print("=== {} ===".format(dir_name.upper()))
+    print("================================================================")
+
+
 def run_scripts(scripts):
     results = {}
     for script in scripts:
@@ -70,6 +78,7 @@ def run_scripts(scripts):
         configure_profile()
         with chdir(os.path.dirname(script)):
             logging.debug("run {}".format(abspath))
+            print_build(script)
             result = subprocess.call(abspath, env=env)
             results[script] = result
             if result != 0 and FAIL_FAST:
@@ -80,7 +89,8 @@ def run_scripts(scripts):
 def print_results(results):
     print("\n\n=== CONAN EXAMPLES: RESULTS ===")
     for build, result in results.items():
-        build_name = os.path.dirname(build)[2:].upper()
+        build_name = os.path.dirname(build).upper()
+        build_name = build_name[2:] if build_name.startswith(".") else build_name
         message = "{}: {}".format(build_name, "OK" if result == 0 else "ERROR")
         print(message)
 
