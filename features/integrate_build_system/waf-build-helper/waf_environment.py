@@ -104,7 +104,7 @@ class WafBuildEnvironment(object):
         self._save_toolchain_file()
         args = args or []
         command = "waf configure " + " ".join(arg for arg in args)
-        if self._compiler_version:
+        if self._compiler_version and "Visual Studio" in self._compiler:
             command = command + \
                 '--msvc_version="msvc {}.0"'.format(self._compiler_version)
         self._run(command)
