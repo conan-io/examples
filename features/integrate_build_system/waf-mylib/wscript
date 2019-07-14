@@ -10,6 +10,7 @@ def options(opt):
 
 def configure(conf):
 	conf.load('compiler_cxx')
+	conf.load('waf_conan_toolchain', tooldir='.')
 
 def build(bld):
 	bld.stlib(target='mylib', source='./src/mylib.cpp')
