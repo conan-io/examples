@@ -9,13 +9,12 @@ class MyLibConan(base.get_conanfile()):
     settings = "os", "compiler", "build_type", "arch", "arch_build"
     name = "mylib-waf"
     version = "1.0"
-    generators = "Waf"
     license = "MIT"
     author = "Conan Team"
     description = "Just a simple example of using Conan to package a Waf lib"
     topics = ("conan", "libs", "Waf")
     exports = "wscript", "src/mylib.cpp", "include/mylib.hpp", "LICENSE"
-    build_requires = "WafGen/0.1@user/channel", "waf/2.0.17@user/channel"
+    build_requires = "waf/2.0.17@user/channel"
 
     def build(self):
         waf = base.WafBuildEnvironment(self)
