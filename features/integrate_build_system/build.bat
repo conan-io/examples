@@ -8,8 +8,7 @@ conan create waf-mylib user/channel
 PUSHD mylib-consumer
 RMDIR /Q /S build
 MKDIR build
-PUSHD build
 
-conan install ..
-cmake .. -G "%CMAKE_GENERATOR%"
-cmake --build . --config Release
+conan source . --source-folder=build
+conan install . --install-folder=build
+conan build . --build-folder=build
