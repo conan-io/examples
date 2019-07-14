@@ -64,7 +64,8 @@ class WafBuildEnvironment(object):
                 sections.append("    conf.env.CXXFLAGS.extend(['/Zi', '/FS'])")
                 sections.append("    conf.env.LINKFLAGS.extend(['/DEBUG'])")
             elif self._build_type == "Release":
-                sections.append("    conf.env.CXXFLAGS.extend(['/O2'])")
+                sections.append(
+                    "    conf.env.CXXFLAGS.extend(['/O2', '/Ob1', '/DNDEBUG', '/EHsc'])")
         else:
             sections.append("    conf.env.CC_VERSION = {}".format(
                 self._gcc_ver_conan2waf(self._compiler_version)))
@@ -107,12 +108,14 @@ class WafBuildEnvironment(object):
         if self._compiler_version and "Visual Studio" in self._compiler:
             command = command + \
                 '--msvc_version="msvc {}.0"'.format(self._compiler_version)
-        self._run(command)
+        with tools.vcvars(self._conanfile.settings):
+            self._run(command)
 
     def build(self, args=None):
         args = args or []
         command = "waf build " + " ".join(arg for arg in args)
-        self._run(command)
+        with tools.vcvars(self._conanfile.settings):
+            self._run(command)
 
     def _run(self, command):
         self._conanfile.run(command)
