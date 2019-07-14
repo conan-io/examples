@@ -11,8 +11,7 @@ set -x
 pushd mylib-consumer
 rm -rf build
 mkdir build
-pushd build
 
-conan install ..
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build .
+conan source . --source-folder=build
+conan install . --install-folder=build
+conan build . --build-folder=build
