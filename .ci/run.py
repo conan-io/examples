@@ -9,6 +9,8 @@ import subprocess
 import tempfile
 import logging
 from contextlib import contextmanager
+from tabulate import tabulate
+import colorama
 
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
@@ -26,6 +28,13 @@ def chdir(dir_path):
     finally:
         logging.debug("cd {}".format(current))
         os.chdir(current)
+
+
+def writeln_console(message):
+    sys.stdout.write(message)
+    sys.stdout.write('\n')
+    sys.stderr.flush()
+    sys.stdout.flush()
 
 
 def get_build_list():
@@ -69,9 +78,9 @@ def configure_profile():
 def print_build(script):
     dir_name = os.path.dirname(script)
     dir_name = dir_name[2:] if dir_name.startswith('.') else dir_name
-    print("================================================================")
-    print("* {}".format(dir_name.upper()))
-    print("================================================================")
+    writeln_console("================================================================")
+    writeln_console("* " + colorama.Style.BRIGHT + "{}".format(dir_name.upper()))
+    writeln_console("================================================================")
 
 
 def run_scripts(scripts):
@@ -95,12 +104,19 @@ def run_scripts(scripts):
 
 
 def print_results(results):
-    print("\n\n=== CONAN EXAMPLES: RESULTS ===")
+    columns = []
     for build, result in results.items():
         build_name = os.path.dirname(build).upper()
         build_name = build_name[2:] if build_name.startswith(".") else build_name
-        message = "{}: {}".format(build_name, "OK" if result == 0 else "ERROR")
-        print(message)
+        columns.append([build_name, get_result_message(result)])
+    writeln_console("\n")
+    writeln_console(tabulate(columns, headers=["EXAMPLE", "RESULT"], tablefmt="grid"))
+
+
+def get_result_message(result):
+    if result == 0:
+        return colorama.Fore.GREEN + "SUCCESS" + colorama.Style.RESET_ALL
+    return colorama.Fore.RED + "FAILURE" + colorama.Style.RESET_ALL
 
 
 def validate_results(results):
@@ -110,6 +126,7 @@ def validate_results(results):
 
 
 if __name__ == "__main__":
+    colorama.init(autoreset=True)
     scripts = get_build_list()
     results = run_scripts(scripts)
     print_results(results)

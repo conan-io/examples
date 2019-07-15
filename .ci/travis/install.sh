@@ -19,6 +19,6 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     pyenv activate conan
 fi
 
-pip install conan --upgrade
+pip install conan tabulate colorama --upgrade
 
 conan user
