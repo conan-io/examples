@@ -110,7 +110,7 @@ def print_results(results):
         build_name = build_name[2:] if build_name.startswith(".") else build_name
         columns.append([build_name, get_result_message(result)])
     writeln_console("\n")
-    writeln_console(tabulate(columns, headers=["EXAMPLE", "RESULT"], tablefmt="grid"))
+    writeln_console(tabulate(columns, headers=["CONAN EXAMPLE", "RESULT"], tablefmt="grid"))
 
 
 def get_result_message(result):
