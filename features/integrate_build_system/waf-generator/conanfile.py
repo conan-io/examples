@@ -14,19 +14,16 @@ class Waf(Generator):
     def content(self):
         sections = []
         sections.append("def configure(ctx):")
-        self.deps_build_info.libs = self._remove_lib_extension(
-            self.deps_build_info.libs)
         conan_libs = []
         for dep_name, info in self.deps_build_info.dependencies:
             if dep_name not in self.conanfile.build_requires:
-                info.libs = self._remove_lib_extension(info.libs)
                 dep_name = dep_name.replace("-", "_")
                 sections.append("   ctx.env.INCLUDES_{} = {}".format(
                     dep_name, info.include_paths))
                 sections.append("   ctx.env.LIBPATH_{} = {}".format(
                     dep_name, info.lib_paths))
                 sections.append("   ctx.env.LIB_{} = {}".format(
-                    dep_name, info.libs))
+                    dep_name, self._remove_lib_extension(info.libs)))
                 conan_libs.append(dep_name)
         sections.append("   ctx.env.CONAN_LIBS = {}".format(conan_libs))
         sections.append("")
