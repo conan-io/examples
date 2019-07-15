@@ -80,8 +80,7 @@ Documentation: https://docs.conan.io/en/latest/versioning/lockfiles.html#how-to-
 
 ### [Integrate a build system in Conan](features/integrate_build_system)
 
-Demonstrate how to integrate a build-system in Conan using an *installer* a *build-helper* and a *custom
-generator*. 
+Shows how to integrate a build-system in Conan using an *installer* a *build-helper* and a *custom generator*.
 
 ## How can I reproduce the build steps?
 
