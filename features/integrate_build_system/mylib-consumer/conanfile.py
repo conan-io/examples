@@ -6,7 +6,7 @@ base = python_requires("waf-build-helper/0.1@user/channel")
 
 
 class TestWafConan(base.get_conanfile()):
-    settings = "os", "compiler", "build_type", "arch", "arch_build"
+    settings = "os", "compiler", "build_type", "arch"
     name = "waf-consumer"
     generators = "Waf"
     requires = "mylib-waf/1.0@user/channel"
