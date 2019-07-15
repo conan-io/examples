@@ -4,13 +4,16 @@
 top = '.'
 out = 'build'
 
+
 def options(opt):
-	opt.load('compiler_cxx')
+    opt.load('compiler_cxx')
+
 
 def configure(conf):
     conf.load('compiler_cxx')
     conf.load('waf_conan_libs_info', tooldir='.')
     conf.load('waf_conan_toolchain', tooldir='.')
 
+
 def build(bld):
-	bld.program(source='main.cpp', target='app', use=bld.env.CONAN_LIBS)
+    bld.program(source='main.cpp', target='app', use=bld.env.CONAN_LIBS)
