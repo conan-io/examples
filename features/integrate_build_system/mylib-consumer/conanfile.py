@@ -2,10 +2,10 @@ import os
 
 from conans import ConanFile, python_requires
 
-base = python_requires("waf-build-helper/0.1@user/channel")
+waf_import = python_requires("waf-build-helper/0.1@user/channel")
 
 
-class TestWafConan(base.get_conanfile()):
+class TestWafConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     name = "waf-consumer"
     generators = "Waf"
@@ -14,6 +14,6 @@ class TestWafConan(base.get_conanfile()):
     exports_sources = "wscript", "main.cpp"
 
     def build(self):
-        waf = base.WafBuildEnvironment(self)
+        waf = waf_import.WafBuildEnvironment(self)
         waf.configure()
         waf.build()
