@@ -6,7 +6,7 @@ waf_import = python_requires("waf-build-helper/0.1@user/channel")
 
 
 class MyLibConan(ConanFile):
-    settings = "os", "compiler", "build_type", "arch", "arch_build"
+    settings = "os", "compiler", "build_type", "arch"
     name = "mylib-waf"
     version = "1.0"
     license = "MIT"

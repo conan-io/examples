@@ -11,7 +11,7 @@ from conans.errors import ConanException
 class WafBuildEnvironment(object):
     def __init__(self, conanfile):
         self._conanfile = conanfile
-        self._arch_build = self._ss("arch_build")
+        self._arch = self._ss("arch")
         self._os = self._ss("os")
         self._compiler = self._ss("compiler")
         self._compiler_version = self._ss("compiler.version")
@@ -52,10 +52,10 @@ class WafBuildEnvironment(object):
                     self._compiler_version))
             try:
                 sections.append("    conf.env.MSVC_TARGETS = '{}'".format(
-                    self._arch_conan2waf[self._arch_build]))
+                    self._arch_conan2waf[self._arch]))
             except KeyError:
                 raise ConanException(
-                    "Architecture  '%s' not supported" % self._arch_build)
+                    "Architecture  '%s' not supported" % self._arch)
 
             sections.append("    conf.env.CXXFLAGS.append('/{}')".format(
                 self._compiler_runtime))
