@@ -5,8 +5,8 @@
 class MyLib
 {
 public:
-	MyLib();
-	~MyLib();
+	MyLib() = default;
+	~MyLib () = default;
 	void PrintMessage(const std::string& message);
 };
 
