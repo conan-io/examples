@@ -28,4 +28,4 @@ class WAFInstallerConan(ConanFile):
 
     def package_info(self):
         self.output.info("Using Waf %s version" % self.version)
-        self.env_info.path.append(os.path.join(self.package_folder, "bin"))
+        self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
