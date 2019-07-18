@@ -18,7 +18,14 @@ def rm(path):
 rm("release")
 rm("build_server_folder")
 rm("bo.json")
-run('conan remove "*" -f')
+
+run("conan remove App/0.1@user/testing* -f")
+run("conan remove PkgA/0.1@user/testing* -f")
+run("conan remove PkgA/0.2@user/testing* -f")
+run("conan remove PkgB/0.1@user/testing* -f")
+run("conan remove PkgC/0.1@user/testing* -f")
+run("conan remove PkgZ/0.1@user/testing* -f")
+run("conan remove PkgZ/0.2@user/testing* -f")
 
 run("conan config set general.default_package_id_mode=full_version_mode")
 run("cd PkgZ && conan create . PkgZ/0.1@user/testing")
