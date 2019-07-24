@@ -86,8 +86,6 @@ def print_build(script):
 def run_scripts(scripts):
     results = {}
     for script in scripts:
-        if "INTEGRATE_BUILD_SYSTEM" not in script.upper():
-            continue
         chmod_x(script)
         abspath = os.path.abspath(script)
         env = get_conan_env()
