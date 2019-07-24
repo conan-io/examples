@@ -2,7 +2,7 @@
 # encoding: utf-8
 import os
 
-top = os.getcwd()
+top = '.'
 out = 'build'
 
 
@@ -12,8 +12,8 @@ def options(opt):
 
 def configure(conf):
     conf.load('compiler_cxx')
-    conf.load('waf_conan_libs_info', tooldir=os.getcwd())
-    conf.load('waf_conan_toolchain', tooldir=os.getcwd())
+    conf.load('waf_conan_libs_info', tooldir='.')
+    conf.load('waf_conan_toolchain', tooldir='.')
 
 
 def build(bld):
