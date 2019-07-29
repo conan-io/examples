@@ -69,14 +69,16 @@ def get_conan_env(script):
     return os.environ
 
 
-def configure_profile():
+def configure_profile(env):
     subprocess.check_output("conan profile new default --detect",
                             stderr=subprocess.STDOUT,
-                            shell=True)
+                            shell=True,
+                            env=env)
     if platform.system() == "Linux":
         subprocess.check_output("conan profile update settings.compiler.libcxx=libstdc++11 default",
                                 stderr=subprocess.STDOUT,
-                                shell=True)
+                                shell=True,
+                                env=env)
 
 
 def print_build(script):
@@ -93,7 +95,7 @@ def run_scripts(scripts):
         chmod_x(script)
         abspath = os.path.abspath(script)
         env = get_conan_env(script)
-        configure_profile()
+        configure_profile(env)
         with chdir(os.path.dirname(script)):
             writeln_console("run {}".format(abspath))
             print_build(script)
