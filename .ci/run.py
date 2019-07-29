@@ -96,7 +96,7 @@ def run_scripts(scripts):
         env = get_conan_env(script)
         configure_profile()
         with chdir(os.path.dirname(script)):
-            logging.debug("run {}".format(abspath))
+            writeln_console("run {}".format(abspath))
             print_build(script)
             if abspath.endswith(".py"):
                 result = subprocess.call([sys.executable, abspath], env=env)
