@@ -1,7 +1,7 @@
 build: false
 
 environment:
-    PYTHON: "C:\\Python27"
+    PYTHON: "C:\\Python37"
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
 

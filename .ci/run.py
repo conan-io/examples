@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 import logging
 from contextlib import contextmanager
+from collections import OrderedDict
 from tabulate import tabulate
 import colorama
 
@@ -16,6 +17,10 @@ import colorama
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
+
+
+def is_appveyor():
+    return os.getenv("APPVEYOR") == "True"
 
 
 @contextmanager
@@ -31,23 +36,20 @@ def chdir(dir_path):
 
 
 def writeln_console(message):
+    sys.stderr.flush()
     sys.stdout.write(message)
     sys.stdout.write('\n')
-    sys.stderr.flush()
     sys.stdout.flush()
 
 
 def get_build_list():
     builds = []
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    for root, dirs, files in os.walk("."):
-        if "build.py" in [os.path.basename(file) for file in files]:
-            builds.append(os.path.join(root, "build.py"))
-            continue
-
+    for root, _, files in os.walk("."):
         for file in files:
-            if os.path.basename(file) == script:
+            if os.path.basename(file) in [script, 'build.py']:
                 builds.append(os.path.join(root, file))
+                break
 
     return builds
 
@@ -58,7 +60,10 @@ def chmod_x(script):
     os.chmod(script, st.st_mode | stat.S_IEXEC)
 
 
-def get_conan_env():
+def get_conan_env(script):
+    if is_appveyor():
+        return os.path.join("C:", "projects", "CONAN_HOME", os.path.basename(script))
+
     temp_folder = tempfile.mkdtemp(prefix="conan-", suffix="-home")
     os.environ["CONAN_USER_HOME"] = temp_folder
     logging.debug("CONAN_USER_HOME: {}".format(temp_folder))
@@ -84,17 +89,17 @@ def print_build(script):
 
 
 def run_scripts(scripts):
-    results = {}
+    results = OrderedDict.fromkeys(scripts, '')
     for script in scripts:
         chmod_x(script)
         abspath = os.path.abspath(script)
-        env = get_conan_env()
+        env = get_conan_env(script)
         configure_profile()
         with chdir(os.path.dirname(script)):
             logging.debug("run {}".format(abspath))
             print_build(script)
             if abspath.endswith(".py"):
-                result = subprocess.call(["python", abspath], env=env)
+                result = subprocess.call([sys.executable, abspath], env=env)
             else:
                 result = subprocess.call(abspath, env=env)
             results[script] = result
