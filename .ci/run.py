@@ -20,7 +20,7 @@ logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOG
 
 
 def is_appveyor():
-    return os.getenv("APPVEYOR") == "True"
+    return os.getenv("APPVEYOR", False)
 
 
 @contextmanager
@@ -61,10 +61,9 @@ def chmod_x(script):
 
 
 def get_conan_env(script):
+    temp_folder = tempfile.mkdtemp(prefix="conan-", suffix="-home")
     if is_appveyor():
         temp_folder = os.path.join("C:", "projects", "CONAN_HOME", os.path.basename(script))
-    else:
-        temp_folder = tempfile.mkdtemp(prefix="conan-", suffix="-home")
     os.environ["CONAN_USER_HOME"] = temp_folder
     logging.debug("CONAN_USER_HOME: {}".format(temp_folder))
     return os.environ
