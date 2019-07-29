@@ -62,8 +62,8 @@ def chmod_x(script):
 
 def get_conan_env(script):
     temp_folder = tempfile.mkdtemp(prefix="conan-", suffix="-home")
-    if is_appveyor():
-        temp_folder = os.path.join("C:", "Users", "appveyor", "CONAN_HOME", os.path.basename(script))
+    #if is_appveyor():
+    #    temp_folder = os.path.join("C:", "Users", "appveyor", "CONAN_HOME", os.path.basename(script))
     os.environ["CONAN_USER_HOME"] = temp_folder
     logging.debug("CONAN_USER_HOME: {}".format(temp_folder))
     return os.environ
