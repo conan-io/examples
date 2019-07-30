@@ -3,6 +3,7 @@
 
 import os
 import sys
+import glob
 import stat
 import platform
 import subprocess
@@ -46,10 +47,15 @@ def get_build_list():
     builds = []
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
     for root, _, files in os.walk("."):
+        # prefer python when present
+        build = [it for it in files if "build.py" in it]
+        if build:
+            builds.append(os.path.join(root, build[0]))
+            break
+
         for file in files:
-            if os.path.basename(file) in [script, 'build.py']:
+            if os.path.basename(file) == script:
                 builds.append(os.path.join(root, file))
-                break
 
     return builds
 
@@ -95,7 +101,6 @@ def run_scripts(scripts):
         env = get_conan_env(script)
         configure_profile(env)
         with chdir(os.path.dirname(script)):
-            writeln_console("run {}".format(abspath))
             print_build(script)
             if abspath.endswith(".py"):
                 result = subprocess.call([sys.executable, abspath], env=env)
