@@ -45,17 +45,19 @@ def writeln_console(message):
 
 def get_build_list():
     builds = []
+    folders = ["features", "libraries"]
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    for root, _, files in os.walk("."):
-        # prefer python when present
-        build = [it for it in files if "build.py" in it]
-        if build:
-            builds.append(os.path.join(root, build[0]))
-            break
+    for folder in folders:
+        for root, _, files in os.walk(folder):
+            # prefer python when present
+            build = [it for it in files if "build.py" in it]
+            if build:
+                builds.append(os.path.join(root, build[0]))
+                break
 
-        for file in files:
-            if os.path.basename(file) == script:
-                builds.append(os.path.join(root, file))
+            for file in files:
+                if os.path.basename(file) == script:
+                    builds.append(os.path.join(root, file))
 
     return builds
 
