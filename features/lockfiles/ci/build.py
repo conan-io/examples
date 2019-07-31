@@ -58,7 +58,6 @@ while build_order:
     _, pkg_ref = build_order[0][0]
     pkg_ref = pkg_ref.split("#", 1)[0]
     print("\n********** Rebuild affected package: %s ***********" % pkg_ref)
-    run("conan graph clean-modified release/")
     run("conan install %s --build=%s --lockfile=release" % (pkg_ref, pkg_ref))
     os.chdir("..")
     run("conan graph update-lock release build_server_folder/release")
