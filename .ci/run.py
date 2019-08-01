@@ -96,6 +96,7 @@ def print_build(script):
     writeln_console("* " + colorama.Style.BRIGHT + "{}".format(dir_name.upper()))
     writeln_console("================================================================")
 
+
 @contextmanager
 def ensure_cache_preserved():
     cache_directory = os.environ["CONAN_USER_HOME"]
@@ -119,7 +120,7 @@ def ensure_cache_preserved():
         diff_values = [k for k,v in after_hashes.items() if before_hashes.get(k, None) != v]
 
         if added_keys or diff_values:
-            diffs = list(added_keys) + diff_values
+            diffs = set(list(added_keys) + diff_values)
             raise Exception("Current example modifies the cache. Found differences in:\n{}".format('\n'.join(diffs)))
 
 
