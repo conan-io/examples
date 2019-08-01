@@ -15,6 +15,7 @@ from collections import OrderedDict
 from tabulate import tabulate
 import colorama
 import hashlib
+import codecs
 import difflib
 
 
@@ -109,7 +110,7 @@ def ensure_cache_preserved():
             for filename in filenames:
                 filepath = os.path.join(root, filename)
                 hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
-                contents[filepath] = open(filepath).read()
+                contents[filepath] = codecs.open(filepath).read()
         return hashes, contents
     
     before_hashes, before_contents = compute_hashes()
