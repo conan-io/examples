@@ -102,19 +102,20 @@ def ensure_cache_preserved():
     cache_directory = os.environ["CONAN_USER_HOME"]
     # The examples cannot modify the cache
     def compute_hashes():
-        hashes = {}
+        hashes = contents = {}
         for root, dirs, filenames in os.walk(cache_directory):
             dirs[:] = [d for d in dirs if d not in ['data', ]]  # Check all files but the storage folder
             for filename in filenames:
                 filepath = os.path.join(root, filename)
                 hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
-        return hashes
+                contents[filepath] = open(filepath).read()
+        return hashes, contents
     
-    before_hashes = compute_hashes()
+    before_hashes, before_contents = compute_hashes()
     try:
         yield
     finally:
-        after_hashes = compute_hashes()
+        after_hashes, after_contents = compute_hashes()
 
         added_keys = set(after_hashes.keys()) - set(before_hashes.keys())
         diff_values = [k for k,v in after_hashes.items() if k in before_hashes and before_hashes.get(k) != v]
@@ -130,6 +131,7 @@ def ensure_cache_preserved():
                 msg += " - Modified files:\n"    
                 for item in diff_values:
                     msg += "   + {}\n".format(item)
+                    msg += "---- before ----\n{}\n---- after ----\n{}\n----\n".format(before_contents[item], after_contents[item])
             
             raise Exception(msg)
 
