@@ -125,11 +125,11 @@ def ensure_cache_preserved():
             if added_keys:
                 msg += " - New files added to the cache:\n"    
                 for item in added_keys:
-                    msg += "   + {}".format(item)
+                    msg += "   + {}\n".format(item)
             if diff_values:
                 msg += " - Modified files:\n"    
                 for item in diff_values:
-                    msg += "   + {}".format(item)
+                    msg += "   + {}\n".format(item)
             
             raise Exception(msg)
 
@@ -145,6 +145,7 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
+            subprocess.call(['conan --version'], env=env)  # Need to initialize the cache with something
             with ensure_cache_preserved():
                 result = subprocess.call(build_script, env=env)
             results[script] = result
