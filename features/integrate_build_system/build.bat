@@ -12,3 +12,5 @@ MKDIR build
 conan source . --source-folder=build
 conan install . --install-folder=build
 conan build . --build-folder=build
+
+POPD

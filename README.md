@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/conan-io/examples.svg?branch=master)](https://travis-ci.org/conan-io/examples)
-[![Build Status AppVeyor](https://ci.appveyor.com/api/projects/status/github/conan-io/examples?svg=true)](https://ci.appveyor.com/project/ConanCIintegration/examples)
+[![Build Status AppVeyor](https://ci.appveyor.com/api/projects/status/github/conan-io/examples?svg=true)](https://ci.appveyor.com/project/ConanOrgCI/examples)
 
 # Conan Examples
 
@@ -39,7 +39,7 @@ Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
 ### [An introduction to Dear ImGui and how to use with Conan](libraries/dear-imgui/basic)
 
-Demonstrate how to use Dear ImGui with Conan to add a GUI to an OpenGL3 application. 
+Demonstrate how to use Dear ImGui with Conan to add a GUI to an OpenGL3 application.
 
 ### [Exporting targets with CMake and reuse with find_package()](features/cmake/find_package/exported_targets_multiconfig)
 
@@ -70,7 +70,7 @@ Documentation: https://docs.conan.io/en/latest/creating_packages/package_approac
 
 When a package in a dependency graph is modified and a new version or revision is created, it
 is sometimes desired to test if that new version works well within a larger product or project,
-that is, when that package is part of a larger dependency graph. The packages that depend on 
+that is, when that package is part of a larger dependency graph. The packages that depend on
 the modified one might need to be rebuilt, but if something else changed, it is impossible to
 achieve reproducible builds.
 
