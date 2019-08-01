@@ -145,7 +145,10 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
+            
             subprocess.call(['conan', 'install', 'zlib/1.2.11@conan/stable'], env=env)  # Need to initialize the cache with something
+            subprocess.call(['conan', 'config', 'set', 'log.print_run_commands=True'], env=env)
+ 
             with ensure_cache_preserved():
                 result = subprocess.call(build_script, env=env)
             results[script] = result
