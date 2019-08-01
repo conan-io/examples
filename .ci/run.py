@@ -117,11 +117,21 @@ def ensure_cache_preserved():
         after_hashes = compute_hashes()
 
         added_keys = set(after_hashes.keys()) - set(before_hashes.keys())
-        diff_values = [k for k,v in after_hashes.items() if before_hashes.get(k, None) != v]
+        diff_values = [k for k,v in after_hashes.items() if k in before_hashes and before_hashes.get(k) != v]
 
         if added_keys or diff_values:
             diffs = set(list(added_keys) + diff_values)
-            raise Exception("Current example modifies the cache. Found differences in:\n{}".format('\n'.join(diffs)))
+            msg = "Current example modifies the cache.\n"
+            if added_keys:
+                msg += " - New files added to the cache:\n"    
+                for item in added_keys:
+                    msg += "   + {}".format(item)
+            if diff_values:
+                msg += " - Modified files:\n"    
+                for item in diff_values:
+                    msg += "   + {}".format(item)
+            
+            raise Exception(msg)
 
 
 def run_scripts(scripts):
