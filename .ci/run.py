@@ -110,7 +110,7 @@ def ensure_cache_preserved():
             for filename in filenames:
                 filepath = os.path.join(root, filename)
                 hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
-                contents[filepath] = codecs.open(filepath, 'r', 'utf-8').read()
+                contents[filepath] = codecs.open(filepath, 'r', 'latin-1').read()
         return hashes, contents
     
     before_hashes, before_contents = compute_hashes()
