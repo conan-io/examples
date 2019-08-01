@@ -102,7 +102,8 @@ def ensure_cache_preserved():
     # The examples cannot modify the cache
     def compute_hashes():
         hashes = {}
-        for root, _, filenames in os.walk(cache_directory):
+        for root, dirs, filenames in os.walk(cache_directory):
+            dirs[:] = [d for d in dirs if d not in ['data', ]]  # Check all files but the storage folder
             for filename in filenames:
                 filepath = os.path.join(root, filename)
                 hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
