@@ -102,11 +102,10 @@ def ensure_cache_preserved():
     # The examples cannot modify the cache
     def compute_hashes():
         hashes = {}
-        for root, dirs, filenames in os.walk(cache_directory, topdown=False):
-            for i, directory in enumerate(dirs):
-                for filename in filenames[i]:
-                    filepath = os.path.join(directory, filename)
-                    hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
+        for root, _, filenames in os.walk(cache_directory):
+            for filename in filenames:
+                filepath = os.path.join(root, filename)
+                hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
         return hashes
     
     before_hashes = compute_hashes()
