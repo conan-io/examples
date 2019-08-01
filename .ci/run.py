@@ -15,6 +15,7 @@ from collections import OrderedDict
 from tabulate import tabulate
 import colorama
 import hashlib
+import difflib
 
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
@@ -131,8 +132,11 @@ def ensure_cache_preserved():
                 msg += " - Modified files:\n"    
                 for item in diff_values:
                     msg += "   + {}\n".format(item)
-                    msg += "---- before ----\n{}\n---- after ----\n{}\n----\n".format(before_contents[item], after_contents[item])
-            
+                    msg += "---"
+                    for line in difflib.unified_diff(before_contents[item].splitlines(), after_contents[item].splitlines(),
+                                                     fromfile='before', tofile='after', lineterm=''):
+                        msg += line
+                    msg += "---"
             raise Exception(msg)
 
 
