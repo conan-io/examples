@@ -89,6 +89,5 @@ def main():
 
 
 if __name__ == '__main__':
-    conan_conf = os.path.join(os.environ)
     with tmp_configure():
         main()
