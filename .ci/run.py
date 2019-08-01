@@ -14,6 +14,7 @@ from contextlib import contextmanager
 from collections import OrderedDict
 from tabulate import tabulate
 import colorama
+import hashlib
 
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
@@ -95,6 +96,32 @@ def print_build(script):
     writeln_console("* " + colorama.Style.BRIGHT + "{}".format(dir_name.upper()))
     writeln_console("================================================================")
 
+@contextmanager
+def ensure_cache_preserved():
+    cache_directory = os.environ["CONAN_USER_HOME"]
+    # The examples cannot modify the cache
+    def compute_hashes():
+        hashes = {}
+        for root, dirs, filenames in os.walk(cache_directory, topdown=False):
+            for i, directory in enumerate(dirs):
+                for filename in filenames[i]:
+                    filepath = os.path.join(directory, filename)
+                    hashes[filepath] = hashlib.md5(open(filepath, 'rb').read()).digest()
+        return hashes
+    
+    before_hashes = compute_hashes()
+    try:
+        yield
+    finally:
+        after_hashes = compute_hashes()
+
+        added_keys = set(after_hashes.keys()) - set(before_hashes.keys())
+        diff_values = [k for k,v in after_hashes.items() if before_hashes.get(k, None) != v]
+
+        if added_keys or diff_values:
+            diffs = list(added_keys) + diff_values
+            raise Exception("Current example modifies the cache. Found differences in:\n{}".format('\n'.join(diffs)))
+
 
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
@@ -102,13 +129,13 @@ def run_scripts(scripts):
         chmod_x(script)
         abspath = os.path.abspath(script)
         env = get_conan_env(script)
+        configfile_path = os.path.join(os.environ["CONAN_USER_HOME"], "conan.conf")
         configure_profile(env)
         with chdir(os.path.dirname(script)):
             print_build(script)
-            if abspath.endswith(".py"):
-                result = subprocess.call([sys.executable, abspath], env=env)
-            else:
-                result = subprocess.call(abspath, env=env)
+            build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
+            with ensure_cache_preserved():
+                result = subprocess.call(build_script, env=env)
             results[script] = result
             if result != 0 and FAIL_FAST:
                 break
