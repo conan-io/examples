@@ -9,7 +9,7 @@ import platform
 import subprocess
 import tempfile
 import logging
-import datetime
+import uuid
 from contextlib import contextmanager
 from collections import OrderedDict
 from tabulate import tabulate
@@ -70,7 +70,7 @@ def chmod_x(script):
 
 
 def get_conan_env(script):
-    temp_folder = os.path.join(tempfile.gettempdir(), str(datetime.datetime.now().microsecond))
+    temp_folder = os.path.join(tempfile.gettempdir(), str(uuid.uuid4())[:4])
     os.environ["CONAN_USER_HOME"] = temp_folder
     logging.debug("CONAN_USER_HOME: {}".format(temp_folder))
     return os.environ
