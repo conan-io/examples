@@ -10,5 +10,7 @@ install:
   - pip.exe install conan tabulate colorama --upgrade
   - conan user
 
+environment:
+  CONAN_PRINT_RUN_COMMANDS: 1
 test_script:
   - python .ci/run.py

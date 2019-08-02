@@ -1,5 +1,5 @@
 env:
-  - CONAN_PRINT_RUN_COMMANDS="1"
+  - CONAN_PRINT_RUN_COMMANDS=1
 matrix:
   include:
     - os: linux
