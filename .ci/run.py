@@ -111,7 +111,7 @@ def ensure_cache_preserved():
     finally:
         r = git.run("diff")
         if r:
-            writeln_console("* " + colorama.Fore.RED + "This is example modifies the cache!")
+            writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the cache!")
             writeln_console(r)
             raise Exception("Example modifies cache!")
 
