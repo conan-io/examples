@@ -136,7 +136,7 @@ def ensure_cache_preserved():
                     msg += "---"
                     for line in difflib.unified_diff(before_contents[item].splitlines(), after_contents[item].splitlines(),
                                                      fromfile='before', tofile='after', lineterm=''):
-                        msg += line
+                        msg += line + "\n"
                     msg += "---"
             raise Exception(msg)
 
