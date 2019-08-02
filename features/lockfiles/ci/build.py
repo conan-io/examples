@@ -23,7 +23,7 @@ def rm(path):
 def tmp_configure():
     config_params = ['default_package_id_mode', ]
     try:
-        package_id_mode = subprocess.check_output("conan config get general.default_package_id_mode", shell=True)
+        package_id_mode = str(subprocess.check_output("conan config get general.default_package_id_mode", shell=True))
     except subprocess.CalledProcessError:
         package_id_mode = None
 
