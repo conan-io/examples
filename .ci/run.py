@@ -147,17 +147,18 @@ def run_scripts(scripts):
         chmod_x(script)
         abspath = os.path.abspath(script)
         env = get_conan_env(script)
-        configfile_path = os.path.join(os.environ["CONAN_USER_HOME"], "conan.conf")
         configure_profile(env)
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
             
-            subprocess.call(['conan', 'install', 'zlib/1.2.11@conan/stable'], env=env)  # Need to initialize the cache with something
+            # Need to initialize the cache with default files if they are not already there
+            subprocess.call(['conan', 'install', 'zlib/1.2.11@conan/stable'], env=env)
             subprocess.call(['conan', 'config', 'set', 'log.print_run_commands=True'], env=env)
  
             with ensure_cache_preserved():
                 result = subprocess.call(build_script, env=env)
+                
             results[script] = result
             if result != 0 and FAIL_FAST:
                 break
