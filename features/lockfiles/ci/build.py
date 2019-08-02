@@ -20,19 +20,15 @@ def rm(path):
 
 
 @contextmanager
-def tmp_configure():
-    config_params = ['default_package_id_mode', ]
+def restore_conan_home():
+    conan_home = os.environ.get('CONAN_USER_HOME', None) or os.path.expanduser('~/.conan')
+    conan_conf = os.path.join(conan_home, 'conan.conf')
+
+    contents = open(conan_conf, 'rb').read()
     try:
-        package_id_mode = str(subprocess.check_output("conan config get general.default_package_id_mode", shell=True))
-    except subprocess.CalledProcessError:
-        package_id_mode = None
-
-    yield
-
-    if package_id_mode:
-        run("conan config set general.default_package_id_mode={}".format(package_id_mode))
-    else:
-        run("conan config rm general.default_package_id_mode")
+        yield
+    finally:
+        open(conan_conf, 'wb').write(contents)
 
 
 def main():
@@ -89,5 +85,5 @@ def main():
 
 
 if __name__ == '__main__':
-    with tmp_configure():
+    with restore_conan_home():
         main()
