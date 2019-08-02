@@ -114,10 +114,10 @@ def ensure_cache_preserved():
         yield
     finally:
         r = git.run("diff")
-        print("*"*20)
-        print(r)
         if r:
-            raise Exception("!!!!")
+            writeln_console("* " + colorama.Style.RED + "This is example modifies the cache!")
+            writeln_console(r)
+            raise Exception("Example modifies cache!")
 
 
 def run_scripts(scripts):
