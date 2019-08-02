@@ -1,24 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-import glob
-import stat
-import platform
-import subprocess
-import tempfile
 import logging
+import os
+import platform
+import stat
+import subprocess
+import sys
+import tempfile
 import uuid
-from contextlib import contextmanager
 from collections import OrderedDict
-from tabulate import tabulate
-import colorama
-import hashlib
-import codecs
-import difflib
-from conans.client.tools.scm import Git
+from contextlib import contextmanager
 
+import colorama
+from conans.client.tools.scm import Git
+from tabulate import tabulate
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
