@@ -154,7 +154,6 @@ def run_scripts(scripts):
             
             # Need to initialize the cache with default files if they are not already there
             subprocess.call(['conan', 'install', 'zlib/1.2.11@conan/stable'], env=env)
-            subprocess.call(['conan', 'config', 'set', 'log.print_run_commands=True'], env=env)
  
             with ensure_cache_preserved():
                 result = subprocess.call(build_script, env=env)
