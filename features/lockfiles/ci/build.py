@@ -21,8 +21,8 @@ def rm(path):
 
 @contextmanager
 def restore_conan_home():
-    conan_home = os.environ.get('CONAN_USER_HOME', None) or os.path.expanduser('~/.conan')
-    conan_conf = os.path.join(conan_home, 'conan.conf')
+    conan_home = os.environ.get('CONAN_USER_HOME', None) or os.path.expanduser('~')
+    conan_conf = os.path.join(conan_home, '.conan', 'conan.conf')
 
     contents = open(conan_conf, 'rb').read()
     try:
