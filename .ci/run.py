@@ -128,7 +128,10 @@ def run_scripts(scripts):
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
             
             # Need to initialize the cache with default files if they are not already there
-            subprocess.call(['conan', 'install', 'zlib/1.2.11@conan/stable'], env=env)
+            try:
+                subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env)
+            except:
+                pass
  
             with ensure_cache_preserved():
                 result = subprocess.call(build_script, env=env)
