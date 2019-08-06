@@ -129,7 +129,8 @@ def run_scripts(scripts):
             
             # Need to initialize the cache with default files if they are not already there
             try:
-                subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env)
+                subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env,
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except:
                 pass
  
