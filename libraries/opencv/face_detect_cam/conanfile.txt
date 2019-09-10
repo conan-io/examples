@@ -1,0 +1,11 @@
+[requires]
+opencv/2.4.13.5@conan/stable
+#opencv/3.4.2@diego/testing
+
+[generators]
+cmake
+
+[imports]
+share/OpenCV/haarcascades, haarcascade*.xml -> bin
+etc, haarcascade*.xml -> bin
+data, haarcascade*.xml -> bin
