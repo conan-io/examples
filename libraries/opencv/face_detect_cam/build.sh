@@ -12,7 +12,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
 pushd bin
-camera
+./camera
 
 popd
 popd
