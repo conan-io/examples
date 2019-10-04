@@ -1,6 +1,7 @@
 import os, json, shutil
 
 def run(cmd):
+    print("Running command: %s" % cmd)
     ret = os.system(cmd)
     if ret != 0:
         raise Exception("Failed command: %s" % cmd)
@@ -56,7 +57,7 @@ while build_order:
     os.chdir("build_server_folder")
     print("\nBuild order is: %s" % build_order)
     _, pkg_ref = build_order[0][0]
-    pkg_ref = pkg_ref.split("#", 1)[0]
+    pkg_ref = pkg_ref.split(":", 1)[0]
     print("\n********** Rebuild affected package: %s ***********" % pkg_ref)
     run("conan install %s --build=%s --lockfile=release" % (pkg_ref, pkg_ref))
     os.chdir("..")
