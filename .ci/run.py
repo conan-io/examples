@@ -54,7 +54,7 @@ def get_build_list():
             build = [it for it in files if "build.py" in it]
             if build:
                 builds.append(os.path.join(root, build[0]))
-                break
+                continue
 
             for file in files:
                 if os.path.basename(file) == script:
