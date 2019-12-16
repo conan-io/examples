@@ -10,7 +10,7 @@ class ConanHelloEmscripten(ConanFile):
     url = "https://github.com/conan-io/examples"
     homepage = "https://github.com/conan-io/examples"
     settings = {"os": ["Emscripten"]}
-    requires = "zlib/1.2.11"
+    requires = "zlib/1.2.11@conan/stable"
     exports_sources = ["CMakeLists.txt", "main.cpp"]
     generators = ["cmake"]
 
