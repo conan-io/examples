@@ -47,24 +47,15 @@ def writeln_console(message):
 
 
 def get_build_list():
-    test_vs2019_examples = ["exported_targets_multiconfig", 
-                            "find_cmake_multi_generator_targets", 
-                            "emscripten", 
-                            "integrate_build_system", 
-                            "ci",
-                            "multi_config",
-                            "package_development_flow",
-                            "reuse_conanfile",
-                            "cmake",
-                            "md5",
-                            "serialization"]
+    omit_vs2019_examples = ["basic", 
+                            "emscripten"]
     builds = []
     folders = ["features", "libraries"]
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
     for folder in folders:
         for root, _, files in os.walk(folder):
             add_example = True
-            if appveyor_image() == "Visual Studio 2019" and root not in test_vs2019_examples:
+            if appveyor_image() == "Visual Studio 2019" and root in omit_vs2019_examples:
                 add_example = False
             if add_example:
                 # prefer python when present
