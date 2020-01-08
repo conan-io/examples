@@ -15,7 +15,7 @@ mkdir build
 pushd BUILD
 conan install .. -s build_type=Debug
 conan install .. -s build_type=Release
-cmake .. -G "Visual Studio 15 2017 Win64"
+cmake .. -G "Visual Studio 16 2019"
 cmake --build . --config Debug
 cmake --build . --config Release
 Debug\example.exe

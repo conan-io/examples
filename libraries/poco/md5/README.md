@@ -18,10 +18,10 @@ Mostly used to run the conan.io getting started: https://docs.conan.io/en/latest
     $ conan install ..
     ```
 
-3. Configure the CMake project (Using MSVC 15 in this example):
+3. Configure the CMake project (Using MSVC 16 in this example):
 
     ```
-    $ cmake .. -G "Visual Studio 15 2017 Win64"
+    $ cmake .. -G "Visual Studio 16 2019"
     ```
 
 4. Build it:
