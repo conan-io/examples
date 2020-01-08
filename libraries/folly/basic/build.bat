@@ -4,7 +4,7 @@ RMDIR /Q /S build
 MKDIR build
 PUSHD build
 
-conan install ..
+conan install .. --build missing
 cmake .. -G "%CMAKE_GENERATOR%"
 cmake --build . --config Release
 
