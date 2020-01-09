@@ -1,20 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-import glob
-import stat
-import platform
-import subprocess
-import tempfile
 import logging
+import os
+import platform
+import stat
+import subprocess
+import sys
+import tempfile
 import uuid
-from contextlib import contextmanager
 from collections import OrderedDict
-from tabulate import tabulate
-import colorama
+from contextlib import contextmanager
 
+import colorama
+from conans.client.tools.scm import Git
+from tabulate import tabulate
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
@@ -102,6 +102,26 @@ def print_build(script):
     writeln_console("================================================================")
 
 
+@contextmanager
+def ensure_cache_preserved():
+    cache_directory = os.environ["CONAN_USER_HOME"]
+
+    git = Git(folder=cache_directory)
+    with open(os.path.join(cache_directory, '.gitignore'), 'w') as gitignore:
+        gitignore.write(".conan/data/")
+    git.run("init .")
+    git.run("add .")
+
+    try:
+        yield
+    finally:
+        r = git.run("diff")
+        if r:
+            writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the cache!")
+            writeln_console(r)
+            raise Exception("Example modifies cache!")
+
+
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
     for script in scripts:
@@ -111,10 +131,18 @@ def run_scripts(scripts):
         configure_profile(env)
         with chdir(os.path.dirname(script)):
             print_build(script)
-            if abspath.endswith(".py"):
-                result = subprocess.call([sys.executable, abspath], env=env)
-            else:
-                result = subprocess.call(abspath, env=env)
+            build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
+            
+            # Need to initialize the cache with default files if they are not already there
+            try:
+                subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env,
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except:
+                pass
+ 
+            with ensure_cache_preserved():
+                result = subprocess.call(build_script, env=env)
+                
             results[script] = result
             if result != 0 and FAIL_FAST:
                 break

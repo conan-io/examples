@@ -2,6 +2,7 @@
 **/test_package/build
 **/project*/build
 !*/build.sh
+.vscode/
 
 # Compiled Object files
 *.slo
