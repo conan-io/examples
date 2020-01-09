@@ -4,7 +4,7 @@ from conans import ConanFile, tools
 from conans.client.tools.oss import args_to_string
 from conans.util.files import normalize, save
 from conans.client.build.compiler_flags import libcxx_flag, libcxx_define, format_defines
-from conans.client.build.cppstd_flags import cppstd_flag
+from conans.client.build.cppstd_flags import cppstd_flag, cppstd_from_settings
 from conans.errors import ConanException
 
 
@@ -73,6 +73,11 @@ class WafBuildEnvironment(object):
 
             cxxf = self._libcxx_flags(
                 compiler=self._compiler, libcxx=self._compiler_libcxx)
+            cppstd = cppstd_from_settings(self._conanfile.settings)
+            cxxf.append(cppstd_flag(self._conanfile.settings.get_safe("compiler"),
+                                    self._conanfile.settings.get_safe(
+                                        "compiler.version"),
+                                    cppstd))
             for flag in cxxf:
                 sections.append(
                     "    conf.env.CXXFLAGS.append('{}')".format(flag))
