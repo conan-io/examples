@@ -24,6 +24,8 @@ logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOG
 def is_appveyor():
     return os.getenv("APPVEYOR", False)
 
+def appveyor_image():
+    return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
 
 @contextmanager
 def chdir(dir_path):
@@ -45,11 +47,15 @@ def writeln_console(message):
 
 
 def get_build_list():
+    omit_vs2019_examples = ["basic", "emscripten"]
     builds = []
     folders = ["features", "libraries"]
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
     for folder in folders:
         for root, _, files in os.walk(folder):
+            if "2019" in appveyor_image() and os.path.basename(root) in omit_vs2019_examples:
+                print("skip {} example".format(os.path.basename(root)))
+                continue
             # prefer python when present
             build = [it for it in files if "build.py" in it]
             if build:
