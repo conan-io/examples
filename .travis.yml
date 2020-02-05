@@ -84,7 +84,3 @@ script:
       pyenv activate conan
     fi
   - tox
-  
-
-script:
-  - tox
