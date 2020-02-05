@@ -38,8 +38,8 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
             pyenv virtualenv 3.7.0 conan
             ;;
         py38)
-            pyenv install 3.8
-            pyenv virtualenv 3.8 conan
+            pyenv install 3.8.1
+            pyenv virtualenv 3.8.1 conan
             ;;
 
     esac
