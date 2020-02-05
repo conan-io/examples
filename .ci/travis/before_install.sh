@@ -37,6 +37,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
             pyenv install 3.7.0
             pyenv virtualenv 3.7.0 conan
             ;;
+        py38)
+            pyenv install 3.8
+            pyenv virtualenv 3.8 conan
+            ;;
 
     esac
     pyenv rehash
