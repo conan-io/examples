@@ -1,5 +1,5 @@
 [requires]
-imgui/1.69@bincrafters/stable
+imgui/1.74
 glfw/3.2.1@bincrafters/stable
 glew/2.1.0@bincrafters/stable
 
@@ -7,7 +7,7 @@ glew/2.1.0@bincrafters/stable
 cmake_find_package_multi
 
 [imports]
-./misc/bindings, imgui_impl_glfw.cpp -> ../bindings
-./misc/bindings, imgui_impl_opengl3.cpp -> ../bindings
-./misc/bindings, imgui_impl_glfw.h -> ../bindings
-./misc/bindings, imgui_impl_opengl3.h -> ../bindings
+./res/bindings, imgui_impl_glfw.cpp -> ../bindings
+./res/bindings, imgui_impl_opengl3.cpp -> ../bindings
+./res/bindings, imgui_impl_glfw.h -> ../bindings
+./res/bindings, imgui_impl_opengl3.h -> ../bindings
