@@ -2,19 +2,26 @@
 
 RMDIR /Q /S say/build
 RMDIR /Q /S hello/build
-RMDIR /Q /S chat/build
-RMDIR /Q /S build
 
-MKDIR build
-PUSHD build
+MKDIR "say/build/Release"
+MKDIR "hello/build"
 
-conan workspace install ../conanws_vs.yml
-conan workspace install ../conanws_vs.yml -s build_type=Debug
-cmake .. -G "%CMAKE_GENERATOR%"
-cmake --build . --config Release
-cmake --build . --config Debug
+conan export say/ say/0.1@user/channel
+conan editable add say/ say/0.1@user/channel --layout=layout_vs
+
+PUSHD say/build/Release
+
+conan install ../..
+cmake ../../src -DCMAKE_BUILD_TYPE=Release
+cmake --build .
 
 POPD
+PUSHD hello/build
 
-chat\build\Release\app.exe
-chat\build\Debug\app.exe
+conan install ..
+cmake ../src/ -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+
+conan editable remove say/0.1@user/channel
+
+bin/hello

@@ -3,17 +3,27 @@
 set -e
 set -x
 
-rm -rf build
 rm -rf say/build
+mkdir -p say/build/Release
 rm -rf hello/build
-rm -rf chat/build
-mkdir build
+mkdir hello/build
 
-pushd build
+conan export say/ say/0.1@user/channel
+conan editable add say/ say/0.1@user/channel --layout=layout_gcc
 
-conan workspace install ../conanws_gcc.yml
-cmake .. -DCMAKE_BUILD_TYPE=Release
+pushd say/build/Release
+
+conan install ../..
+cmake ../../src -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
 popd
-chat/build/Release/app
+pushd hello/build
+
+conan install ..
+cmake ../src/ -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+
+conan editable remove say/0.1@user/channel
+
+bin/hello
