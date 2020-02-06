@@ -4,7 +4,7 @@ glfw/3.2.1@bincrafters/stable
 glew/2.1.0@bincrafters/stable
 
 [generators]
-cmake_find_package_multi
+cmake_find_package
 
 [imports]
 ./res/bindings, imgui_impl_glfw.cpp -> ../bindings
