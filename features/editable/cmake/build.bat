@@ -9,19 +9,19 @@ MKDIR "hello/build"
 conan export say/ say/0.1@user/channel
 conan editable add say/ say/0.1@user/channel --layout=layout_vs
 
-PUSHD say/build/Release
+PUSHD "say/build/Release"
 
 conan install ../..
 cmake ../../src -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
 POPD
-PUSHD hello/build
+PUSHD "hello/build"
 
 conan install ..
 cmake ../src/ -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
-conan editable remove say/0.1@user/channel
+"bin/hello.exe"
 
-bin/hello
+conan editable remove say/0.1@user/channel
