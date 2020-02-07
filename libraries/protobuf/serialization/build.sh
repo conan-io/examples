@@ -15,6 +15,6 @@ bin/sensor
 
 
 python -m venv _exproto
-_exproto/bin/activate
+. _exproto/bin/activate
 pip install -U protobuf
 python ../main.py
