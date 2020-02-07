@@ -13,6 +13,7 @@ cmake --build .
 
 bin/sensor
 
+python -m ensurepip --default-pip
 python -m venv _exproto
 ls -la 
 ls -la _exproto
