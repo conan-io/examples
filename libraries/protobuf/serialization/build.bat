@@ -10,7 +10,6 @@ cmake --build . --config Release
 
 bin\sensor.exe
 
-python -m venv _exproto
-_exproto\bin\activate.bat
-pip install -U protobuf
-python ..\main.py
+pip install protobuf
+python ../main.py
+pip uninstall -y protobuf
