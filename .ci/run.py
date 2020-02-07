@@ -130,8 +130,7 @@ def ensure_python_environment_preserved():
     finally:
         freeze_after = subprocess.check_output("pip freeze", stderr=subprocess.STDOUT, shell=True)
         if freeze != freeze_after:
-            writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the Python dependencies!")
-            writeln_console(r)
+            writeln_console(">>> " + colorama.Fore.RED + "This example modifies the Python dependencies!")
             raise Exception("Example modifies Python environment!")
 
 

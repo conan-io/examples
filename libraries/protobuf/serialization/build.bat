@@ -1,7 +1,5 @@
 @ECHO ON
 
-pip install -U protobuf
-
 RMDIR /Q /S build
 MKDIR build
 PUSHD build
@@ -11,7 +9,7 @@ cmake .. -G "%CMAKE_GENERATOR%"
 cmake --build . --config Release
 
 bin\sensor.exe
-ECHO. 2>__init__.py
 
-POPD
-python main.py
+python -m venv _exproto
+_exproto\bin\pip install -U protobuf
+_exproto\bin\python ..\main.py

@@ -3,8 +3,6 @@
 set -e
 set -x
 
-pip install -U protobuf
-
 rm -rf build
 mkdir build
 pushd build
@@ -14,7 +12,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
 bin/sensor
-touch __init__.py
 
-popd
-python main.py
+python -m venv _exproto
+_exproto/bin/pip install -U protobuf
+_exproto/bin/python ../main.py
