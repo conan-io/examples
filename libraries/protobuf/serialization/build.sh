@@ -14,6 +14,6 @@ cmake --build .
 bin/sensor
 
 
-python --copies -m venv _exproto
+python -m venv --copies _exproto
 source _exproto/bin/activate && pip install -U protobuf
 _exproto/bin/python ../main.py
