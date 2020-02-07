@@ -14,5 +14,8 @@ cmake --build .
 bin/sensor
 
 python -m venv _exproto
+ls -la 
+ls -la _exproto
+ls -la _exproto/bin
 _exproto/bin/pip install -U protobuf
 _exproto/bin/python ../main.py
