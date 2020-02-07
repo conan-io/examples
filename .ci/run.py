@@ -122,6 +122,19 @@ def ensure_cache_preserved():
             raise Exception("Example modifies cache!")
 
 
+@contextmanager
+def ensure_python_environment_preserved():
+    freeze = subprocess.check_output("pip freeze", stderr=subprocess.STDOUT, shell=True)
+    try:
+        yield
+    finally:
+        freeze_after = subprocess.check_output("pip freeze", stderr=subprocess.STDOUT, shell=True)
+        if freeze != freeze_after:
+            writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the Python dependencies!")
+            writeln_console(r)
+            raise Exception("Example modifies Python environment!")
+
+
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
     for script in scripts:
@@ -140,8 +153,9 @@ def run_scripts(scripts):
             except:
                 pass
  
-            with ensure_cache_preserved():
-                result = subprocess.call(build_script, env=env)
+            with ensure_python_environment_preserved():
+                with ensure_cache_preserved():
+                    result = subprocess.call(build_script, env=env)
                 
             results[script] = result
             if result != 0 and FAIL_FAST:
