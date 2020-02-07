@@ -131,6 +131,12 @@ def ensure_python_environment_preserved():
         freeze_after = subprocess.check_output("pip freeze", stderr=subprocess.STDOUT, shell=True)
         if freeze != freeze_after:
             writeln_console(">>> " + colorama.Fore.RED + "This example modifies the Python dependencies!")
+            removed = set(freeze.splitlines()) - set(freeze_after.splitlines())
+            added = set(freeze_after.splitlines()) - set(freeze.splitlines())
+            for it in removed:
+                writeln_console("- " + it)
+            for it in added:
+                writeln_console("+ " + it)
             raise Exception("Example modifies Python environment!")
 
 
