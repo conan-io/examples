@@ -15,4 +15,4 @@ bin/sensor
 
 pip install protobuf
 python ../main.py
-pip uninstall protobuf
+pip uninstall -y protobuf
