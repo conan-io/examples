@@ -65,11 +65,14 @@ def get_examples_to_skip(current_version):
         if current_version < v:
             skip.extend(examples)
 
+    # Some invalid configurations
+    if "2017" in appveyor_image():
+        skip.append('./libraries/folly')  # Requires VS2019 (>=15)
+
     return [os.path.normpath(it) for it in skip]
 
 
 def get_build_list():
-    omit_vs2019_examples = ["basic", "emscripten"]
     skip_examples = get_examples_to_skip(current_version=version.parse(conan_version))
 
     builds = []
