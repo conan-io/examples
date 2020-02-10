@@ -56,6 +56,8 @@ def get_examples_to_skip(current_version):
     for v, examples in required_conan.items():
         if current_version < v:
             skip.extend(examples)
+
+
     return skip
 
 
@@ -64,10 +66,8 @@ def get_build_list():
     skip_examples = get_examples_to_skip(current_version=version.parse(conan_version))
 
     builds = []
-    folders = ["features", "libraries"]
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-
-    skip_folders = ['./.ci', './.git']
+    skip_folders = ['./.ci', './.git', './.tox']
     for root, dirs, files in os.walk('.'):
         if root in skip_folders:
             dirs[:] = []
