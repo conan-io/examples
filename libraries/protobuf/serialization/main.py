@@ -9,7 +9,7 @@ if __name__ == "__main__":
     sensor = Sensor()
     sensor.ParseFromString(content)
     door = "Open" if sensor.door else "Closed"
-    print(f"Sensor name: {sensor.name}")
-    print(f"Sensor temperature: {sensor.temperature}")
-    print(f"Sensor humidity: {sensor.humidity}")
-    print(f"Sensor door: {door}")
+    print("Sensor name: {}".format(sensor.name))
+    print("Sensor temperature: {}".format(sensor.temperature))
+    print("Sensor humidity: {}".format(sensor.humidity))
+    print("Sensor door: {}".format(door))
