@@ -57,7 +57,6 @@ def get_examples_to_skip(current_version):
         if current_version < v:
             skip.extend(examples)
 
-
     return skip
 
 
@@ -213,9 +212,6 @@ def validate_results(results):
 if __name__ == "__main__":
     colorama.init(autoreset=True)
     scripts = get_build_list()
-    for it in scripts:
-        print(it)
-    exit(-1)
     results = run_scripts(scripts)
     print_results(results)
     validate_results(results)
