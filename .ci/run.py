@@ -11,10 +11,13 @@ import tempfile
 import uuid
 from collections import OrderedDict
 from contextlib import contextmanager
+from packaging import version
 
 import colorama
 from conans.client.tools.scm import Git
 from tabulate import tabulate
+from conans import __version__ as conan_version
+
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
@@ -46,26 +49,43 @@ def writeln_console(message):
     sys.stdout.flush()
 
 
+def get_examples_to_skip(current_version):
+    skip = []
+    # Given the Conan version, some examples are skipped
+    required_conan = {version.parse("1.22.0"): ['./libraries/dear-imgui/basic']}
+    for v, examples in required_conan.items():
+        if current_version < v:
+            skip.extend(examples)
+    return skip
+
+
 def get_build_list():
     omit_vs2019_examples = ["basic", "emscripten"]
+    skip_examples = get_examples_to_skip(current_version=version.parse(conan_version))
+
     builds = []
     folders = ["features", "libraries"]
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    for folder in folders:
-        for root, _, files in os.walk(folder):
-            if "2019" in appveyor_image() and os.path.basename(root) in omit_vs2019_examples:
-                print("skip {} example".format(os.path.basename(root)))
-                continue
-            # prefer python when present
-            build = [it for it in files if "build.py" in it]
-            if build:
-                builds.append(os.path.join(root, build[0]))
-                continue
 
-            for file in files:
-                if os.path.basename(file) == script:
-                    builds.append(os.path.join(root, file))
+    skip_folders = ['./.ci', './.git']
+    for root, dirs, files in os.walk('.'):
+        if root in skip_folders:
+            dirs[:] = []
+            continue
+        if root in skip_examples:
+            dirs[:] = []
+            sys.stdout.write("Skip {!r} example\n".format(root))
+            continue
 
+        # Look for 'build' script, prefer 'build.py' over all of them
+        build = [it for it in files if "build.py" in it]
+        if not build:
+            build = [it for it in files if os.path.basename(it) == script]
+        
+        if build:
+            builds.append(os.path.join(root, build[0]))
+            dirs[:] = []
+            continue
     return builds
 
 
@@ -193,6 +213,9 @@ def validate_results(results):
 if __name__ == "__main__":
     colorama.init(autoreset=True)
     scripts = get_build_list()
+    for it in scripts:
+        print(it)
+    exit(-1)
     results = run_scripts(scripts)
     print_results(results)
     validate_results(results)
