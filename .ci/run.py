@@ -68,6 +68,7 @@ def get_build_list():
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
     skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox']]
     for root, dirs, files in os.walk('.'):
+        root = os.path.normpath(root)
         if root in skip_folders:
             dirs[:] = []
             continue
