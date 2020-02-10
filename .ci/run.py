@@ -57,7 +57,7 @@ def get_examples_to_skip(current_version):
         if current_version < v:
             skip.extend(examples)
 
-    return skip
+    return [os.path.normpath(it) for it in skip]
 
 
 def get_build_list():
@@ -66,7 +66,7 @@ def get_build_list():
 
     builds = []
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    skip_folders = ['./.ci', './.git', './.tox']
+    skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox']]
     for root, dirs, files in os.walk('.'):
         if root in skip_folders:
             dirs[:] = []
