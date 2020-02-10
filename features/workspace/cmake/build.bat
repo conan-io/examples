@@ -10,7 +10,6 @@ PUSHD build
 
 conan workspace install ../conanws_vs.yml
 conan workspace install ../conanws_vs.yml -s build_type=Debug
-cmake .. -G "%CMAKE_GENERATOR%"
 cmake --build . --config Release
 cmake --build . --config Debug
 
