@@ -65,10 +65,6 @@ def get_examples_to_skip(current_version):
         if current_version < v:
             skip.extend(examples)
 
-    # Some invalid configurations
-    if "2017" in appveyor_image():
-        skip.append('./libraries/folly')  # Requires VS2019 (>=15)
-
     return [os.path.normpath(it) for it in skip]
 
 
