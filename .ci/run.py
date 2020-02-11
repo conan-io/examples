@@ -24,11 +24,14 @@ LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
 
+"""
 def is_appveyor():
     return os.getenv("APPVEYOR", False)
 
 def appveyor_image():
     return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
+"""
+
 
 @contextmanager
 def chdir(dir_path):
