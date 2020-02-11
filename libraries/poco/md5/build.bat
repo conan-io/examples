@@ -5,7 +5,7 @@ MKDIR build
 PUSHD build
 
 conan install ..
-cmake ..
+cmake .. -G "%CMAKE_GENERATOR%"
 cmake --build . --config Release
 
 bin\md5.exe
