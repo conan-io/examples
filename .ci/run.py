@@ -24,14 +24,12 @@ LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
 
-"""
 def is_appveyor():
     return os.getenv("APPVEYOR", False)
 
 def appveyor_image():
     return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
-"""
-
+    
 
 @contextmanager
 def chdir(dir_path):
@@ -67,6 +65,10 @@ def get_examples_to_skip(current_version):
     for v, examples in required_conan.items():
         if current_version < v:
             skip.extend(examples)
+
+    # Some binaries are not available # TODO: All the examples should have binaries available
+    if is_appveyor() and appveyor_image() == "Visual Studio 2019":
+        skip.extend('./libraries/folly/basic')
 
     return [os.path.normpath(it) for it in skip]
 

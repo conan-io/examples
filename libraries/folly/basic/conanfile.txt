@@ -1,7 +1,5 @@
 [requires]
 folly/2018.11.12.00@bincrafters/stable
-double-conversion/3.1.4@bincrafters/stable
-gflags/2.2.2@bincrafters/stable
 
 [generators]
 cmake
