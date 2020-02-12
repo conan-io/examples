@@ -1,16 +1,86 @@
-matrix:
-  include:
-    - os: linux
-      dist: xenial
-      language: python
-      python: "3.7"
-    - os: osx
-      language: generic
-      before_script:
-        - eval "$(pyenv init -)"
-        - pyenv activate conan
+sudo: false
+language: python
+dist: trusty
 
+jobs:
+  fast_finish: true
+  include:
+
+    - stage: Linux - Conan develop
+      name: Python 3.5
+      python: 3.5
+      env: TOXENV=py35-conandev
+      dist: xenial
+    - name: Python 3.8
+      python: 3.8
+      env: TOXENV=py38-conandev
+      dist: xenial
+
+    # All Linux first, check versions
+    - stage: Linux - Conan Current
+      name: Python 3.5
+      python: 3.5
+      env: TOXENV=py35-conancurrent
+      dist: xenial
+    - name: Python 3.8
+      python: 3.8
+      env: TOXENV=py38-conancurrent
+      dist: xenial
+
+    - stage: Linux - Conan 1.21
+      name: Python 3.5
+      python: 3.5
+      env: TOXENV=py35-conan121
+      dist: xenial
+    - name: Python 3.8
+      python: 3.8
+      env: TOXENV=py38-conan121
+      dist: xenial
+
+    - stage: Linux - Conan 1.20
+      name: Python 3.5
+      python: 3.5
+      env: TOXENV=py35-conan120
+      dist: xenial
+    - name: Python 3.8
+      python: 3.8
+      env: TOXENV=py38-conan120
+      dist: xenial
+
+    # Macos is slow, only if everything has passed
+    - stage: Macos - All Conan versions
+      name: Conan develop - Python 3.8
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py38 TOXENV=py38-conandev
+    - name: Conan Current - Python 3.5
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py35 TOXENV=py35-conancurrent
+    - name: Conan Current - Python 3.8
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py38 TOXENV=py38-conancurrent
+
+before_install:
+  - ./.ci/travis/before_install.sh
+  
 install:
-  - .ci/travis/install.sh
+  - |
+    if [[ "$(uname -s)" == 'Darwin' ]]; then
+      if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+      pyenv activate conan;
+    fi
+  - pip install --upgrade pip
+  - pip install tox tox-venv tox-travis
+
 script:
-  - python .ci/run.py
+  - |
+    if [[ "$(uname -s)" == 'Darwin' ]]; then
+      if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+      pyenv activate conan
+    fi
+  - tox

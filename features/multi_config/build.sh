@@ -3,9 +3,6 @@
 set -e
 set -x
 
-# Print commands
-conan config set log.print_run_commands=True
-
 # Create the multiconfig package
 conan create . user/testing
 

@@ -82,6 +82,12 @@ Documentation: https://docs.conan.io/en/latest/versioning/lockfiles.html#how-to-
 
 Shows how to integrate a build-system in Conan using an *installer*, a *build-helper* and a *custom generator*.
 
+### [Deployment](features/deployment)
+
+Shows how to use conan ``json`` generator with custom script to automate the creation of deployable artifact ([makeself.io](https://makeself.io))
+
+Documentation: https://docs.conan.io/en/laters/integrations/deployment.html
+
 ## How can I reproduce the build steps?
 
 All our examples can be built on Windows, Linux and Mac. If you are interested to reproduce

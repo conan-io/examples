@@ -2,13 +2,52 @@ build: false
 
 environment:
     PYTHON: "C:\\Python37"
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+
+    matrix:
+        # Conan development
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          PYVER: py38
+          TOXENV: py38-conandev
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+          PYVER: py38
+          TOXENV: py38-conandev
+          CMAKE_GENERATOR: "Visual Studio 16 2019"
+
+        # Conan current version
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          PYVER: py38
+          TOXENV: py38-conancurrent
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+          PYVER: py38
+          TOXENV: py38-conancurrent
+          CMAKE_GENERATOR: "Visual Studio 16 2019"
+
+        # Conan 1.21.x
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          PYVER: py38
+          TOXENV: py38-conan121
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+          PYVER: py38
+          TOXENV: py38-conan121
+          CMAKE_GENERATOR: "Visual Studio 16 2019"
+
+        # Conan 1.20.x
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          PYVER: py38
+          TOXENV: py38-conan120
+          CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+          PYVER: py38
+          TOXENV: py38-conan120
+          CMAKE_GENERATOR: "Visual Studio 16 2019"
 
 install:
-  - set PATH=%PYTHON%;%PYTHON%/Scripts/;%PATH%
-  - pip.exe install conan tabulate colorama --upgrade
-  - conan user
+  - set PATH=%PATH%;%PYTHON%/Scripts/
+  - python -m pip install --upgrade pip
+  - pip install tox==3.7.0 tox-venv==0.3.1
 
 test_script:
-  - python .ci/run.py
+  - tox
