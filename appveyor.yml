@@ -39,3 +39,6 @@ install:
 
 test_script:
   - tox
+
+matrix:
+  fast_finish: true
