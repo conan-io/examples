@@ -11,10 +11,13 @@ import tempfile
 import uuid
 from collections import OrderedDict
 from contextlib import contextmanager
+from packaging import version
 
 import colorama
 from conans.client.tools.scm import Git
 from tabulate import tabulate
+from conans import __version__ as conan_version
+
 
 FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
@@ -26,6 +29,7 @@ def is_appveyor():
 
 def appveyor_image():
     return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
+    
 
 @contextmanager
 def chdir(dir_path):
@@ -46,26 +50,54 @@ def writeln_console(message):
     sys.stdout.flush()
 
 
+def get_examples_to_skip(current_version):
+    skip = []
+    # Given the Conan version, some examples are skipped
+    required_conan = {
+        version.parse("1.22.0"): [
+            './libraries/dear-imgui/basic',  # Requires fix related to CMake link order/targets
+            ],
+        version.parse("1.21.0"): [
+            './features/deployment',  # Requires 'cpp_info.names'
+            './libraries/poco/md5',  # Requires 'cpp_info.names'
+            ],
+        }
+    for v, examples in required_conan.items():
+        if current_version < v:
+            skip.extend(examples)
+
+    # Some binaries are not available # TODO: All the examples should have binaries available
+    if is_appveyor() and appveyor_image() == "Visual Studio 2019":
+        skip.extend('./libraries/folly/basic')
+
+    return [os.path.normpath(it) for it in skip]
+
+
 def get_build_list():
-    omit_vs2019_examples = ["basic", "emscripten"]
+    skip_examples = get_examples_to_skip(current_version=version.parse(conan_version))
+
     builds = []
-    folders = ["features", "libraries"]
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    for folder in folders:
-        for root, _, files in os.walk(folder):
-            if "2019" in appveyor_image() and os.path.basename(root) in omit_vs2019_examples:
-                print("skip {} example".format(os.path.basename(root)))
-                continue
-            # prefer python when present
-            build = [it for it in files if "build.py" in it]
-            if build:
-                builds.append(os.path.join(root, build[0]))
-                continue
+    skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox']]
+    for root, dirs, files in os.walk('.'):
+        root = os.path.normpath(root)
+        if root in skip_folders:
+            dirs[:] = []
+            continue
+        if root in skip_examples:
+            dirs[:] = []
+            sys.stdout.write("Skip {!r} example\n".format(root))
+            continue
 
-            for file in files:
-                if os.path.basename(file) == script:
-                    builds.append(os.path.join(root, file))
-
+        # Look for 'build' script, prefer 'build.py' over all of them
+        build = [it for it in files if "build.py" in it]
+        if not build:
+            build = [it for it in files if os.path.basename(it) == script]
+        
+        if build:
+            builds.append(os.path.join(root, build[0]))
+            dirs[:] = []
+            continue
     return builds
 
 
@@ -122,6 +154,24 @@ def ensure_cache_preserved():
             raise Exception("Example modifies cache!")
 
 
+@contextmanager
+def ensure_python_environment_preserved():
+    freeze = subprocess.check_output("{} -m pip freeze".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+    try:
+        yield
+    finally:
+        freeze_after = subprocess.check_output("{} -m pip freeze".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+        if freeze != freeze_after:
+            writeln_console(">>> " + colorama.Fore.RED + "This example modifies the Python dependencies!")
+            removed = set(freeze.splitlines()) - set(freeze_after.splitlines())
+            added = set(freeze_after.splitlines()) - set(freeze.splitlines())
+            for it in removed:
+                writeln_console("- " + it)
+            for it in added:
+                writeln_console("+ " + it)
+            raise Exception("Example modifies Python environment!")
+
+
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
     for script in scripts:
@@ -140,8 +190,9 @@ def run_scripts(scripts):
             except:
                 pass
  
-            with ensure_cache_preserved():
-                result = subprocess.call(build_script, env=env)
+            with ensure_python_environment_preserved():
+                with ensure_cache_preserved():
+                    result = subprocess.call(build_script, env=env)
                 
             results[script] = result
             if result != 0 and FAIL_FAST:
