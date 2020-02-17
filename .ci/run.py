@@ -60,6 +60,7 @@ def get_examples_to_skip(current_version):
         version.parse("1.21.0"): [
             './features/deployment',  # Requires 'cpp_info.names'
             './libraries/poco/md5',  # Requires 'cpp_info.names'
+            './libraries/folly/basic',  # Requires 'cpp_info.names'
             ],
         }
     for v, examples in required_conan.items():
