@@ -60,6 +60,7 @@ def get_examples_to_skip(current_version):
         version.parse("1.21.0"): [
             './features/deployment',  # Requires 'cpp_info.names'
             './libraries/poco/md5',  # Requires 'cpp_info.names'
+            './libraries/folly/basic',  # Requires 'cpp_info.names'
             ],
         }
     for v, examples in required_conan.items():
@@ -67,7 +68,7 @@ def get_examples_to_skip(current_version):
             skip.extend(examples)
 
     # Some binaries are not available # TODO: All the examples should have binaries available
-    if is_appveyor() and appveyor_image() == "Visual Studio 2019":
+    if is_appveyor():  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
         skip.extend(['./libraries/folly/basic', ])
 
     return [os.path.normpath(it) for it in skip]
