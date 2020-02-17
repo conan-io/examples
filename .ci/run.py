@@ -68,7 +68,7 @@ def get_examples_to_skip(current_version):
             skip.extend(examples)
 
     # Some binaries are not available # TODO: All the examples should have binaries available
-    if is_appveyor() and appveyor_image() == "Visual Studio 2019":
+    if is_appveyor() and appveyor_image() == "Visual Studio 2017":
         skip.extend(['./libraries/folly/basic', ])
 
     return [os.path.normpath(it) for it in skip]
