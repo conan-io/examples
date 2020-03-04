@@ -70,6 +70,9 @@ def get_examples_to_skip(current_version):
     # Some binaries are not available # TODO: All the examples should have binaries available
     if is_appveyor():  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
         skip.extend(['./libraries/folly/basic', ])
+        # waf does not support Visual Studio 2019 for 2.0.19
+        if appveyor_image() == "Visual Studio 2019":
+            skip.extend(['./features/integrate_build_system', ])
 
     return [os.path.normpath(it) for it in skip]
 
