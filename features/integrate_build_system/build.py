@@ -12,8 +12,8 @@ def main():
     run("conan create waf-generator user/channel")
     run("conan create waf-installer user/channel")
     run("conan create waf-build-helper user/channel")
-    run("conan create waf-mylib user/channel -s compiler.cppstd=11")
-    run("conan create mylib-consumer waf-consumer/1.0@user/channel -s compiler.cppstd=11")
+    run("conan create waf-mylib user/channel -s compiler.cppstd=14")
+    run("conan create mylib-consumer waf-consumer/1.0@user/channel -s compiler.cppstd=14")
 
 
 if __name__ == '__main__':
