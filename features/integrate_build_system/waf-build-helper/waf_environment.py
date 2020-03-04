@@ -124,7 +124,10 @@ class WafBuildEnvironment(object):
             self._run(command)
 
     def _run(self, command):
-        self._conanfile.run(command)
+        try:
+            self._conanfile.run(command)
+        except Exception as e:
+            raise ConanException("Error running: {} ({})".format(command, str(e)))
 
     def _ss(self, setname):
         """safe setting"""

@@ -4,7 +4,7 @@ import os
 
 class WAFInstallerConan(ConanFile):
     name = "waf"
-    version = "2.0.18"
+    version = "2.0.19"
     description = "Waf is a Python-based build system"
     settings = "os_build"
     homepage = "https://gitlab.com/ita1024/waf"
