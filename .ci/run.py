@@ -191,13 +191,10 @@ def run_scripts(scripts):
             except:
                 pass
  
-            try:
-                with ensure_python_environment_preserved():
-                    with ensure_cache_preserved():
-                        result = subprocess.call(build_script, env=env)
-            except Exception:
-                raise
-            
+            with ensure_python_environment_preserved():
+                with ensure_cache_preserved():
+                    result = subprocess.call(build_script, env=env)
+                
             results[script] = result
             if result != 0 and FAIL_FAST:
                 break
