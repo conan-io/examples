@@ -1,0 +1,19 @@
+[build_folder]
+{% if settings.compiler == "Visual Studio" %}
+build
+{% else %}
+build/{{settings.build_type}}
+{% endif %}
+
+[source_folder]
+src
+
+[includedirs]
+src
+
+# This happens to be mostly useless (with CMake), as CMake is able to find them anyway
+[libdirs]
+build/{{settings.build_type}}/lib
+
+[bindirs]
+build/{{settings.build_type}}/bin
