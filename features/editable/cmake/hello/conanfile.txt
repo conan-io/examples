@@ -1,0 +1,5 @@
+[requires]
+say/0.1@user/channel
+
+[generators]
+cmake
