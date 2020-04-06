@@ -10,7 +10,7 @@ class HelloConan(ConanFile):
     exports_sources = "src/*"
 
     def build_requirements(self):
-        if self.settins.os == "Windows":
+        if self.settings.os == "Windows":
             self.build_requires("make/4.2.1")
 
     def build(self):
