@@ -9,6 +9,10 @@ class HelloConan(ConanFile):
     generators = "cmake"
     exports_sources = "src/*"
 
+    def build_requirements(self):
+        if self.settins.os == "Windows":
+            self.build_requires("make/4.2.1")
+
     def build(self):
         with tools.chdir("src"):
             env_build = AutoToolsBuildEnvironment(self)
