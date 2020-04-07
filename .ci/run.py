@@ -54,13 +54,15 @@ def get_examples_to_skip(current_version):
     skip = []
     # Given the Conan version, some examples are skipped
     required_conan = {
+        version.parse("1.24.0"): [
+            './libraries/folly/basic',  # Requires fix related to import cppstd_flag in boost
+            ],
         version.parse("1.22.0"): [
             './libraries/dear-imgui/basic',  # Requires fix related to CMake link order/targets
             ],
         version.parse("1.21.0"): [
             './features/deployment',  # Requires 'cpp_info.names'
             './libraries/poco/md5',  # Requires 'cpp_info.names'
-            './libraries/folly/basic',  # Requires 'cpp_info.names'
             ],
         }
     for v, examples in required_conan.items():

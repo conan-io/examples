@@ -23,13 +23,13 @@ environment:
         # Conan 1.21.x
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
           PYVER: py38
-          TOXENV: py38-conan121
+          TOXENV: py38-conan123
           CMAKE_GENERATOR: "Visual Studio 16 2019"
 
         # Conan 1.20.x
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
           PYVER: py38
-          TOXENV: py38-conan120
+          TOXENV: py38-conan122
           CMAKE_GENERATOR: "Visual Studio 16 2019"
 
 install:
