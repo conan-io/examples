@@ -9,14 +9,10 @@ class AppConan(ConanFile):
     exports_sources = "src/*"
     requires = "hello/0.1@user/testing"
 
-    def build_requirements(self):
-        if self.settings.os == "Windows":
-            self.build_requires("make/4.2.1")
-
     def build(self):
         with tools.chdir("src"):
-            env_build = AutoToolsBuildEnvironment(self)
-            env_build.make()
+            atools = AutoToolsBuildEnvironment(self)
+            atools.make()
 
     def package(self):
         self.copy("*app", dst="bin", keep_path=False)
