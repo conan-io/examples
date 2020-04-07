@@ -27,24 +27,24 @@ jobs:
       env: TOXENV=py38-conancurrent
       dist: xenial
 
-    - stage: Linux - Conan 1.21
+    - stage: Linux - Conan 1.23
       name: Python 3.5
       python: 3.5
-      env: TOXENV=py35-conan121
+      env: TOXENV=py35-conan123
       dist: xenial
     - name: Python 3.8
       python: 3.8
-      env: TOXENV=py38-conan121
+      env: TOXENV=py38-conan123
       dist: xenial
 
-    - stage: Linux - Conan 1.20
+    - stage: Linux - Conan 1.22
       name: Python 3.5
       python: 3.5
-      env: TOXENV=py35-conan120
+      env: TOXENV=py35-conan122
       dist: xenial
     - name: Python 3.8
       python: 3.8
-      env: TOXENV=py38-conan120
+      env: TOXENV=py38-conan122
       dist: xenial
 
     # Macos is slow, only if everything has passed
