@@ -54,6 +54,9 @@ def get_examples_to_skip(current_version):
     skip = []
     # Given the Conan version, some examples are skipped
     required_conan = {
+        version.parse("1.24.0"): [
+            './features/makefiles',  # Requires fix related to cppstd_flag import
+            ],
         version.parse("1.22.0"): [
             './libraries/dear-imgui/basic',  # Requires fix related to CMake link order/targets
             ],
