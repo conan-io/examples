@@ -12,15 +12,15 @@ conan editable add say/ say/0.1@user/channel --layout=layout_vs
 PUSHD "say/build/Release"
 
 conan install ../..
-cmake ../../src -DCMAKE_BUILD_TYPE=Release
-cmake --build .
+cmake ../../src
+cmake --build . --config Release
 
 POPD
 PUSHD "hello/build"
 
-conan install ..
-cmake ../src/ -DCMAKE_BUILD_TYPE=Release
-cmake --build .
+conan install .. 
+cmake ../src/
+cmake --build . --config Release
 
 "bin/hello.exe"
 
