@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
 PROJECT(encryption-test CXX)
 
 # Initialize Conan #############################################################
@@ -8,6 +8,7 @@ CONAN_BASIC_SETUP()
 # Create application test ######################################################
 ADD_EXECUTABLE(${PROJECT_NAME} encryption_test.cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${CONAN_LIBS})
+SET_PROPERTY(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 # Include Encryptor test #######################################################
 ENABLE_TESTING()
