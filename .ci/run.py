@@ -54,6 +54,9 @@ def get_examples_to_skip(current_version):
     skip = []
     # Given the Conan version, some examples are skipped
     required_conan = {
+        version.parse("1.24.0"): [
+            './libraries/folly/basic',  # Requires fix related to import cppstd_flag in boost
+            ],
         version.parse("1.22.0"): [
             './libraries/dear-imgui/basic',  # Requires fix related to CMake link order/targets
             ],
@@ -67,8 +70,12 @@ def get_examples_to_skip(current_version):
             skip.extend(examples)
 
     # Some binaries are not available # TODO: All the examples should have binaries available
-    if is_appveyor() and appveyor_image() == "Visual Studio 2019":
-        skip.extend('./libraries/folly/basic')
+    if is_appveyor():  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
+        skip.extend(['./libraries/folly/basic', ])
+        skip.extend(['./features/makefiles', ])
+        # waf does not support Visual Studio 2019 for 2.0.19
+        if appveyor_image() == "Visual Studio 2019":
+            skip.extend(['./features/integrate_build_system', ])
 
     return [os.path.normpath(it) for it in skip]
 

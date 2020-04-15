@@ -25,6 +25,12 @@ Example how to use Conan Workspaces.
 
 Documentation: https://docs.conan.io/en/latest/developing_packages/workspaces.html
 
+### [Editable Packages](features/editable)
+
+Example how to use Conan Editable Packages.
+
+Documentation: https://docs.conan.io/en/latest/developing_packages/editable_packages.html
+
 ### [Serializing your data with Protobuf](libraries/protobuf/serialization)
 
 Demonstrate how to use Protobuf to serialize data between C++ and Python.
