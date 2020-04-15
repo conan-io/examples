@@ -5,7 +5,7 @@ from conans import CMake
 class TestConanGTestExample(ConanFile):
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
-    requires = "gtest/1.8.1@bincrafters/stable"
+    requires = "gtest/1.10.0"
     default_options = {"gtest:shared": True}
 
     def _configure_cmake(self):
