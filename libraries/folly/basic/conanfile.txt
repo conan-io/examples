@@ -1,5 +1,5 @@
 [requires]
-folly/2018.11.12.00@bincrafters/stable
+folly/2019.10.21.00
 
 [generators]
 cmake
