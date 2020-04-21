@@ -13,25 +13,11 @@ class CI(object):
         self.product = product
         self._build_counter = 0
 
-    def package_pipeline(self, repo, branch, job=None):
-        if job is None:
-            job = self._build_counter
-            self._build_counter += 1
+    def new_job(self):
+        job = self._build_counter
+        self._build_counter += 1
         job_folder = os.path.join(self.ci_folder, "build%s" % job)
-        cache_folder = os.path.join(job_folder, "cache")
-        os.makedirs(cache_folder, exist_ok=True)
-        with setenv("CONAN_USER_HOME", cache_folder):
-            self._run("conan remote remove conan-center")
-            self._run("conan remote add master http://localhost:8081/artifactory/api/conan/ci-master -f")
-            self._run("conan user admin -p=password -r=master")
-            with chdir(job_folder):
-                self._run("git clone %s" % repo)
-                repo_folder = os.path.basename(repo)
-                with chdir(repo_folder):
-                    self._run("git checkout %s" % branch)
-                    self._run("conan create . user/testing")
-            if branch == "master":
-                self._run("conan upload * -r=master --all --confirm")
+        return job, job_folder
 
     def product_pipeline(self, job):
         if not self.product:
@@ -52,7 +38,7 @@ class CI(object):
         self.package_pipeline(repo, branch, job)
         self.product_pipeline(job)
 
-    def _run(self, cmd):
+    def run(self, cmd):
         print("RUNNING (CI): %s" % cmd)
         ret = os.system(cmd)
         if ret != 0:
