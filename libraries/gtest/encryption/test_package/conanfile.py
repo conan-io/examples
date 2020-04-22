@@ -1,5 +1,5 @@
 from conans import ConanFile
-from conans import CMake
+from conans import CMake, RunEnvironment, tools
 
 
 class TestConanGTestExample(ConanFile):
@@ -18,5 +18,7 @@ class TestConanGTestExample(ConanFile):
         cmake.build()
 
     def test(self):
-        cmake = self._configure_cmake()
-        cmake.test()
+        env_build = RunEnvironment(self)
+        with tools.environment_append(env_build.vars):
+            cmake = self._configure_cmake()
+            cmake.test()

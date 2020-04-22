@@ -1,8 +1,5 @@
 // SOURCE CODE FROM https://wiki.openssl.org/index.php/EVP_Symmetric_Encryption_and_Decryption
 // applink.c => https://www.openssl.org/docs/faq.html
-#if _MSC_VER
-	#include "openssl/applink.c" 
-#endif
 #include "encrypter.h"
 
 int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key, unsigned char *iv, unsigned char *ciphertext){
