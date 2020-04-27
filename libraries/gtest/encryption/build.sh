@@ -5,7 +5,7 @@ set -x
 
 rm -rf build source package
 
-elif [[ "$OSTYPE" == "darwin"* ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
     conan source . --source-folder source
     conan install . --install-folder build -s build_type=Debug --build missing -s os.version=10.13
     conan build . --source-folder source --build-folder build
