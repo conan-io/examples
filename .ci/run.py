@@ -29,7 +29,7 @@ def is_appveyor():
 
 def appveyor_image():
     return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
-    
+
 
 @contextmanager
 def chdir(dir_path):
@@ -100,8 +100,10 @@ def get_build_list():
         build = [it for it in files if "build.py" in it]
         if not build:
             build = [it for it in files if os.path.basename(it) == script]
-        
+
         if build:
+            if "gtest" not in root:
+                continue
             builds.append(os.path.join(root, build[0]))
             dirs[:] = []
             continue
@@ -189,18 +191,18 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
-            
+
             # Need to initialize the cache with default files if they are not already there
             try:
                 subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env,
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except:
                 pass
- 
+
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
                     result = subprocess.call(build_script, env=env)
-                
+
             results[script] = result
             if result != 0 and FAIL_FAST:
                 break
