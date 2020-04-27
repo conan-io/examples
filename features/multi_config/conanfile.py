@@ -28,22 +28,22 @@ class HelloConan(ConanFile):
 
     def build(self):
         # Alternative 1: Use always default runtime (MD/MDd)
-        cmake_debug = CMake(self, build_type="Debug")
-        # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
-        # cmake_debug.defintions["CONAN_LINK_RUNTIME_MULTI"] = cmake_debug.definitions["CONAN_LINK_RUNTIME"]
-        # cmake_debug.definitions["CONAN_LINK_RUNTIME"] = False
-        cmake_debug.configure(build_folder="Debug")
-        cmake_debug.build()
-
-        if self.settings.os != "Windows":
-            print_strings(self, "Debug/lib/libhello_d.a", "DEBUG")
-
-        cmake_release = CMake(self, build_type="Release")
+        cmake_release = CMake(self, build_type="Debug")
         # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
         # cmake_release.defintions["CONAN_LINK_RUNTIME_MULTI"] = cmake_release.definitions["CONAN_LINK_RUNTIME"]
         # cmake_release.definitions["CONAN_LINK_RUNTIME"] = False
         cmake_release.configure()
         cmake_release.build()
+
+        if self.settings.os != "Windows":
+            print_strings(self, "lib/libhello_d.a", "DEBUG")
+
+        cmake_debug = CMake(self, build_type="Release")
+        # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
+        # cmake_debug.defintions["CONAN_LINK_RUNTIME_MULTI"] = cmake_release.definitions["CONAN_LINK_RUNTIME"]
+        # cmake_debug.definitions["CONAN_LINK_RUNTIME"] = False
+        cmake_debug.configure()
+        cmake_debug.build()
 
         if self.settings.os != "Windows":
             print_strings(self, "lib/libhello.a", "RELEASE")

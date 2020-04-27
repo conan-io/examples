@@ -15,7 +15,5 @@ class HelloTestConan(ConanFile):
     def test(self):
         os.chdir("bin")
         output = StringIO()
-        if self.settings.build_type != 'Release':
-            return
         self.run(".%sexample" % os.sep, run_environment=True, output=output)
         assert ("Hello World {}!".format(str(self.settings.build_type)) in output.getvalue()), output.getvalue()
