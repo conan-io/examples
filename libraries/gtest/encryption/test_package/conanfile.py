@@ -18,7 +18,8 @@ class TestConanGTestExample(ConanFile):
         cmake.build()
 
     def test(self):
+        os.environ["CTEST_OUTPUT_ON_FAILURE"] = "1"
         env_build = RunEnvironment(self)
         with tools.environment_append(env_build.vars):
             cmake = self._configure_cmake()
-            cmake.test()
+            cmake.test(output_on_failure=True)
