@@ -6,47 +6,6 @@ jobs:
   fast_finish: true
   include:
 
-    - stage: Linux - Conan develop
-      name: Python 3.5
-      python: 3.5
-      env: TOXENV=py35-conandev
-      dist: xenial
-    - name: Python 3.8
-      python: 3.8
-      env: TOXENV=py38-conandev
-      dist: xenial
-
-    # All Linux first, check versions
-    - stage: Linux - Conan Current
-      name: Python 3.5
-      python: 3.5
-      env: TOXENV=py35-conancurrent
-      dist: xenial
-    - name: Python 3.8
-      python: 3.8
-      env: TOXENV=py38-conancurrent
-      dist: xenial
-
-    - stage: Linux - Conan 1.23
-      name: Python 3.5
-      python: 3.5
-      env: TOXENV=py35-conan123
-      dist: xenial
-    - name: Python 3.8
-      python: 3.8
-      env: TOXENV=py38-conan123
-      dist: xenial
-
-    - stage: Linux - Conan 1.22
-      name: Python 3.5
-      python: 3.5
-      env: TOXENV=py35-conan122
-      dist: xenial
-    - name: Python 3.8
-      python: 3.8
-      env: TOXENV=py38-conan122
-      dist: xenial
-
     # Macos is slow, only if everything has passed
     - stage: Macos - All Conan versions
       name: Conan develop - Python 3.8
@@ -67,7 +26,7 @@ jobs:
 
 before_install:
   - ./.ci/travis/before_install.sh
-  
+
 install:
   - |
     if [[ "$(uname -s)" == 'Darwin' ]]; then
