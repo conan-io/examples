@@ -53,3 +53,6 @@ libraries/poco/md5/build/*
 .pydevproject
 .settings/*
 .ropeproject/*
+
+.tox
+.python-version
