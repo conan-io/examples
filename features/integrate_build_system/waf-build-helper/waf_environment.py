@@ -2,7 +2,7 @@ import os
 import shutil
 from conans import ConanFile, tools
 from conans.util.files import normalize, save
-# TODO: change this for calls to tools instead of undocumented functions 
+# TODO: change libcxx_flag and libcxx_define imports to tools instead of using undocumented functions 
 from conans.client.build.compiler_flags import libcxx_flag, libcxx_define
 from conans.errors import ConanException
 
