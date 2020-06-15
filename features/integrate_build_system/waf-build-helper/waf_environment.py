@@ -1,6 +1,7 @@
 import os
 import shutil
 from conans import ConanFile, tools, __version__ as conan_version
+from conans.client.build.compiler_flags import libcxx_flag, libcxx_define, format_defines
 from conans.model.version import Version
 from conans.errors import ConanException
 
@@ -25,50 +26,17 @@ class WafBuildEnvironment(object):
             version.append('0')
         return "('{}', '{}', '{}')".format(version[0], version[1], version[2])
 
-    def _base_compiler(self):
-        return self._settings.get_safe("compiler.base") or self._settings.get_safe("compiler")
-
-    def _libcxx_define(self):
-        compiler = self._base_compiler()
-        libcxx = self._settings.get_safe("compiler.libcxx")
-        if not compiler or not libcxx:
-            return ""
-
-        if str(compiler) in ['clang', 'apple-clang', 'gcc']:
-            if str(libcxx) == 'libstdc++':
-                return '_GLIBCXX_USE_CXX11_ABI=0'
-            elif str(libcxx) == 'libstdc++11':
-                return '_GLIBCXX_USE_CXX11_ABI=1'
-        return ""
-
-    def _libcxx_flag(self):
-        """
-        returns flag specific to the target C++ standard library
-        """
-        compiler = self._base_compiler()
-        libcxx = self._settings.get_safe("compiler.libcxx")
-        if not compiler or not libcxx:
-            return ""
-        if str(compiler) in ['clang', 'apple-clang']:
-            if str(libcxx) in ['libstdc++', 'libstdc++11']:
-                return '-stdlib=libstdc++'
-            elif str(libcxx) == 'libc++':
-                return '-stdlib=libc++'
-        elif str(compiler) == 'sun-cc':
-            return ({"libCstd": "-library=Cstd",
-                                "libstdcxx": "-library=stdcxx4",
-                                "libstlport": "-library=stlport4",
-                                "libstdc++": "-library=stdcpp"}.get(libcxx, ""))
-        elif str(compiler) == "qcc":
-            return "-Y _%s" % str(libcxx)
-        return ""
-
     def _libcxx_flags(self, compiler, libcxx):
         lib_flags = []
         if libcxx:
-            stdlib_define = self._libcxx_define()
-            lib_flags.extend(["-D%s" % define for define in [stdlib_define] if define])
-            cxxf = self._libcxx_flag()
+            if conan_version >= Version("1.26"):
+                stdlib_define = libcxx_define(self._settings)
+                cxxf = libcxx_flag(self._settings)
+            else:
+                stdlib_define = libcxx_define(compiler=compiler, libcxx=libcxx)
+                cxxf = libcxx_flag(compiler=compiler, libcxx=libcxx)
+
+            lib_flags.extend(format_defines([stdlib_define]))
             if cxxf:
                 lib_flags.append(cxxf)
 
