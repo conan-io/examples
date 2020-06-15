@@ -1,7 +1,6 @@
 import os
 import shutil
 from conans import ConanFile, tools
-from conans.util.files import normalize, save
 # TODO: change libcxx_flag and libcxx_define imports to tools instead of using undocumented functions 
 from conans.client.build.compiler_flags import libcxx_flag, libcxx_define
 from conans.errors import ConanException
@@ -81,20 +80,17 @@ class WafBuildEnvironment(object):
                 sections.append("    conf.env.CXXFLAGS.extend(['-g'])")
             elif self._build_type == "Release":
                 sections.append("    conf.env.CXXFLAGS.extend(['-O3'])")
-
+        sections.append("\n")
         return "\n".join(sections)
 
     def _save_toolchain_file(self):
         filename = "waf_conan_toolchain.py"
         content = self._toolchain_content()
         output_path = self._conanfile.build_folder
-        content = normalize(content)
-        self._conanfile.output.info("Waf Toolchain File created: %s" %
-                                    (filename))
-        save(
-            os.path.join(output_path, filename),
-            content,
-            only_if_modified=True)
+        print(os.path.join(output_path, filename))
+        with open(os.path.join(output_path, filename), 'w') as output_file:
+            output_file.write(content)
+        self._conanfile.output.info("Waf Toolchain File created: %s" % (filename))
 
     def configure(self, args=None):
         self._save_toolchain_file()
