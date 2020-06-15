@@ -30,9 +30,10 @@ class WafBuildEnvironment(object):
     def _libcxx_flags(self, compiler, libcxx):
         lib_flags = []
         if libcxx:
-            stdlib_define = libcxx_define(compiler=compiler, libcxx=libcxx)
+            # TODO: change this for calls to tools instead of undocumented functions 
+            stdlib_define = libcxx_define(self._conanfile.settings)
             lib_flags.extend(format_defines([stdlib_define]))
-            cxxf = libcxx_flag(compiler=compiler, libcxx=libcxx)
+            cxxf = libcxx_flag(self._conanfile.settings)
             if cxxf:
                 lib_flags.append(cxxf)
 
