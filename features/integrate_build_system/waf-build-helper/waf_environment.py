@@ -1,6 +1,7 @@
 import os
 import shutil
-from conans import ConanFile, tools
+from conans import ConanFile, tools, __version__ as conan_version
+from conans.model.version import Version
 from conans.errors import ConanException
 
 
@@ -72,6 +73,17 @@ class WafBuildEnvironment(object):
                 lib_flags.append(cxxf)
 
         return lib_flags
+    
+    def _cppstd_flag(self):
+        if conan_version >= Version("1.24"):
+            return tools.cppstd_flag(self._settings)
+        else:
+            from conans.client.build.cppstd_flags import cppstd_flag, cppstd_from_settings 
+            compiler = self._settings.get_safe("compiler")
+            compiler_version = self._settings.get_safe("compiler.version")
+            cppstd = cppstd_from_settings(self._settings)
+            return cppstd_flag(compiler, compiler_version, cppstd)
+            
 
     def _toolchain_content(self):
         sections = []
@@ -108,7 +120,7 @@ class WafBuildEnvironment(object):
 
             cxxf = self._libcxx_flags(
                 compiler=self._compiler, libcxx=self._compiler_libcxx)
-            cxxf.append(tools.cppstd_flag(self._settings))
+            cxxf.append(self._cppstd_flag())
             for flag in cxxf:
                 sections.append(
                     "    conf.env.CXXFLAGS.append('{}')".format(flag))
