@@ -124,7 +124,6 @@ class WafBuildEnvironment(object):
         filename = "waf_conan_toolchain.py"
         content = self._toolchain_content()
         output_path = self._conanfile.build_folder
-        print(os.path.join(output_path, filename))
         with open(os.path.join(output_path, filename), 'w') as output_file:
             output_file.write(content)
         self._conanfile.output.info("Waf Toolchain File created: %s" % (filename))
