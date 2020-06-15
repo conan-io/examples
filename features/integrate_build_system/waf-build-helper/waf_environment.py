@@ -1,10 +1,9 @@
 import os
 import shutil
 from conans import ConanFile, tools
-from conans.client.tools.oss import args_to_string
 from conans.util.files import normalize, save
-from conans.client.build.compiler_flags import libcxx_flag, libcxx_define, format_defines
-from conans.client.build.cppstd_flags import cppstd_flag, cppstd_from_settings
+# TODO: change this for calls to tools instead of undocumented functions 
+from conans.client.build.compiler_flags import libcxx_flag, libcxx_define
 from conans.errors import ConanException
 
 
@@ -30,9 +29,8 @@ class WafBuildEnvironment(object):
     def _libcxx_flags(self, compiler, libcxx):
         lib_flags = []
         if libcxx:
-            # TODO: change this for calls to tools instead of undocumented functions 
             stdlib_define = libcxx_define(self._conanfile.settings)
-            lib_flags.extend(format_defines([stdlib_define]))
+            lib_flags.extend(["-D%s" % define for define in [stdlib_define] if define])
             cxxf = libcxx_flag(self._conanfile.settings)
             if cxxf:
                 lib_flags.append(cxxf)
@@ -74,20 +72,10 @@ class WafBuildEnvironment(object):
 
             cxxf = self._libcxx_flags(
                 compiler=self._compiler, libcxx=self._compiler_libcxx)
-            cppstd = cppstd_from_settings(self._conanfile.settings)
-            cxxf.append(cppstd_flag(self._conanfile.settings.get_safe("compiler"),
-                                    self._conanfile.settings.get_safe(
-                                        "compiler.version"),
-                                    cppstd))
+            cxxf.append(tools.cppstd_flag(self._conanfile.settings))
             for flag in cxxf:
                 sections.append(
                     "    conf.env.CXXFLAGS.append('{}')".format(flag))
-
-            if self._compiler_cppstd:
-                cppstdf = cppstd_flag(self._compiler, self._compiler_version,
-                                      self._compiler_cppstd)
-                sections.append(
-                    "    conf.env.CXXFLAGS.append('{}')".format(cppstdf))
 
             if self._build_type == "Debug":
                 sections.append("    conf.env.CXXFLAGS.extend(['-g'])")
