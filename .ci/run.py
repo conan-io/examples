@@ -61,12 +61,6 @@ def get_examples_to_skip(current_version):
             ],
         version.parse("1.22.0"): [
             './libraries/dear-imgui/basic',  # Requires fix related to CMake link order/targets
-            './libraries/poco/md5',  # Uses get_safe() with 3 arguments
-            './features/deployment',  # Fails because of poco requirement
-            ],
-        version.parse("1.21.0"): [
-            './features/deployment',  # Requires 'cpp_info.names'
-            './libraries/poco/md5',  # Requires 'cpp_info.names'
             ],
         }
     for v, examples in required_conan.items():
