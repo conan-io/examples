@@ -1,16 +1,15 @@
 import os
 import shutil
-from conans import ConanFile, tools
-from conans.client.tools.oss import args_to_string
-from conans.util.files import normalize, save
+from conans import ConanFile, tools, __version__ as conan_version
 from conans.client.build.compiler_flags import libcxx_flag, libcxx_define, format_defines
-from conans.client.build.cppstd_flags import cppstd_flag, cppstd_from_settings
+from conans.model.version import Version
 from conans.errors import ConanException
 
 
 class WafBuildEnvironment(object):
     def __init__(self, conanfile):
         self._conanfile = conanfile
+        self._settings = self._conanfile.settings
         self._arch = self._ss("arch")
         self._os = self._ss("os")
         self._compiler = self._ss("compiler")
@@ -30,13 +29,29 @@ class WafBuildEnvironment(object):
     def _libcxx_flags(self, compiler, libcxx):
         lib_flags = []
         if libcxx:
-            stdlib_define = libcxx_define(compiler=compiler, libcxx=libcxx)
+            if conan_version >= Version("1.26"):
+                stdlib_define = libcxx_define(self._settings)
+                cxxf = libcxx_flag(self._settings)
+            else:
+                stdlib_define = libcxx_define(compiler=compiler, libcxx=libcxx)
+                cxxf = libcxx_flag(compiler=compiler, libcxx=libcxx)
+
             lib_flags.extend(format_defines([stdlib_define]))
-            cxxf = libcxx_flag(compiler=compiler, libcxx=libcxx)
             if cxxf:
                 lib_flags.append(cxxf)
 
         return lib_flags
+    
+    def _cppstd_flag(self):
+        if conan_version >= Version("1.24"):
+            return tools.cppstd_flag(self._settings)
+        else:
+            from conans.client.build.cppstd_flags import cppstd_flag, cppstd_from_settings 
+            compiler = self._settings.get_safe("compiler")
+            compiler_version = self._settings.get_safe("compiler.version")
+            cppstd = cppstd_from_settings(self._settings)
+            return cppstd_flag(compiler, compiler_version, cppstd)
+            
 
     def _toolchain_content(self):
         sections = []
@@ -73,39 +88,25 @@ class WafBuildEnvironment(object):
 
             cxxf = self._libcxx_flags(
                 compiler=self._compiler, libcxx=self._compiler_libcxx)
-            cppstd = cppstd_from_settings(self._conanfile.settings)
-            cxxf.append(cppstd_flag(self._conanfile.settings.get_safe("compiler"),
-                                    self._conanfile.settings.get_safe(
-                                        "compiler.version"),
-                                    cppstd))
+            cxxf.append(self._cppstd_flag())
             for flag in cxxf:
                 sections.append(
                     "    conf.env.CXXFLAGS.append('{}')".format(flag))
-
-            if self._compiler_cppstd:
-                cppstdf = cppstd_flag(self._compiler, self._compiler_version,
-                                      self._compiler_cppstd)
-                sections.append(
-                    "    conf.env.CXXFLAGS.append('{}')".format(cppstdf))
 
             if self._build_type == "Debug":
                 sections.append("    conf.env.CXXFLAGS.extend(['-g'])")
             elif self._build_type == "Release":
                 sections.append("    conf.env.CXXFLAGS.extend(['-O3'])")
-
+        sections.append("\n")
         return "\n".join(sections)
 
     def _save_toolchain_file(self):
         filename = "waf_conan_toolchain.py"
         content = self._toolchain_content()
         output_path = self._conanfile.build_folder
-        content = normalize(content)
-        self._conanfile.output.info("Waf Toolchain File created: %s" %
-                                    (filename))
-        save(
-            os.path.join(output_path, filename),
-            content,
-            only_if_modified=True)
+        with open(os.path.join(output_path, filename), 'w') as output_file:
+            output_file.write(content)
+        self._conanfile.output.info("Waf Toolchain File created: %s" % (filename))
 
     def configure(self, args=None):
         self._save_toolchain_file()
@@ -114,13 +115,13 @@ class WafBuildEnvironment(object):
         if self._compiler_version and "Visual Studio" in self._compiler:
             command = command + \
                 '--msvc_version="msvc {}.0"'.format(self._compiler_version)
-        with tools.vcvars(self._conanfile.settings):
+        with tools.vcvars(self._settings):
             self._run(command)
 
     def build(self, args=None):
         args = args or []
         command = "waf build " + " ".join(arg for arg in args)
-        with tools.vcvars(self._conanfile.settings):
+        with tools.vcvars(self._settings):
             self._run(command)
 
     def _run(self, command):
@@ -131,7 +132,7 @@ class WafBuildEnvironment(object):
 
     def _ss(self, setname):
         """safe setting"""
-        return self._conanfile.settings.get_safe(setname)
+        return self._settings.get_safe(setname)
 
     def _so(self, setname):
         """safe option"""
