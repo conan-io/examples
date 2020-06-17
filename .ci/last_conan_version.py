@@ -32,6 +32,9 @@ def update_tox(last_version):
     with open(tox_file, 'r') as f:
         content = f.read()
 
+    assert 'conanprev: conan-unknown' in content, "Unexpected tox.ini content"
+    assert 'conanprevprev: conan-unknown' in content, "Unexpected tox.ini content"
+
     content = content.replace('conanprev: conan-unknown', 'conanprev: {}'.format(conan_prev))
     content = content.replace('conanprevprev: conan-unknown', 'conanprevprev: {}'.format(conan_prev_prev))
 
