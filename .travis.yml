@@ -27,24 +27,24 @@ jobs:
       env: TOXENV=py38-conancurrent
       dist: xenial
 
-    - stage: Linux - Conan 1.23
+    - stage: Linux - Conan prev
       name: Python 3.5
       python: 3.5
-      env: TOXENV=py35-conan123
+      env: TOXENV=py35-conanprev
       dist: xenial
     - name: Python 3.8
       python: 3.8
-      env: TOXENV=py38-conan123
+      env: TOXENV=py38-conanprev
       dist: xenial
 
-    - stage: Linux - Conan 1.22
+    - stage: Linux - Conan prev-prev
       name: Python 3.5
       python: 3.5
-      env: TOXENV=py35-conan122
+      env: TOXENV=py35-conanprevprev
       dist: xenial
     - name: Python 3.8
       python: 3.8
-      env: TOXENV=py38-conan122
+      env: TOXENV=py38-conanprevprev
       dist: xenial
 
     # Macos is slow, only if everything has passed
@@ -83,4 +83,5 @@ script:
       if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
       pyenv activate conan
     fi
+  - python .ci/last_conan_version.py
   - tox

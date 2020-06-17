@@ -20,16 +20,16 @@ environment:
           TOXENV: py38-conancurrent
           CMAKE_GENERATOR: "Visual Studio 16 2019"
 
-        # Conan 1.21.x
+        # Conan prev version
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
           PYVER: py38
-          TOXENV: py38-conan123
+          TOXENV: py38-conanprev
           CMAKE_GENERATOR: "Visual Studio 16 2019"
 
-        # Conan 1.20.x
+        # Conan prev-prev version
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
           PYVER: py38
-          TOXENV: py38-conan122
+          TOXENV: py38-conanprevprev
           CMAKE_GENERATOR: "Visual Studio 16 2019"
 
 install:
@@ -38,6 +38,7 @@ install:
   - pip install tox==3.7.0 tox-venv==0.3.1
 
 test_script:
+  - python .ci/last_conan_version.py
   - tox
 
 matrix:
