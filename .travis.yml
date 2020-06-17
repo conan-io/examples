@@ -75,7 +75,7 @@ install:
       pyenv activate conan;
     fi
   - pip install --upgrade pip
-  - pip install tox tox-venv tox-travis
+  - pip install tox tox-venv tox-travis requests
 
 script:
   - |

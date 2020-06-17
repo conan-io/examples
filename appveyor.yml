@@ -35,7 +35,7 @@ environment:
 install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
   - python -m pip install --upgrade pip
-  - pip install tox==3.7.0 tox-venv==0.3.1
+  - pip install tox==3.7.0 tox-venv==0.3.1 requests
 
 test_script:
   - python .ci/last_conan_version.py
