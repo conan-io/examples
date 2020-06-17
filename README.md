@@ -43,6 +43,12 @@ Demonstrate how to use Folly to validate an URI using Futures, FBString, Executo
 
 Blog Post: https://blog.conan.io/2018/12/03/Using-Facebook-Folly-with-Conan.html
 
+### [Testing package with GTest](libraries/gtest/encryption)
+
+Demonstrate how to use GTest with your test package.
+
+Docs: https://docs.conan.io/en/latest/integrations/ci/appveyor.html#building-and-testing-your-project
+
 ### [An introduction to Dear ImGui and how to use with Conan](libraries/dear-imgui/basic)
 
 Demonstrate how to use Dear ImGui with Conan to add a GUI to an OpenGL3 application.
