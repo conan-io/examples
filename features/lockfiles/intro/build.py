@@ -1,0 +1,143 @@
+import os, json, shutil
+import subprocess
+from contextlib import contextmanager
+
+
+def run(cmd, assert_error=False):
+    print("*********** Running: %s" % cmd)
+    ret = os.system(cmd)
+    if ret == 0 and assert_error:
+        raise Exception("Command unexpectedly succedeed: %s" % cmd)
+    if ret != 0 and not assert_error:
+        raise Exception("Failed command: %s" % cmd)
+
+def load(filename):
+    with open(filename, "r") as f:
+        return f.read()
+
+def rm(path):
+    if os.path.isfile(path):
+        os.remove(path)
+    elif os.path.isdir(path):
+        shutil.rmtree(path)
+
+@contextmanager
+def chdir(path):
+    current_path = os.getcwd()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(current_path)
+
+@contextmanager
+def setenv(key, value):
+    old_value = os.environ.get(key)
+    os.environ[key] = value
+    try:
+        yield
+    finally:
+        if old_value is not None:
+            os.environ[key] = old_value
+
+
+def clean():
+    rm("tmp")
+    rm("pkgb/build")
+    rm("pkgb/locks")
+    rm("consume")
+    run("conan remove * -f")
+
+def single_config():
+    clean()
+
+    run("conan config set general.default_package_id_mode=full_version_mode")
+    run("conan create pkga pkga/0.1@user/testing")
+
+    with chdir("pkgb"):
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb.lock")
+        print(load("locks/pkgb.lock"))
+
+    run("conan create pkga pkga/0.2@user/testing")
+
+    os.makedirs("pkgb/build")
+    with chdir("pkgb/build"):
+        run("conan install .. --lockfile=../locks/pkgb.lock")
+        run('cmake ../src -G "Visual Studio 15 Win64"')
+        run("cmake --build . --config Release")
+        run(os.sep.join(["bin", "greet"]))
+        run("conan install ..")
+        run("cmake --build . --config Release")
+        run(os.sep.join(["bin", "greet"]))
+
+        run("conan install .. --lockfile=../locks/pkgb.lock --build=pkga", assert_error=True)
+
+    with chdir("pkgb"):
+        run("conan create . user/stable --lockfile=locks/pkgb.lock", assert_error=True)
+        run("conan create . user/testing --lockfile=locks/pkgb.lock --lockfile-out=locks/pkgb.lock")
+        print(load("locks/pkgb.lock"))
+        run("conan create . user/testing --lockfile=locks/pkgb.lock", assert_error=True)
+
+    os.makedirs("consume")
+    with chdir("consume"):
+        run("conan install pkgb/0.1@user/testing --lockfile=../pkgb/locks/pkgb.lock")
+        run(os.sep.join(["bin", "greet"]))
+
+    clean()
+
+def multi_config():
+    # Multi-configuration
+    clean()
+
+    run("conan create pkga pkga/0.1@user/testing")
+    run("conan create pkga pkga/0.1@user/testing -s build_type=Debug")
+
+    with chdir("pkgb"):
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb_release.lock")
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb_debug.lock -s build_type=Debug")
+        rm("locks")
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb.lock --base")
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile=locks/pkgb.lock --lockfile-out=locks/pkgb_debug.lock -s build_type=Debug")
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile=locks/pkgb.lock --lockfile-out=locks/pkgb_release.lock")
+        print(load("locks/pkgb_release.lock"))
+        print(load("locks/pkgb_debug.lock"))
+
+    run("conan create pkga pkga/0.2@user/testing")
+    run("conan create pkga pkga/0.2@user/testing -s build_type=Debug")
+
+    os.makedirs("pkgb/build")
+    with chdir("pkgb/build"):
+        for config in ("Release", "Debug"):
+            run("conan install .. --lockfile=../locks/pkgb_%s.lock -s build_type=%s" % (config.lower(), config), assert_error=True)
+            run("conan install .. --lockfile=../locks/pkgb_%s.lock" % config.lower())
+            run('cmake ../src -G "Visual Studio 15 Win64"')
+            run("cmake --build . --config %s" % config)
+            run(os.sep.join(["bin", "greet"]))
+            run("conan install .. -s build_type=%s" % config)
+            run("cmake --build . --config %s" % config)
+            run(os.sep.join(["bin", "greet"]))
+
+            run("conan install .. --lockfile=../locks/pkgb_%s.lock --build=pkga" % config.lower(), assert_error=True)
+
+
+    with chdir("pkgb"):
+        for config in ("Release", "Debug"):
+            run("conan create . user/stable --lockfile=locks/pkgb_%s.lock" % config.lower(), assert_error=True)
+            run("conan create . user/testing --lockfile=locks/pkgb_%s.lock --lockfile-out=locks/pkgb_%s.lock" % (config.lower(), config.lower()))
+            print(load("locks/pkgb_%s.lock" % config.lower()))
+            run("conan create . user/testing --lockfile=locks/pkgb_%s.lock" % config.lower(), assert_error=True)
+
+    os.makedirs("consume")
+    with chdir("consume"):
+        for config in ("Release", "Debug"):
+            run("conan install pkgb/0.1@user/testing --lockfile=../pkgb/locks/pkgb_%s.lock" % config.lower())
+            run(os.sep.join(["bin", "greet"]))
+
+    clean()
+
+
+if __name__ == '__main__':
+    home = os.path.abspath(os.path.join(os.path.dirname(__file__), "tmp"))
+    with setenv("CONAN_USER_HOME", home):
+        single_config()
+        multi_config()
