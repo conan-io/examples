@@ -55,28 +55,30 @@ def single_config():
     run("conan create pkga pkga/0.1@user/testing")
 
     with chdir("pkgb"):
-        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb.lock")
-        print(load("locks/pkgb.lock"))
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb_deps.lock")
+        print(load("locks/pkgb_deps.lock"))
 
     run("conan create pkga pkga/0.2@user/testing")
 
     os.makedirs("pkgb/build")
     with chdir("pkgb/build"):
-        run("conan install .. --lockfile=../locks/pkgb.lock")
+        run("conan install ..")
         run('cmake ../src -G "Visual Studio 15 Win64"')
         run("cmake --build . --config Release")
         run(os.sep.join(["bin", "greet"]))
-        run("conan install ..")
+
+        run("conan install .. --lockfile=../locks/pkgb_deps.lock")
         run("cmake --build . --config Release")
         run(os.sep.join(["bin", "greet"]))
 
-        run("conan install .. --lockfile=../locks/pkgb.lock --build=pkga", assert_error=True)
+        run("conan install .. --lockfile=../locks/pkgb_deps.lock --build=pkga", assert_error=True)
 
     with chdir("pkgb"):
-        run("conan create . user/stable --lockfile=locks/pkgb.lock", assert_error=True)
-        run("conan create . user/testing --lockfile=locks/pkgb.lock --lockfile-out=locks/pkgb.lock")
+        run("conan create . user/stable --lockfile=locks/pkgb_deps.lock", assert_error=True)
+        run("conan create . user/testing --lockfile=locks/pkgb_deps.lock --lockfile-out=locks/pkgb.lock")
         print(load("locks/pkgb.lock"))
         run("conan create . user/testing --lockfile=locks/pkgb.lock", assert_error=True)
+        run("conan create . user/testing --lockfile=locks/pkgb_deps.lock")
 
     os.makedirs("consume")
     with chdir("consume"):
@@ -96,11 +98,12 @@ def multi_config():
         run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb_release.lock")
         run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb_debug.lock -s build_type=Debug")
         rm("locks")
-        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb.lock --base")
-        run("conan lock create conanfile.py --user=user --channel=testing --lockfile=locks/pkgb.lock --lockfile-out=locks/pkgb_debug.lock -s build_type=Debug")
-        run("conan lock create conanfile.py --user=user --channel=testing --lockfile=locks/pkgb.lock --lockfile-out=locks/pkgb_release.lock")
-        print(load("locks/pkgb_release.lock"))
-        print(load("locks/pkgb_debug.lock"))
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile-out=locks/pkgb_base.lock --base")
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile=locks/pkgb_base.lock --lockfile-out=locks/pkgb_deps_debug.lock -s build_type=Debug")
+        run("conan lock create conanfile.py --user=user --channel=testing --lockfile=locks/pkgb_base.lock --lockfile-out=locks/pkgb_deps_release.lock")
+        print(load("locks/pkgb_base.lock"))
+        print(load("locks/pkgb_deps_release.lock"))
+        print(load("locks/pkgb_deps_debug.lock"))
 
     run("conan create pkga pkga/0.2@user/testing")
     run("conan create pkga pkga/0.2@user/testing -s build_type=Debug")
@@ -108,8 +111,8 @@ def multi_config():
     os.makedirs("pkgb/build")
     with chdir("pkgb/build"):
         for config in ("Release", "Debug"):
-            run("conan install .. --lockfile=../locks/pkgb_%s.lock -s build_type=%s" % (config.lower(), config), assert_error=True)
-            run("conan install .. --lockfile=../locks/pkgb_%s.lock" % config.lower())
+            run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock -s build_type=%s" % (config.lower(), config), assert_error=True)
+            run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock" % config.lower())
             run('cmake ../src -G "Visual Studio 15 Win64"')
             run("cmake --build . --config %s" % config)
             run(os.sep.join(["bin", "greet"]))
@@ -117,13 +120,13 @@ def multi_config():
             run("cmake --build . --config %s" % config)
             run(os.sep.join(["bin", "greet"]))
 
-            run("conan install .. --lockfile=../locks/pkgb_%s.lock --build=pkga" % config.lower(), assert_error=True)
+            run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock --build=pkga" % config.lower(), assert_error=True)
 
 
     with chdir("pkgb"):
         for config in ("Release", "Debug"):
-            run("conan create . user/stable --lockfile=locks/pkgb_%s.lock" % config.lower(), assert_error=True)
-            run("conan create . user/testing --lockfile=locks/pkgb_%s.lock --lockfile-out=locks/pkgb_%s.lock" % (config.lower(), config.lower()))
+            run("conan create . user/stable --lockfile=locks/pkgb_deps_%s.lock" % config.lower(), assert_error=True)
+            run("conan create . user/testing --lockfile=locks/pkgb_deps_%s.lock --lockfile-out=locks/pkgb_%s.lock" % (config.lower(), config.lower()))
             print(load("locks/pkgb_%s.lock" % config.lower()))
             run("conan create . user/testing --lockfile=locks/pkgb_%s.lock" % config.lower(), assert_error=True)
 
