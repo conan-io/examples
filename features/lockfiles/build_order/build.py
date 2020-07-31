@@ -53,10 +53,10 @@ def build_order():
     clean()
 
     run("conan config set general.default_package_id_mode=full_version_mode")
-    run("conan export pkga pkga/0.1@user/testing")
-    run("conan export pkgb pkgb/0.1@user/testing")
-    run("conan export pkgc pkgc/0.1@user/testing")
-    run("conan export pkgd pkgd/0.1@user/testing")
+    run("conan export liba liba/0.1@user/testing")
+    run("conan export libb libb/0.1@user/testing")
+    run("conan export libc libc/0.1@user/testing")
+    run("conan export libd libd/0.1@user/testing")
     run("conan export app1 app1/0.1@user/testing")
     run("conan export app2 app2/0.1@user/testing")
 
@@ -78,15 +78,15 @@ def build_order():
     run("conan lock build-order app1.lock --json=build_order.json")
     print(load("build_order.json"))  # All deps
 
-    # Modifying pkgb outside the version range
-    run("conan create pkgb pkgb/2.0@user/testing")
+    # Modifying libb outside the version range
+    run("conan create libb libb/2.0@user/testing")
     run("conan lock create --reference=app1/0.1@user/testing --lockfile-out=app1.lock")
     print(load("app1.lock"))
     run("conan lock build-order app1.lock --json=build_order.json")
     print(load("build_order.json"))
 
-    # Modifying pkgb, what needs to be built?
-    run("conan create pkgb pkgb/0.2@user/testing")
+    # Modifying libb, what needs to be built?
+    run("conan create libb libb/0.2@user/testing")
     run("conan lock create --reference=app1/0.1@user/testing --lockfile-out=app1.lock")
     print(load("app1.lock"))
     run("conan lock build-order app1.lock --json=build_order.json")
