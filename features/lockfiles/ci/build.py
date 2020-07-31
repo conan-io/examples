@@ -3,14 +3,22 @@ import subprocess
 from contextlib import contextmanager
 
 
-def run(cmd):
+def run(cmd, assert_error=False):
+    print("*********** Running: %s" % cmd)
     ret = os.system(cmd)
-    if ret != 0:
+    if ret == 0 and assert_error:
+        raise Exception("Command unexpectedly succedeed: %s" % cmd)
+    if ret != 0 and not assert_error:
         raise Exception("Failed command: %s" % cmd)
 
 def load(filename):
     with open(filename, "r") as f:
         return f.read()
+
+def save(filename, content):
+    with open(filename, "w") as f:
+        return f.write(content)
+
 
 def rm(path):
     if os.path.isfile(path):
@@ -18,71 +26,93 @@ def rm(path):
     elif os.path.isdir(path):
         shutil.rmtree(path)
 
+@contextmanager
+def chdir(path):
+    current_path = os.getcwd()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(current_path)
 
 @contextmanager
-def restore_conan_home():
-    conan_home = os.environ.get('CONAN_USER_HOME', os.path.expanduser('~'))
-    conan_conf = os.path.join(conan_home, '.conan', 'conan.conf')
-    contents = open(conan_conf, 'rb').read()
+def setenv(key, value):
+    old_value = os.environ.get(key)
+    os.environ[key] = value
     try:
         yield
     finally:
-        open(conan_conf, 'wb').write(contents)
+        if old_value is not None:
+            os.environ[key] = old_value
 
 
-def main():
-    rm("release")
-    rm("build_server_folder")
-    rm("bo.json")
+def clean():
+    rm("tmp")
+    rm("locks")
 
-    run("conan remove App/0.1@user/testing* -f")
-    run("conan remove PkgA/0.1@user/testing* -f")
-    run("conan remove PkgA/0.2@user/testing* -f")
-    run("conan remove PkgB/0.1@user/testing* -f")
-    run("conan remove PkgC/0.1@user/testing* -f")
-    run("conan remove PkgZ/0.1@user/testing* -f")
-    run("conan remove PkgZ/0.2@user/testing* -f")
+
+def ci_pipeline():
+    clean()
 
     run("conan config set general.default_package_id_mode=full_version_mode")
-    run("cd PkgZ && conan create . PkgZ/0.1@user/testing")
-    run("cd PkgA && conan create . PkgA/0.1@user/testing")
-    run("cd PkgB && conan create . user/testing")
-    run("cd PkgC && conan create . user/testing")
-    run("cd App && conan create . user/testing")
+    for config in ("Release", "Debug"):
+        run("conan create liba liba/0.1@user/testing -s build_type=%s" % config)
+        run("conan create libb libb/0.1@user/testing -s build_type=%s" % config)
+        run("conan create libc libc/0.1@user/testing -s build_type=%s" % config)
+        run("conan create libd libd/0.1@user/testing -s build_type=%s" % config)
+        run("conan create app1 app1/0.1@user/testing -s build_type=%s" % config)
+        run("conan create app2 app2/0.1@user/testing -s build_type=%s" % config)
 
-    # Freeze the App dependencies in a lockfile in the release subfolder
-    print("\n********** Freeze dependencies in a lockfile ***********")
-    run("conan graph lock App/0.1@user/testing --lockfile=release")
+    # A developer does some change to the libb
+    with chdir("libb"):
+        libb = load("conanfile.py")
+        libb = libb + "# Some changes"
+        save("conanfile.py", libb)
 
-    # A new version of Z will not affect at all
-    run("cd PkgZ && conan create . PkgZ/0.2@user/testing")
-    # There is a change in A, a new version that we want to test
-    print("\n********** Creating PkgA/0.2 ***********")
-    run("cd PkgA && conan create . PkgA/0.2@user/testing --lockfile=../release")
+        run("conan lock create conanfile.py --name=libb --version=0.2 "
+            "--user=user --channel=testing --lockfile-out=../locks/libb_base.lock --base")
 
-    print("\n********** Computing the build order after PkgA/0.2 ***********")
-    run("conan graph build-order ./release --json=bo.json --build=missing")
+    # Even if liba gets a new 0.2 version, the lockfile will avoid it
+    run("conan create liba liba/0.2@user/testing")
+    with chdir("libb"):
+        # This will be useful to capture the revision
+        run("conan export . libb/0.2@user/testing --lockfile=../locks/libb_base.lock "
+            "--lockfile-out=../locks/libb_base.lock")
+        # Capture the configuration lockfiles, one per configuration
+        run("conan lock create conanfile.py --name=libb --version=0.2 "
+            "--user=user --channel=testing --lockfile=../locks/libb_base.lock --lockfile-out=../locks/libb_deps_debug.lock -s build_type=Debug")
+        run("conan lock create conanfile.py --name=libb --version=0.2 "
+            "--user=user --channel=testing --lockfile=../locks/libb_base.lock --lockfile-out=../locks/libb_deps_release.lock")
+        # Now build libb
+        run("conan create . libb/0.2@user/testing --lockfile=../locks/libb_deps_release.lock")
+        run("conan create . libb/0.2@user/testing --lockfile=../locks/libb_deps_debug.lock")
 
-    build_order = json.loads(load("bo.json"))
+    # Capture the app1 base lockfile
+    run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/libb_base.lock "
+        "--lockfile-out=locks/app1_base.lock --base")
+    # And one lockfile per configuration
+    run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/app1_base.lock "
+        "--lockfile-out=locks/app1_release.lock")
+    run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/app1_base.lock "
+        "--lockfile-out=locks/app1_debug.lock -s build_type=Debug")
 
-    while build_order:
-        # Simulates building in a different build server
-        os.makedirs("build_server_folder/release")
-        shutil.copy2("release/conan.lock", "build_server_folder/release")
-        os.chdir("build_server_folder")
-        print("\nBuild order is: %s" % build_order)
-        _, pkg_ref = build_order[0][0]
-        pkg_ref = pkg_ref.split("#", 1)[0]
-        print("\n********** Rebuild affected package: %s ***********" % pkg_ref)
-        run("conan install %s --build=%s --lockfile=release" % (pkg_ref, pkg_ref))
-        os.chdir("..")
-        run("conan graph update-lock release build_server_folder/release")
-        rm("build_server_folder")
-        # Update the build order after changes
-        run("conan graph build-order ./release --json=bo.json --build=missing")
-        build_order = json.loads(load("bo.json"))
+    run("conan lock build-order locks/app1_release.lock --json=bo_release.json")
+    run("conan lock build-order locks/app1_debug.lock --json=bo_debug.json")
+    build_order_release = json.loads(load("bo_release.json"))
+    build_order_debug = json.loads(load("bo_debug.json"))
 
+    for level in build_order_release:
+        for item in level:
+            ref, pid, context, id_ = item
+            print(item)
+            run("conan install %s --build=%s --lockfile=locks/app1_release.lock "
+                "--lockfile-out=locks/app1_release_updated.lock" % (ref, ref))
+            run("conan lock update locks/app1_release.lock locks/app1_release_updated.lock")
+
+    print(load("locks/app1_release.lock"))
+    clean()
 
 if __name__ == '__main__':
-    with restore_conan_home():
-        main()
+    home = os.path.abspath(os.path.join(os.path.dirname(__file__), "tmp"))
+    with setenv("CONAN_USER_HOME", home):
+        ci_pipeline()
