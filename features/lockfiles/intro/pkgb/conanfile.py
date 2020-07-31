@@ -1,5 +1,6 @@
 from conans import ConanFile, CMake
 
+required_conan_version = ">=1.28"
 
 class PkgbConan(ConanFile):
     name = "pkgb"
