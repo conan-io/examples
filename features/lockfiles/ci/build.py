@@ -53,7 +53,6 @@ def clean():
 
 def ci_pipeline():
     clean()
-
     run("conan config set general.default_package_id_mode=full_version_mode")
     for config in ("Release", "Debug"):
         run("conan create liba liba/0.1@user/testing -s build_type=%s" % config)
@@ -70,14 +69,16 @@ def ci_pipeline():
         save("conanfile.py", libb)
 
         run("conan lock create conanfile.py --name=libb --version=0.2 "
-            "--user=user --channel=testing --lockfile-out=../locks/libb_base.lock --base")
+            "--user=user --channel=testing --lockfile-out=../locks/libb_deps_base.lock --base")
+        print(load("../locks/libb_deps_base.lock"))
 
     # Even if liba gets a new 0.2 version, the lockfile will avoid it
     run("conan create liba liba/0.2@user/testing")
     with chdir("libb"):
         # This will be useful to capture the revision
-        run("conan export . libb/0.2@user/testing --lockfile=../locks/libb_base.lock "
+        run("conan export . libb/0.2@user/testing --lockfile=../locks/libb_deps_base.lock "
             "--lockfile-out=../locks/libb_base.lock")
+        print(load("../locks/libb_base.lock"))
         # Capture the configuration lockfiles, one per configuration
         run("conan lock create conanfile.py --name=libb --version=0.2 "
             "--user=user --channel=testing --lockfile=../locks/libb_base.lock --lockfile-out=../locks/libb_deps_debug.lock -s build_type=Debug")
@@ -90,6 +91,7 @@ def ci_pipeline():
     # Capture the app1 base lockfile
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/libb_base.lock "
         "--lockfile-out=locks/app1_base.lock --base")
+    print(load("locks/app1_base.lock"))
     # And one lockfile per configuration
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/app1_base.lock "
         "--lockfile-out=locks/app1_release.lock")
@@ -99,7 +101,9 @@ def ci_pipeline():
     run("conan lock build-order locks/app1_release.lock --json=bo_release.json")
     run("conan lock build-order locks/app1_debug.lock --json=bo_debug.json")
     build_order_release = json.loads(load("bo_release.json"))
+    print(build_order_release)
     build_order_debug = json.loads(load("bo_debug.json"))
+    print(build_order_debug)
 
     for level in build_order_release:
         for item in level:
