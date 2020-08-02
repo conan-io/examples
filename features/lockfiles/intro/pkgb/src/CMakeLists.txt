@@ -5,3 +5,6 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 add_library(pkgb hello.cpp)
+
+add_executable(greet greet.cpp)
+target_link_libraries(greet PRIVATE pkgb)
