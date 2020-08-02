@@ -49,6 +49,8 @@ def setenv(key, value):
 def clean():
     rm("tmp")
     rm("locks")
+    rm("bo_release.json")
+    rm("bo_debug.json")
 
 
 def ci_pipeline():
@@ -70,7 +72,6 @@ def ci_pipeline():
 
         run("conan lock create conanfile.py --name=libb --version=0.2 "
             "--user=user --channel=testing --lockfile-out=../locks/libb_deps_base.lock --base")
-        print(load("../locks/libb_deps_base.lock"))
 
     # Even if liba gets a new 0.2 version, the lockfile will avoid it
     run("conan create liba liba/0.2@user/testing")
@@ -91,7 +92,6 @@ def ci_pipeline():
     # Capture the app1 base lockfile
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/libb_base.lock "
         "--lockfile-out=locks/app1_base.lock --base")
-    print(load("locks/app1_base.lock"))
     # And one lockfile per configuration
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/app1_base.lock "
         "--lockfile-out=locks/app1_release.lock")
@@ -101,9 +101,7 @@ def ci_pipeline():
     run("conan lock build-order locks/app1_release.lock --json=bo_release.json")
     run("conan lock build-order locks/app1_debug.lock --json=bo_debug.json")
     build_order_release = json.loads(load("bo_release.json"))
-    print(build_order_release)
     build_order_debug = json.loads(load("bo_debug.json"))
-    print(build_order_debug)
 
     for level in build_order_release:
         for item in level:
