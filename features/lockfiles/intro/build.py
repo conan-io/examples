@@ -120,7 +120,7 @@ def multi_config():
             if platform.system() == "Windows":
                 run('cmake ../src -G "Visual Studio 15 Win64"')
             else:
-                run("cmake ../src -DCMAKE_BUILD_TYPE=Release")
+                run("cmake ../src -DCMAKE_BUILD_TYPE=%s" % config)
             run("cmake --build . --config %s" % config)
             run(os.sep.join(["bin", "greet"]))
             run("conan install .. -s build_type=%s" % config)
