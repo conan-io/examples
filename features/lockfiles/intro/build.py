@@ -1,4 +1,5 @@
 import os, json, shutil
+import platform
 import subprocess
 from contextlib import contextmanager
 
@@ -46,7 +47,7 @@ def clean():
     rm("pkgb/build")
     rm("pkgb/locks")
     rm("consume")
-    run("conan remove * -f")
+    run("conan remove '*' -f")
 
 def single_config():
     clean()
@@ -63,7 +64,10 @@ def single_config():
     os.makedirs("pkgb/build")
     with chdir("pkgb/build"):
         run("conan install ..")
-        run('cmake ../src -G "Visual Studio 15 Win64"')
+        if platform.system() == "Windows":
+            run('cmake ../src -G "Visual Studio 15 Win64"')
+        else:
+            run("cmake ../src -DCMAKE_BUILD_TYPE=Release")
         run("cmake --build . --config Release")
         run(os.sep.join(["bin", "greet"]))
 
@@ -113,7 +117,10 @@ def multi_config():
         for config in ("Release", "Debug"):
             run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock -s build_type=%s" % (config.lower(), config), assert_error=True)
             run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock" % config.lower())
-            run('cmake ../src -G "Visual Studio 15 Win64"')
+            if platform.system() == "Windows":
+                run('cmake ../src -G "Visual Studio 15 Win64"')
+            else:
+                run("cmake ../src -DCMAKE_BUILD_TYPE=Release")
             run("cmake --build . --config %s" % config)
             run(os.sep.join(["bin", "greet"]))
             run("conan install .. -s build_type=%s" % config)
