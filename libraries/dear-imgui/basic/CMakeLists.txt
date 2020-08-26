@@ -29,4 +29,4 @@ add_custom_command(TARGET dear-imgui-conan
 )
 
 target_compile_definitions(dear-imgui-conan PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW)
-target_link_libraries(dear-imgui-conan imgui::imgui glew::glew glfw::glfw)
+target_link_libraries(dear-imgui-conan imgui::imgui GLEW::GLEW glfw::glfw)
