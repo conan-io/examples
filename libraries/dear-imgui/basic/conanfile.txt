@@ -6,6 +6,9 @@ glew/2.1.0
 [generators]
 cmake_find_package_multi
 
+[options]
+glew:shared=False
+
 [imports]
 ./res/bindings, imgui_impl_glfw.cpp -> ../bindings
 ./res/bindings, imgui_impl_opengl3.cpp -> ../bindings
