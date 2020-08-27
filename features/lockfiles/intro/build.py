@@ -65,7 +65,7 @@ def single_config():
     with chdir("pkgb/build"):
         run("conan install ..")
         if platform.system() == "Windows":
-            run('cmake ../src -G "Visual Studio 15 Win64"')
+            run('cmake ../src -G "{}"'.format(os.getenv("CMAKE_GENERATOR")))
         else:
             run("cmake ../src -DCMAKE_BUILD_TYPE=Release")
         run("cmake --build . --config Release")
@@ -118,7 +118,7 @@ def multi_config():
             run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock -s build_type=%s" % (config.lower(), config), assert_error=True)
             run("conan install .. --lockfile=../locks/pkgb_deps_%s.lock" % config.lower())
             if platform.system() == "Windows":
-                run('cmake ../src -G "Visual Studio 15 Win64"')
+                run('cmake ../src -G "{}"'.format(os.getenv("CMAKE_GENERATOR")))
             else:
                 run("cmake ../src -DCMAKE_BUILD_TYPE=%s" % config)
             run("cmake --build . --config %s" % config)
