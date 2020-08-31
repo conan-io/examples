@@ -1,4 +1,4 @@
-import os, json, shutil
+import os, json, shutil, sys
 import platform
 import subprocess
 from contextlib import contextmanager
@@ -149,5 +149,10 @@ def multi_config():
 if __name__ == '__main__':
     home = os.path.abspath(os.path.join(os.path.dirname(__file__), "tmp"))
     with setenv("CONAN_USER_HOME", home):
+        if platform.system() == "Windows":
+            if not os.getenv("CMAKE_GENERATOR"):
+                print("CMAKE_GENERATOR environment variable not defined. "
+                      "Please define the CMake generator in the CMAKE_GENERATOR environment variable.")
+                sys.exit()
         single_config()
         multi_config()
