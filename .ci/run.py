@@ -54,7 +54,7 @@ def get_examples_to_skip(current_version):
     skip = []
     # Given the Conan version, some examples are skipped
     required_conan = {
-        version.parse("1.28.2"): [
+        version.parse("1.29.0"): [
             './libraries/dear-imgui/basic', # solved bug for system packages and components
             ],
         version.parse("1.28.0"): [
