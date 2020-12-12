@@ -14,8 +14,14 @@ class Recipe(ConanFile):
     generators = "cmake", "cmake_find_package"
     exports_sources = "CMakeLists.txt", "src/main.cpp"
 
+    options = {'use_hidden': [True, False]}
+    default_options = {'use_hidden': False}
+
     def requirements(self):
-        self.requires("library/1.0")
+        if self.options.use_hidden:
+            self.requires("hidden/1.0")
+        else:
+            self.requires("library/1.0")
 
     def build(self):
         cmake = CMake(self)

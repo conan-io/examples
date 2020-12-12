@@ -4,6 +4,5 @@ project(app)
 include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-find_package(library)
 add_executable(app src/main.cpp)
-target_link_libraries(app library::library)
+target_link_libraries(app ${CONAN_LIBS})
