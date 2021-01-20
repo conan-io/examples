@@ -1,0 +1,7 @@
+config BR2_PACKAGE_HOST_PYTHON_CONAN
+	bool "host python-conan"
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  Decentralized, open-source, C/C++ package manager
+
+	  https://conan.io

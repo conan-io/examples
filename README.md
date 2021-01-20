@@ -94,6 +94,13 @@ Shows how to use conan ``json`` generator with custom script to automate the cre
 
 Documentation: https://docs.conan.io/en/laters/integrations/deployment.html
 
+
+### [Buildroot](features/buildroot)
+
+Demonstrate how to build a tiny Linux image using [Buildroot](https://buildroot.org/) and Conan.
+
+Documentation: https://docs.conan.io/en/latest/integrations/cross_platform/buildroot.html
+
 ## How can I reproduce the build steps?
 
 All our examples can be built on Windows, Linux and Mac. If you are interested to reproduce

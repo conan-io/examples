@@ -1,0 +1,40 @@
+choice
+	prompt "Build policy"
+
+config CONAN_BUILD_POLICY_MISSING
+	bool "missing"
+    help
+	  It will build only the missing requires.
+
+config CONAN_BUILD_POLICY_OUTDATED
+	bool "outdated"
+	help
+	  It will try to build from code if the binary is
+	  not built with the current recipe or when missing binary package.
+
+config CONAN_BUILD_POLICY_CASCADE
+	bool "cascade"
+	help
+	  It will build from code all the nodes with some dependency being
+	  built (for any reason). Can be used together with any other build
+	  policy. Useful to make sure that any new change introduced in a
+	  dependency is incorporated by building again the package.
+
+config CONAN_BUILD_POLICY_ALWAYS
+	bool "always"
+	help
+	  The always policy will retrieve the sources each time the package
+	  is installed, so it can be useful for providing a “latest” mechanism
+	  or ignoring the uploaded binary packages.
+
+config CONAN_BUILD_POLICY_NEVER
+	bool "never"
+	help
+	  Never build, use binary packages or fail if a binary package is not found.
+
+endchoice
+
+config CONAN_REMOTE_NAME
+	string "Conan remote name"
+    help
+	  Look in the specified remote server.

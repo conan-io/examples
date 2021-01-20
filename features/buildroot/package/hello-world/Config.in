@@ -1,0 +1,7 @@
+config BR2_PACKAGE_HELLO_WORLD
+    bool "hello-world"
+	depends on BR2_PACKAGE_CONAN_ZLIB
+    help
+        Hello world package.
+
+        http://example.com

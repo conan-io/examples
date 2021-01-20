@@ -1,0 +1,7 @@
+config BR2_PACKAGE_CONAN_ZLIB
+	bool "conan-zlib"
+	help
+	  Standard (de)compression library. Used by things like
+	  gzip and libpng.
+
+	  http://www.zlib.net

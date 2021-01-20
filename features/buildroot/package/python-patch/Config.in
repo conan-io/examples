@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_PATCH
+	bool "python-patch"
+	help
+	  Library to parse and apply unified diffs
+
+	  https://github.com/techtonik/python-patch

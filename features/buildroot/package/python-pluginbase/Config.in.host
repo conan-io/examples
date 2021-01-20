@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HOST_PYTHON_PLUGINBASE
+	bool "host-python-pluginbase"
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  PluginBase is a module for Python that enables the development of \
+	  flexible plugin systems in Python.
+
+	  http://github.com/mitsuhiko/pluginbase

@@ -1,0 +1,3 @@
+# md5, sha256 from https://pypi.org/pypi/aioconsole/json
+md5     1c1fc353638ffbfec7199495c3d55dbf                                  conan-0.18.0.tar.gz
+sha256	b610d56944b8dd5207385c3e570bda9b9b4366055503a0a68d22bb31b25c0252  conan-1.18.0.tar.gz
