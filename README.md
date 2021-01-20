@@ -31,6 +31,12 @@ Example how to use Conan Editable Packages.
 
 Documentation: https://docs.conan.io/en/latest/developing_packages/editable_packages.html
 
+### [Buildroot](features/buildroot)
+
+Demonstrate how to build a tiny Linux image using [Buildroot](https://buildroot.org/) and Conan.
+
+Documentation: https://docs.conan.io/en/latest/integrations/cross_platform/buildroot.html
+
 ### [Serializing your data with Protobuf](libraries/protobuf/serialization)
 
 Demonstrate how to use Protobuf to serialize data between C++ and Python.
@@ -94,12 +100,6 @@ Shows how to use conan ``json`` generator with custom script to automate the cre
 
 Documentation: https://docs.conan.io/en/laters/integrations/deployment.html
 
-
-### [Buildroot](features/buildroot)
-
-Demonstrate how to build a tiny Linux image using [Buildroot](https://buildroot.org/) and Conan.
-
-Documentation: https://docs.conan.io/en/latest/integrations/cross_platform/buildroot.html
 
 ## How can I reproduce the build steps?
 
