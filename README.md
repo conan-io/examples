@@ -69,6 +69,12 @@ Example on how to create multi-configuration debug/release packages covering the
 
 Documentation: https://docs.conan.io/en/latest/creating_packages/package_approaches.html#n-configs-1-package
 
+### [Go Server](features/integrate_build_system)
+
+Shows how to integrate Go language and Conan package manager.
+
+Documentation: https://docs.conan.io/en/latest/howtos/other_languages_package_manager/go.html
+
 
 ### Lockfiles
 
