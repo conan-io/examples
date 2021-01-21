@@ -1,0 +1,634 @@
+diff --git a/package/Config.in b/package/Config.in
+index 6e0ddfd8d9..c7b097e8b5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -62,6 +62,12 @@ menu "Audio and video applications"
+ 	source "package/ympd/Config.in"
+ endmenu
+ 
++menu "Conan"
++	source "package/conan/Config.in"
++	source "package/conan-zlib/Config.in"
++	source "package/conan-gtest/Config.in"
++endmenu
++
+ menu "Compressors and decompressors"
+ 	source "package/brotli/Config.in"
+ 	source "package/bzip2/Config.in"
+@@ -964,6 +970,7 @@ menu "External python modules"
+ 	source "package/python-parso/Config.in"
+ 	source "package/python-passlib/Config.in"
+ 	source "package/python-pathlib2/Config.in"
++	source "package/python-patch/Config.in"
+ 	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
+@@ -973,6 +980,7 @@ menu "External python modules"
+ 	source "package/python-pigpio/Config.in"
+ 	source "package/python-pillow/Config.in"
+ 	source "package/python-pip/Config.in"
++	source "package/python-pluginbase/Config.in"
+ 	source "package/python-ply/Config.in"
+ 	source "package/python-portend/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+@@ -1830,6 +1838,7 @@ menu "Miscellaneous"
+ 	source "package/gr-osmosdr/Config.in"
+ 	source "package/gsettings-desktop-schemas/Config.in"
+ 	source "package/haveged/Config.in"
++	source "package/hello-world/Config.in"
+ 	source "package/linux-syscall-support/Config.in"
+ 	source "package/mcrypt/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 93822304e9..b2e211ebdf 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -51,8 +51,10 @@ menu "Host utilities"
+ 	source "package/pkgconf/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
++	source "package/python-conan/Config.in.host"
+ 	source "package/python-cython/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
++	source "package/python-pluginbase/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+ 	source "package/python-xlrd/Config.in.host"
+ 	source "package/qemu/Config.in.host"
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0a7899c852..c956e189a5 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -436,6 +436,7 @@ endif
+ include package/pkg-download.mk
+ include package/pkg-autotools.mk
+ include package/pkg-cmake.mk
++include package/pkg-conan.mk
+ include package/pkg-luarocks.mk
+ include package/pkg-perl.mk
+ include package/pkg-python.mk
+diff --git a/package/conan-gtest/Config.in b/package/conan-gtest/Config.in
+new file mode 100644
+index 0000000000..1a94f2c241
+--- /dev/null
++++ b/package/conan-gtest/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CONAN_GTEST
++	bool "conan-gtest"
++	help
++	  Google Testing and Mocking Framework
++
++	  https://github.com/google/googletest
+diff --git a/package/conan-gtest/conan-gtest.mk b/package/conan-gtest/conan-gtest.mk
+new file mode 100644
+index 0000000000..39391dd8c3
+--- /dev/null
++++ b/package/conan-gtest/conan-gtest.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# Conan GTest package
++#
++################################################################################
++
++CONAN_GTEST_VERSION = 1.8.1
++CONAN_GTEST_INSTALL_STAGING = YES
++CONAN_GTEST_LICENSE = BSD-3-Clause
++CONAN_GTEST_LICENSE_FILES = licenses/LICENSE
++CONAN_GTEST_SITE = $(call github,bincrafters,conan-gtest,e28f1217907db483521841dcfad9606b1c99a970)
++CONAN_GTEST_REFERENCE = gtest/$(CONAN_GTEST_VERSION)@bincrafters/stable
++
++$(eval $(conan-package))
+diff --git a/package/conan-zlib/Config.in b/package/conan-zlib/Config.in
+new file mode 100644
+index 0000000000..a97b3c977d
+--- /dev/null
++++ b/package/conan-zlib/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CONAN_ZLIB
++	bool "conan-zlib"
++	help
++	  Standard (de)compression library. Used by things like
++	  gzip and libpng.
++
++	  http://www.zlib.net
+diff --git a/package/conan-zlib/conan-zlib.mk b/package/conan-zlib/conan-zlib.mk
+new file mode 100644
+index 0000000000..2d38def5ee
+--- /dev/null
++++ b/package/conan-zlib/conan-zlib.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# Conan zlib package
++#
++################################################################################
++
++CONAN_ZLIB_VERSION = 1.2.11
++CONAN_ZLIB_INSTALL_STAGING = YES
++CONAN_ZLIB_LICENSE = Zlib
++CONAN_ZLIB_LICENSE_FILES = licenses/LICENSE
++CONAN_ZLIB_SITE = $(call github,conan-community,conan-zlib,92d34d0024d64a8f307237f211e43ab9952ef0a1)
++CONAN_ZLIB_REFERENCE = zlib/$(CONAN_ZLIB_VERSION)@conan/stable
++
++$(eval $(conan-package))
+diff --git a/package/conan/Config.in b/package/conan/Config.in
+new file mode 100644
+index 0000000000..ed42017aec
+--- /dev/null
++++ b/package/conan/Config.in
+@@ -0,0 +1,40 @@
++choice
++	prompt "Build policy"
++
++config CONAN_BUILD_POLICY_MISSING
++	bool "missing"
++    help
++	  It will build only the missing requires.
++
++config CONAN_BUILD_POLICY_OUTDATED
++	bool "outdated"
++	help
++	  It will try to build from code if the binary is
++	  not built with the current recipe or when missing binary package.
++
++config CONAN_BUILD_POLICY_CASCADE
++	bool "cascade"
++	help
++	  It will build from code all the nodes with some dependency being
++	  built (for any reason). Can be used together with any other build
++	  policy. Useful to make sure that any new change introduced in a
++	  dependency is incorporated by building again the package.
++
++config CONAN_BUILD_POLICY_ALWAYS
++	bool "always"
++	help
++	  The always policy will retrieve the sources each time the package
++	  is installed, so it can be useful for providing a “latest” mechanism
++	  or ignoring the uploaded binary packages.
++
++config CONAN_BUILD_POLICY_NEVER
++	bool "never"
++	help
++	  Never build, use binary packages or fail if a binary package is not found.
++
++endchoice
++
++config CONAN_REMOTE_NAME
++	string "Conan remote name"
++    help
++	  Look in the specified remote server.
+diff --git a/package/hello-world/Config.in b/package/hello-world/Config.in
+new file mode 100644
+index 0000000000..c389c6fd41
+--- /dev/null
++++ b/package/hello-world/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HELLO_WORLD
++    bool "hello-world"
++	depends on BR2_PACKAGE_CONAN_ZLIB
++    help
++        Hello world package.
++
++        http://example.com
+\ No newline at end of file
+diff --git a/package/hello-world/hello-world.mk b/package/hello-world/hello-world.mk
+new file mode 100644
+index 0000000000..57342b8ef6
+--- /dev/null
++++ b/package/hello-world/hello-world.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# HELLO_WORLD
++#
++################################################################################
++
++HELLO_WORLD_VERSION = 0.1.0
++HELLO_WORLD_SITE = ./package/hello-world
++HELLO_WORLD_SITE_METHOD = local
++HELLO_WORLD_SUBDIR = src
++HELLO_WORLD_DEPENDENCIES = conan-zlib
++HELLO_WORLD_CONF_OPTS = -DCMAKE_VERBOSE_MAKEFILE=ON
++
++$(eval $(cmake-package))
+diff --git a/package/hello-world/src/CMakeLists.txt b/package/hello-world/src/CMakeLists.txt
+new file mode 100644
+index 0000000000..a990034b16
+--- /dev/null
++++ b/package/hello-world/src/CMakeLists.txt
+@@ -0,0 +1,10 @@
++cmake_minimum_required(VERSION 2.8)
++project(hello-world CXX)
++
++add_executable(${CMAKE_PROJECT_NAME} main.cpp)
++target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC z)
++
++install(TARGETS ${CMAKE_PROJECT_NAME}
++        RUNTIME DESTINATION bin
++        LIBRARY DESTINATION lib
++        ARCHIVE DESTINATION lib)
+diff --git a/package/hello-world/src/conanfile.txt b/package/hello-world/src/conanfile.txt
+new file mode 100644
+index 0000000000..aa884ee31f
+--- /dev/null
++++ b/package/hello-world/src/conanfile.txt
+@@ -0,0 +1,2 @@
++[requires]
++zlib/1.2.11@conan/stable
+\ No newline at end of file
+diff --git a/package/hello-world/src/main.cpp b/package/hello-world/src/main.cpp
+new file mode 100644
+index 0000000000..a01b8d6225
+--- /dev/null
++++ b/package/hello-world/src/main.cpp
+@@ -0,0 +1,32 @@
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++
++#include <zlib.h>
++
++int main(void) {
++    char buffer_in [32] = {"Conan Package Manager"};
++    char buffer_out [32] = {0};
++
++    z_stream defstream;
++    defstream.zalloc = Z_NULL;
++    defstream.zfree = Z_NULL;
++    defstream.opaque = Z_NULL;
++    defstream.avail_in = (uInt) strlen(buffer_in);
++    defstream.next_in = (Bytef *) buffer_in;
++    defstream.avail_out = (uInt) sizeof(buffer_out);
++    defstream.next_out = (Bytef *) buffer_out;
++
++    deflateInit(&defstream, Z_BEST_COMPRESSION);
++    deflate(&defstream, Z_FINISH);
++    deflateEnd(&defstream);
++
++    printf("Compressed size is: %lu\n", strlen(buffer_in));
++    printf("Compressed string is: %s\n", buffer_in);
++    printf("Compressed size is: %lu\n", strlen(buffer_out));
++    printf("Compressed string is: %s\n", buffer_out);
++
++    printf("ZLIB VERSION: %s\n", zlibVersion());
++
++    return EXIT_SUCCESS;
++}
+\ No newline at end of file
+diff --git a/package/pkg-conan.mk b/package/pkg-conan.mk
+new file mode 100644
+index 0000000000..7f0629742e
+--- /dev/null
++++ b/package/pkg-conan.mk
+@@ -0,0 +1,208 @@
++################################################################################
++# Conan package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Meson packages. It should be used for all
++# packages that use Meson as their build system.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this Meson infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default Meson behaviour. The
++# package can also define some post operation hooks.
++#
++################################################################################
++
++#
++# Pass PYTHONNOUSERSITE environment variable when invoking Meson or Ninja, so
++# $(HOST_DIR)/bin/python3 will not look for Meson modules in
++# $HOME/.local/lib/python3.x/site-packages
++#
++#CONAN		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/conan
++CONAN		= conan
++
++################################################################################
++# inner-conan-package -- defines how the configuration, compilation and
++# installation of a Conan package should be done, implements a few hooks to
++# tune the build process and calls the generic package infrastructure to
++# generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-conan-package
++
++$(2)_CONF_ENV			?=
++$(2)_CONF_OPTS			?=
++$(2)_CONAN_ENV			?= CONAN_USER_HOME=$$(BASE_DIR)
++
++CONAN_SETTING_COMPILER 			?= gcc
++CONAN_SETTING_COMPILER_VERSION 	?=
++CONAN_SETTING_ARCH 				?= $(BR2_ARCH)
++CONAN_REMOTE					?=
++CONAN_BUILD_POLICY				?=
++
++# TODO (uilian): Use Conan privded by buildroot
++# $(2)_DEPENDENCIES += host-python-conan
++
++CONAN_OPTION_SHARED = $$(if $$(BR2_STATIC_LIBS),False,True)
++CONAN_SETTING_BUILD_TYPE = $$(if $$(BR2_ENABLE_DEBUG),Debug,Release)
++
++ifeq ($(BR2_GCC_VERSION_8_X),y)
++CONAN_SETTING_COMPILER_VERSION = 8
++else ifeq ($(BR2_GCC_VERSION_7_X),y)
++CONAN_SETTING_COMPILER_VERSION = 7
++else ifeq ($(BR2_GCC_VERSION_6_X),y)
++CONAN_SETTING_COMPILER_VERSION = 6
++else ifeq ($(BR2_GCC_VERSION_5_X),y)
++CONAN_SETTING_COMPILER_VERSION = 5
++else ifeq ($(BR2_GCC_VERSION_4_9_X),y)
++CONAN_SETTING_COMPILER_VERSION = 4.9
++endif
++
++ifeq ($(BR2_x86_64),y)
++CONAN_SETTING_ARCH = x86_64
++else ifeq ($(BR2_x86_i686),y)
++CONAN_SETTING_ARCH = x86
++else ifeq ($(BR2_x86_i486),y)
++CONAN_SETTING_ARCH = x86
++else ifeq ($(BR2_x86_i586),y)
++CONAN_SETTING_ARCH = x86
++else ifeq ($(BR2_ARCH),arm)
++CONAN_SETTING_ARCH = armv7
++else ifeq ($(BR2_ARCH),armhf)
++CONAN_SETTING_ARCH = armv7hf
++else ifeq ($(call qstrip,$(BR2_ARCH)),powerpc64)
++CONAN_SETTING_ARCH = ppc64
++else ifeq ($(call qstrip,$(BR2_ARCH)),powerpc64le)
++CONAN_SETTING_ARCH = ppc64le
++endif
++
++ifeq ($(BR2_ARM_CPU_ARMV4),y)
++CONAN_SETTING_ARCH = armv4
++else ifeq ($(BR2_ARM_CPU_ARMV5),y)
++CONAN_SETTING_ARCH = armv5hf
++else ifeq ($(BR2_ARM_CPU_ARMV6),y)
++CONAN_SETTING_ARCH = armv6
++else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++CONAN_SETTING_ARCH = armv7
++else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++CONAN_SETTING_ARCH = armv8
++endif
++
++ifeq ($(CONAN_BUILD_POLICY_MISSING),y)
++CONAN_BUILD_POLICY = missing
++else ifeq ($(CONAN_BUILD_POLICY_OUTDATED),y)
++CONAN_BUILD_POLICY = outdated
++else ifeq ($(CONAN_BUILD_POLICY_CASCADE),y)
++CONAN_BUILD_POLICY = cascade
++else ifeq ($(CONAN_BUILD_POLICY_ALWAYS),y)
++CONAN_BUILD_POLICY = always
++else ifeq ($(CONAN_BUILD_POLICY_NEVER),y)
++CONAN_BUILD_POLICY = never
++endif
++
++# Check if package reference contains shared option
++ifneq (,$(findstring shared,$(shell $(CONAN) inspect -a options $($(3)_REFERENCE))))
++$(2)_CONAN_OPTS += -o $(shell echo $($(3)_REFERENCE) | cut -f1 -d/):shared=$$(CONAN_OPTION_SHARED)
++endif
++
++ifneq ($(CONAN_REMOTE_NAME),"")
++CONAN_REMOTE = -r $$(CONAN_REMOTE_NAME)
++endif
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file.
++#
++ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
++define $(2)_BUILD_CMDS
++	$$(TARGET_MAKE_ENV) $$(CONAN_ENV) $$($$(PKG)_CONAN_ENV) \
++	    CC=$$(TARGET_CC) CXX=$$(TARGET_CXX) \
++		$$(CONAN) install $$(CONAN_OPTS) $$($$(PKG)_CONAN_OPTS) \
++		$$($$(PKG)_REFERENCE) \
++		-s build_type=$$(CONAN_SETTING_BUILD_TYPE) \
++		-s arch=$$(CONAN_SETTING_ARCH) \
++		-s compiler=$$(CONAN_SETTING_COMPILER) \
++		-s compiler.version=$$(CONAN_SETTING_COMPILER_VERSION) \
++		-g deploy \
++		--build $$(CONAN_BUILD_POLICY) \
++		$$(CONAN_REMOTE)
++endef
++else
++define $(2)_BUILD_CMDS
++	$$(HOST_MAKE_ENV) $$(CONAN_ENV) $$($$(PKG)_CONAN_ENV) \
++		$$(CONAN) install $$(CONAN_OPTS) $$($$(PKG)_CONAN_OPTS) \
++		$$($$(PKG)_REFERENCE) \
++		-s build_type=$$(CONAN_SETTING_BUILD_TYPE) \
++		-s arch=$$(CONAN_SETTING_ARCH) \
++		-s compiler=$$(CONAN_SETTING_COMPILER) \
++		-s compiler.version=$$(CONAN_SETTING_COMPILER_VERSION) \
++		-g deploy \
++		--build $$(CONAN_BUILD_POLICY) \
++		$$(CONAN_REMOTE)
++endef
++endif
++endif
++
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	cp -f -a $$($$(PKG)_BUILDDIR)/bin/. /usr/bin 2>/dev/null || :
++	cp -f -a $$($$(PKG)_BUILDDIR)/lib/. /usr/lib 2>/dev/null || :
++	cp -f -a $$($$(PKG)_BUILDDIR)/include/. /usr/include 2>/dev/null || :
++endef
++endif
++
++#
++# Staging installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_STAGING_CMDS
++define $(2)_INSTALL_STAGING_CMDS
++	cp -f -a $$($$(PKG)_BUILDDIR)/bin/. $$(STAGING_DIR)/usr/bin 2>/dev/null || :
++	cp -f -a $$($$(PKG)_BUILDDIR)/lib/. $$(STAGING_DIR)/usr/lib 2>/dev/null || :
++	cp -f -a $$($$(PKG)_BUILDDIR)/include/. $$(STAGING_DIR)/usr/include 2>/dev/null || :
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	cp -a $$($$(PKG)_BUILDDIR)/bin/. $$(TARGET_DIR)/usr/bin 2>/dev/null || :
++	cp -a $$($$(PKG)_BUILDDIR)/lib/. $$(TARGET_DIR)/usr/lib 2>/dev/null || :
++	cp -a $$($$(PKG)_BUILDDIR)/include/. $$(TARGET_DIR)/usr/include 2>/dev/null || :
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++################################################################################
++# conan-package -- the target generator macro for Conan packages
++################################################################################
++
++conan-package = $(call inner-conan-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-conan-package = $(call inner-conan-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+diff --git a/package/python-conan/Config.in.host b/package/python-conan/Config.in.host
+new file mode 100644
+index 0000000000..1fb68aa945
+--- /dev/null
++++ b/package/python-conan/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_PYTHON_CONAN
++	bool "host python-conan"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Decentralized, open-source, C/C++ package manager
++
++	  https://conan.io
+diff --git a/package/python-conan/python-conan.hash b/package/python-conan/python-conan.hash
+new file mode 100644
+index 0000000000..7005e9e953
+--- /dev/null
++++ b/package/python-conan/python-conan.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/aioconsole/json
++md5     1c1fc353638ffbfec7199495c3d55dbf                                  conan-0.18.0.tar.gz
++sha256	b610d56944b8dd5207385c3e570bda9b9b4366055503a0a68d22bb31b25c0252  conan-1.18.0.tar.gz
+diff --git a/package/python-conan/python-conan.mk b/package/python-conan/python-conan.mk
+new file mode 100644
+index 0000000000..2e851dff88
+--- /dev/null
++++ b/package/python-conan/python-conan.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-conan
++#
++################################################################################
++
++PYTHON_CONAN_VERSION = 1.18.0
++PYTHON_CONAN_SOURCE = conan-$(PYTHON_CONAN_VERSION).tar.gz
++PYTHON_CONAN_SITE = https://files.pythonhosted.org/packages/30/26/27483b3e8cc0f1af517e3cd1e8f0a59289c8636a46449d4401948f2e443e
++PYTHON_CONAN_SETUP_TYPE = setuptools
++PYTHON_CONAN_LICENSE = MIT
++PYTHON_CONAN_LICENSE_FILES = LICENSE.md
++HOST_PYTHON_CONAN_DEPENDENCIES = host-python-pluginbase python-semver python-patch python-bottle
++
++$(eval $(host-python-package))
+diff --git a/package/python-patch/Config.in b/package/python-patch/Config.in
+new file mode 100644
+index 0000000000..ce58d62aac
+--- /dev/null
++++ b/package/python-patch/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PATCH
++	bool "python-patch"
++	help
++	  Library to parse and apply unified diffs
++
++	  https://github.com/techtonik/python-patch
+diff --git a/package/python-patch/python-patch.hash b/package/python-patch/python-patch.hash
+new file mode 100644
+index 0000000000..19659b54ae
+--- /dev/null
++++ b/package/python-patch/python-patch.hash
+@@ -0,0 +1,2 @@
++md5	dbcbbd4e45ddd8baeb02bddf663a3176  patch-1.16.zip
++sha256	c62073f356cff054c8ac24496f1a3d7cfa137835c31e9af39a9f5292fd75bd9f  patch-1.16.zip
+diff --git a/package/python-patch/python-patch.mk b/package/python-patch/python-patch.mk
+new file mode 100644
+index 0000000000..17d45f5c86
+--- /dev/null
++++ b/package/python-patch/python-patch.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-patch
++#
++################################################################################
++
++PYTHON_PATCH_VERSION = 1.16
++PYTHON_PATCH_SOURCE = patch-$(PYTHON_PATCH_VERSION).zip
++PYTHON_PATCH_SITE = https://files.pythonhosted.org/packages/da/74/0815f03c82f4dc738e2bfc5f8966f682bebcc809f30c8e306e6cc7156a99
++PYTHON_PATCH_SETUP_TYPE = distutils
++PYTHON_PATCH_LICENSE = MIT
++
++define PYTHON_PATCH_EXTRACT_CMDS
++	$(UNZIP) $(PYTHON_PATCH_DL_DIR)/$(PYTHON_PATCH_SOURCE) -d $(@D)
++endef
++
++$(eval $(python-package))
+diff --git a/package/python-pluginbase/Config.in b/package/python-pluginbase/Config.in
+new file mode 100644
+index 0000000000..f6e7b7b479
+--- /dev/null
++++ b/package/python-pluginbase/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PLUGINBASE
++	bool "python-pluginbase"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  PluginBase is a module for Python that enables the development of \
++	  flexible plugin systems in Python.
++
++	  http://github.com/mitsuhiko/pluginbase
+diff --git a/package/python-pluginbase/Config.in.host b/package/python-pluginbase/Config.in.host
+new file mode 100644
+index 0000000000..55f760d535
+--- /dev/null
++++ b/package/python-pluginbase/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_PYTHON_PLUGINBASE
++	bool "host-python-pluginbase"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  PluginBase is a module for Python that enables the development of \
++	  flexible plugin systems in Python.
++
++	  http://github.com/mitsuhiko/pluginbase
+diff --git a/package/python-pluginbase/python-pluginbase.hash b/package/python-pluginbase/python-pluginbase.hash
+new file mode 100644
+index 0000000000..e7a3d86920
+--- /dev/null
++++ b/package/python-pluginbase/python-pluginbase.hash
+@@ -0,0 +1,2 @@
++md5     55125d582069b0b9bd7240f6d5321699                                  pluginbase-0.7.tar.gz
++sha256	c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8  pluginbase-0.7.tar.gz
+diff --git a/package/python-pluginbase/python-pluginbase.mk b/package/python-pluginbase/python-pluginbase.mk
+new file mode 100644
+index 0000000000..77f972f5bf
+--- /dev/null
++++ b/package/python-pluginbase/python-pluginbase.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pluginbase
++#
++################################################################################
++
++PYTHON_PLUGINBASE_VERSION = 0.7
++PYTHON_PLUGINBASE_SOURCE = pluginbase-$(PYTHON_PLUGINBASE_VERSION).tar.gz
++PYTHON_PLUGINBASE_SITE = https://files.pythonhosted.org/packages/6e/f4/1db0a26c1c7fad81a1214ad1b02839a7bd98d8ba68f782f6edcc3d343441
++PYTHON_PLUGINBASE_SETUP_TYPE = setuptools
++PYTHON_PLUGINBASE_LICENSE = BSD-3-Clause
++PYTHON_PLUGINBASE_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
++$(eval $(host-python-package))
