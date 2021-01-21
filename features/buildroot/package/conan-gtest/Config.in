@@ -1,6 +1,0 @@
-config BR2_PACKAGE_CONAN_GTEST
-	bool "conan-gtest"
-	help
-	  Google Testing and Mocking Framework
-
-	  https://github.com/google/googletest
