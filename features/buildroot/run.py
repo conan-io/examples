@@ -8,7 +8,6 @@ import shutil
 if __name__ == "__main__":
     tarfilename = "2019.05.1.tar.gz"
     buildrootdir = "buildroot-2019.05.1"
-    tarfilename = "2019.05.1.tar.gz"
 
     print("Cleaning directory ...")
     shutil.rmtree(buildrootdir, True)
