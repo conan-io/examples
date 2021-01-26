@@ -3,6 +3,8 @@ language: python
 dist: trusty
 
 jobs:
+  allow_failures:
+    env: TOXENV=py35-conanprevprev TOXENV=py38-conanprevprev
   fast_finish: true
   include:
 
@@ -67,7 +69,7 @@ jobs:
 
 before_install:
   - ./.ci/travis/before_install.sh
-  
+
 install:
   - |
     if [[ "$(uname -s)" == 'Darwin' ]]; then
