@@ -193,14 +193,12 @@ def run_scripts(scripts):
 
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
-                    process = subprocess.Popen(build_script, env=env, stderr=subprocess.PIPE)
-                    process.wait()
+                    process = subprocess.run(build_script, env=env, capture_output=True)
 
             results[script] = process.returncode
             if process.returncode != 0:
-                _, stderror_decoded = process.communicate()
-                if re.search('Current Conan version \(.*\) does not satisfy the defined one'
-                             , stderror_decoded.decode()):
+                if re.search(r'Current Conan version \(.*\) does not satisfy the defined one'
+                             , process.stderr.decode()):
                     results[script] = "skip"
                 elif FAIL_FAST:
                     break
