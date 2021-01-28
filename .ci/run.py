@@ -228,7 +228,7 @@ def get_result_message(result):
 
 def validate_results(results):
     for value in results.values():
-        if value != 0:
+        if value != 0 and value != "skip":
             sys.exit(value)
 
 
