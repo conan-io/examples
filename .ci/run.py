@@ -13,6 +13,7 @@ import re
 from collections import OrderedDict
 from contextlib import contextmanager
 from packaging import version
+from subprocess import PIPE
 
 import colorama
 from conans.client.tools.scm import Git
@@ -193,7 +194,7 @@ def run_scripts(scripts):
 
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
-                    process = subprocess.run(build_script, env=env, capture_output=True)
+                    process = subprocess.run(build_script, env=env, stdout=PIPE, stderr=PIPE)
 
             results[script] = process.returncode
             if process.returncode != 0:
