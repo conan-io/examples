@@ -9,7 +9,7 @@ jobs:
     - stage: Linux - Conan develop
       name: Python 3.6
       python: 3.6
-      env: TOXENV=py35-conandev
+      env: TOXENV=py36-conandev
       dist: xenial
     - name: Python 3.8
       python: 3.8
@@ -20,7 +20,7 @@ jobs:
     - stage: Linux - Conan Current
       name: Python 3.6
       python: 3.6
-      env: TOXENV=py35-conancurrent
+      env: TOXENV=py36-conancurrent
       dist: xenial
     - name: Python 3.8
       python: 3.8
@@ -30,7 +30,7 @@ jobs:
     - stage: Linux - Conan prev
       name: Python 3.6
       python: 3.6
-      env: TOXENV=py35-conanprev
+      env: TOXENV=py36-conanprev
       dist: xenial
     - name: Python 3.8
       python: 3.8
@@ -40,7 +40,7 @@ jobs:
     - stage: Linux - Conan prev-prev
       name: Python 3.6
       python: 3.6
-      env: TOXENV=py35-conanprevprev
+      env: TOXENV=py36-conanprevprev
       dist: xenial
     - name: Python 3.8
       python: 3.8
@@ -58,7 +58,7 @@ jobs:
       language: generic
       os: osx
       osx_image: xcode10
-      env: PYVER=py35 TOXENV=py35-conancurrent
+      env: PYVER=py36 TOXENV=py36-conancurrent
     - name: Conan Current - Python 3.8
       language: generic
       os: osx
