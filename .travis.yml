@@ -1,4 +1,3 @@
-sudo: false
 language: python
 dist: trusty
 
@@ -12,23 +11,28 @@ jobs:
       language: generic
       os: osx
       osx_image: xcode10
-      env:
-        - PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=1
-        - PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=2
+      matrix:
+        include:
+          - env: PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=1
+          - env: PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=2
+
     - name: Conan Current - Python 3.5
       language: generic
       os: osx
       osx_image: xcode10
-      env:
-        - PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=1
-        - PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=2
+      matrix:
+        include:
+          - env: PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=1
+          - env: PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=2
+
     - name: Conan Current - Python 3.8
       language: generic
       os: osx
       osx_image: xcode10
-      env:
-        - PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=1
-        - PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=2
+      matrix:
+        include:
+          - env: PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=1
+          - env: PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=2
 
     - stage: Linux - Conan develop
       name: Python 3.5
