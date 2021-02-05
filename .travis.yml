@@ -63,4 +63,4 @@ install:
 
 script:
   - python .ci/last_conan_version.py
-  - tox -v
+  - travis_wait 30 tox -v
