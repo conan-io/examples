@@ -63,4 +63,4 @@ install:
 
 script:
   - python .ci/last_conan_version.py
-  - .ci/travis/build.sh
+  - tox -v
