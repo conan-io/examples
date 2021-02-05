@@ -1,0 +1,4 @@
+tox
+tox-venv
+tox-travis
+requests

@@ -6,6 +6,30 @@ jobs:
   fast_finish: true
   include:
 
+    # Macos is slow, only if everything has passed
+    - stage: Macos - All Conan versions
+      name: Conan develop - Python 3.8
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env:
+        - PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=1
+        - PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=2
+    - name: Conan Current - Python 3.5
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env:
+        - PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=1
+        - PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=2
+    - name: Conan Current - Python 3.8
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env:
+        - PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=1
+        - PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=2
+
     - stage: Linux - Conan develop
       name: Python 3.5
       python: 3.5
@@ -47,35 +71,21 @@ jobs:
       env: TOXENV=py38-conanprevprev
       dist: xenial
 
-    # Macos is slow, only if everything has passed
-    - stage: Macos - All Conan versions
-      name: Conan develop - Python 3.8
-      language: generic
-      os: osx
-      osx_image: xcode10
-      env: PYVER=py38 TOXENV=py38-conandev
-    - name: Conan Current - Python 3.5
-      language: generic
-      os: osx
-      osx_image: xcode10
-      env: PYVER=py35 TOXENV=py35-conancurrent
-    - name: Conan Current - Python 3.8
-      language: generic
-      os: osx
-      osx_image: xcode10
-      env: PYVER=py38 TOXENV=py38-conancurrent
+
 
 before_install:
   - ./.ci/travis/before_install.sh
-  
+
 install:
   - |
     if [[ "$(uname -s)" == 'Darwin' ]]; then
       if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
       pyenv activate conan;
+      printenv
+      export
     fi
   - pip install --upgrade pip
-  - pip install tox tox-venv tox-travis requests
+  - pip install -r .ci/travis/requirements.txt
 
 script:
   - |
@@ -84,4 +94,4 @@ script:
       pyenv activate conan
     fi
   - python .ci/last_conan_version.py
-  - tox
+  - .ci/travis/build.sh
