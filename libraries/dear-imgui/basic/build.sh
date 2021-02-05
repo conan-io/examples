@@ -8,6 +8,6 @@ mkdir build
 pushd build
 
 export CONAN_SYSREQUIRES_MODE=enabled
-conan install ..
+conan install .. --building missing
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
