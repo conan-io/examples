@@ -231,9 +231,19 @@ def validate_results(results):
             sys.exit(value)
 
 
+def filter_scripts(scripts):
+    folder = sys.argv[1] if len(sys.argv) == 2 else ""
+    if folder == "libraries":
+        scripts = [it for it in scripts if not it.startswith("features")]
+    elif folder == "features":
+        scripts = [it for it in scripts if not it.startswith("libraries")]
+    return scripts
+
+
 if __name__ == "__main__":
     colorama.init(autoreset=True)
     scripts = get_build_list()
+    scripts = filter_scripts(scripts)
     results = run_scripts(scripts)
     print_results(results)
     validate_results(results)
