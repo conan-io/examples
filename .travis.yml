@@ -1,44 +1,39 @@
-language: python
-dist: trusty
-
 jobs:
   fast_finish: true
   include:
 
     # Macos is slow, only if everything has passed
     - stage: Macos - All Conan versions
-      matrix:
-        include:
-          - name: Conan develop - Python 3.8 (Page 1)
-            language: generic
-            os: osx
-            osx_image: xcode10
-            env: PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=1
-          - name: Conan develop - Python 3.8 (Page 2)
-            language: generic
-            os: osx
-            osx_image: xcode10
-            env: PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=2
-          - name: Conan Current - Python 3.5 (Page 1)
-            language: generic
-            os: osx
-            osx_image: xcode10
-            env: PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=1
-          - name: Conan Current - Python 3.5 (Page 2)
-            language: generic
-            os: osx
-            osx_image: xcode10
-            env: PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=2
-          - name: Conan Current - Python 3.8 (Page 1)
-            language: generic
-            os: osx
-            osx_image: xcode10
-            env: PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=1
-          - name: Conan Current - Python 3.8 (Page 2)
-            language: generic
-            os: osx
-            osx_image: xcode10
-            env: PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=2
+      name: Conan develop - Python 3.8 (Page 1)
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=1
+    - name: Conan develop - Python 3.8 (Page 2)
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py38 TOXENV=py38-conandev CONAN_CURRENT_PAGE=2
+    - name: Conan Current - Python 3.5 (Page 1)
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=1
+    - name: Conan Current - Python 3.5 (Page 2)
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py35 TOXENV=py35-conancurrent CONAN_CURRENT_PAGE=2
+    - name: Conan Current - Python 3.8 (Page 1)
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=1
+    - name: Conan Current - Python 3.8 (Page 2)
+      language: generic
+      os: osx
+      osx_image: xcode10
+      env: PYVER=py38 TOXENV=py38-conancurrent CONAN_CURRENT_PAGE=2
 
     - stage: Linux - Conan develop
       name: Python 3.5
