@@ -1,0 +1,41 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "libb/0.2@user/testing",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   },
+   "1": {
+    "ref": "liba/0.1@user/testing",
+    "context": "host"
+   },
+   "3": {
+    "ref": "app1/0.1@user/testing",
+    "requires": [
+     "4"
+    ],
+    "context": "host"
+   },
+   "4": {
+    "ref": "libd/0.1@user/testing",
+    "requires": [
+     "0",
+     "5"
+    ],
+    "context": "host"
+   },
+   "5": {
+    "ref": "libc/0.1@user/testing",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4"
+}

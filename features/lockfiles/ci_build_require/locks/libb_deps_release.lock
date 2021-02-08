@@ -1,0 +1,43 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "libb/0.2@user/testing",
+    "options": "",
+    "requires": [
+     "1"
+    ],
+    "build_requires": [
+     "2",
+     "3"
+    ],
+    "path": "..\\libb\\conanfile.py",
+    "context": "host"
+   },
+   "1": {
+    "ref": "liba/0.1@user/testing",
+    "options": "",
+    "package_id": "4024617540c4f240a6a5e8911b0de9ef38a11a72",
+    "prev": "0",
+    "context": "host"
+   },
+   "2": {
+    "ref": "tool1/0.1@user/testing",
+    "options": "",
+    "package_id": "4024617540c4f240a6a5e8911b0de9ef38a11a72",
+    "prev": "0",
+    "context": "host"
+   },
+   "3": {
+    "ref": "tool2/0.1@user/testing",
+    "options": "",
+    "package_id": "4024617540c4f240a6a5e8911b0de9ef38a11a72",
+    "prev": "0",
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4",
+ "profile_host": "[settings]\nbuild_type=Release\n[options]\n[build_requires]\n*: tool1/0.1@user/testing, tool2/0.1@user/testing\n[env]\n"
+}

@@ -1,0 +1,55 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "libb/0.2@user/testing",
+    "options": "",
+    "package_id": "281a7e3eaa861ca65ad8f566ded8fc8b48206913",
+    "prev": "0",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   },
+   "1": {
+    "ref": "liba/0.1@user/testing",
+    "options": "",
+    "package_id": "5a67a79dbc25fd0fa149a0eb7a20715189a0d988",
+    "prev": "0",
+    "context": "host"
+   },
+   "3": {
+    "ref": "app1/0.1@user/testing",
+    "options": "",
+    "package_id": "680239a70c97f93d4d3dba4dec1b148d45ed087a",
+    "requires": [
+     "4"
+    ],
+    "context": "host"
+   },
+   "4": {
+    "ref": "libd/0.1@user/testing",
+    "options": "",
+    "package_id": "67a26cfbef78ad4905bec085664768c209d14fda",
+    "requires": [
+     "0",
+     "5"
+    ],
+    "context": "host"
+   },
+   "5": {
+    "ref": "libc/0.1@user/testing",
+    "options": "",
+    "package_id": "281a7e3eaa861ca65ad8f566ded8fc8b48206913",
+    "prev": "0",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4",
+ "profile_host": "[settings]\nbuild_type=Debug\n[options]\n[build_requires]\n*: tool1/0.1@user/testing, tool2/0.1@user/testing\n[env]\n"
+}

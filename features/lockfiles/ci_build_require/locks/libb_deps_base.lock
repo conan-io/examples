@@ -1,0 +1,20 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "libb/0.2@user/testing",
+    "requires": [
+     "1"
+    ],
+    "path": "..\\libb\\conanfile.py",
+    "context": "host"
+   },
+   "1": {
+    "ref": "liba/0.1@user/testing",
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4"
+}
