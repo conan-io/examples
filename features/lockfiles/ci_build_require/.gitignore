@@ -1,2 +1,4 @@
 release/
-bo.json
+tmp/
+locks/
+bo*.json
