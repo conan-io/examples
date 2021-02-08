@@ -95,12 +95,12 @@ def ci_pipeline():
 
     # Capture the app1 base lockfile
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/libb_base.lock "
-        "--lockfile-out=locks/app1_base.lock --base")
+        "--lockfile-out=locks/app1_base.lock --base --build=missing")
     # And one lockfile per configuration
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/app1_base.lock "
-        "--lockfile-out=locks/app1_release.lock -s build_type=Release --profile=profile")
+        "--lockfile-out=locks/app1_release.lock -s build_type=Release --profile=profile --build=missing")
     run("conan lock create --reference=app1/0.1@user/testing --lockfile=locks/app1_base.lock "
-        "--lockfile-out=locks/app1_debug.lock -s build_type=Debug --profile=profile")
+        "--lockfile-out=locks/app1_debug.lock -s build_type=Debug --profile=profile --build=missing")
 
     run("conan lock build-order locks/app1_release.lock --json=bo_release.json")
     run("conan lock build-order locks/app1_debug.lock --json=bo_debug.json")
