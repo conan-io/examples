@@ -27,7 +27,7 @@ Windows and having CMake compile with Visual Studio compiler.
 8. Build solution & run
 
 
-App running
-You can use a custom url to load your image
-Click 'Open' to open the image
-Apply a threshold with the slider
+#### App running
+* You can use a custom url to load your image
+* Click 'Open' to open the image
+* Apply a threshold with the slider
