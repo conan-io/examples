@@ -14,12 +14,16 @@ Windows and having CMake compile with Visual Studio compiler.
 1. Install conan: https://docs.conan.io/en/latest/installation.html
 2. Clone this repo: `git clone https://github.com/conan-io/examples.git`
 3. `cd libraries/imgui-opencv-poco`
-   For CMake
+
+For CMake
+
 4. `mkdir build && cd build`
 5. `conan install ..`
 6. `conan build ..`
 7. `./bin/imgui-opencv`
-    For Visual Studio 16 2019
+
+For Visual Studio 16 2019
+
 4. `cd msvc`
 5. `conan install .. -g=MSBuildDeps -if=conan`
 6. Open msvc.sln
