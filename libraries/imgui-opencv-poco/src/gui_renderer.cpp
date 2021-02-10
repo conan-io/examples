@@ -81,7 +81,7 @@ void GUIRenderer::ShowImage()
 {
     ImGui::Begin("Image");
     // Image downloaded from: https://www.pexels.com/photo/green-bird-1661179/
-    static char image_url[256] = "https://raw.githubusercontent.com/czoido/imgui-opencv/master/data/bird.jpeg";
+    static char image_url[256] = "https://raw.githubusercontent.com/conan-io/examples/master/libraries/imgui-opencv-poco/data/bird.jpeg";
     ImGui::InputText("URL:", image_url, IM_ARRAYSIZE(image_url));
     ImGui::SameLine();
     if (ImGui::Button("Open"))
