@@ -12,7 +12,7 @@ for those interested in the pure Visual Studio integration without using CMake, 
 Windows and having CMake compile with Visual Studio compiler.
 
 1. Install conan: https://docs.conan.io/en/latest/installation.html
-2. Clone this repo: `git clone https://github.com/czoido/imgui-opencv.git`
+2. Clone this repo: `git clone https://github.com/conan-io/examples.git`
 3. `cd libraries/imgui-opencv-poco`
    For CMake
 4. `mkdir build && cd build`
