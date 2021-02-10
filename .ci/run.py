@@ -9,9 +9,11 @@ import subprocess
 import sys
 import tempfile
 import uuid
+import re
 from collections import OrderedDict
 from contextlib import contextmanager
 from packaging import version
+from subprocess import PIPE
 
 import colorama
 from conans.client.tools.scm import Git
@@ -29,7 +31,7 @@ def is_appveyor():
 
 def appveyor_image():
     return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
-    
+
 
 @contextmanager
 def chdir(dir_path):
@@ -93,7 +95,7 @@ def get_build_list():
         build = [it for it in files if "build.py" in it]
         if not build:
             build = [it for it in files if os.path.basename(it) == script]
-        
+
         if build:
             builds.append(os.path.join(root, build[0]))
             dirs[:] = []
@@ -182,21 +184,26 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
-            
+
             # Need to initialize the cache with default files if they are not already there
             try:
                 subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env,
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except:
                 pass
- 
+
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
-                    result = subprocess.call(build_script, env=env)
-                
-            results[script] = result
-            if result != 0 and FAIL_FAST:
-                break
+                    process = subprocess.run(build_script, env=env, stdout=PIPE, stderr=PIPE)
+
+            results[script] = process.returncode
+            if process.returncode != 0:
+                if re.search(r'Current Conan version \(.*\) does not satisfy the defined one'
+                             , process.stderr.decode()):
+                    results[script] = "skip"
+                elif FAIL_FAST:
+                    break
+
     return results
 
 
@@ -213,12 +220,14 @@ def print_results(results):
 def get_result_message(result):
     if result == 0:
         return colorama.Fore.GREEN + "SUCCESS" + colorama.Style.RESET_ALL
+    elif result == "skip":
+        return colorama.Fore.YELLOW + "SKIP" + colorama.Style.RESET_ALL
     return colorama.Fore.RED + "FAILURE" + colorama.Style.RESET_ALL
 
 
 def validate_results(results):
     for value in results.values():
-        if value != 0:
+        if value != 0 and value != "skip":
             sys.exit(value)
 
 

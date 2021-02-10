@@ -7,7 +7,7 @@ rm -rf build
 mkdir build
 pushd build
 
-conan install ..
+conan install .. --build=missing
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 
