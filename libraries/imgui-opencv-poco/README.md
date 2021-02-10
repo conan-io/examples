@@ -3,7 +3,7 @@
 Just a simple demo to add opencv, imgui and poco libraries to a project using Conan.io
 The program will download a picture from the Internet and apply a threshold to the image with the desired level through an slider.
 
-![use](https://raw.githubusercontent.com/czoido/imgui-opencv/master/data/screen-capture.gif)
+![use](https://raw.githubusercontent.com/conan-io/examples/master/libraries/imgui-opencv-poco/data/screen-capture.gif)
 
 ## How to use:
 
