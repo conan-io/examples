@@ -11,32 +11,56 @@ private Closure runTests(String nodeName) {
         node(nodeName) {
             stage("${nodeName}") {
                 def scmVars = checkout scm
+                def venvName = "examples_venv"
+                def pipInstalls = 'python -m pip install tox tox-venv requests && '
                 if (nodeName == 'Linux') {
-                    try {
-                        def pipInstalls = 'pip install tox tox-venv requests && '
-                        def dockerImage = 'conanio/ci-functional'
-                        docker.image(dockerImage).inside('--entrypoint=') {
-                            def sourcedir = '/home/conan/'
-                            def pyenvdir = "${sourcedir}.pyenv"
-                            sh(script: "cp -R ./ ${sourcedir}")
-                            sh(script: "chown -R conan ${sourcedir}")
-                            def command = "su - conan -c \"" \
-                                          + "export USE_UNSUPPORTED_CONAN_WITH_PYTHON_2=1 && " \
-                                          + "export PYENV_ROOT=${pyenvdir} && " \
-                                          + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
-                                          + "pyenv local \$PY36 \$PY38 \$PY39 \$PY27 && " \
-                                          + pipInstalls \
-                                          + "python .ci/last_conan_version.py && " \
-                                          + "tox\""
-                            sh(script: command)
-                        }
+                    def dockerImage = 'conanio/ci-functional'
+                    docker.image(dockerImage).inside('--entrypoint=') {
+                        def sourcedir = '/home/conan/'
+                        def pyenvdir = "${sourcedir}.pyenv"
+                        sh(script: "cp -R ./ ${sourcedir}")
+                        sh(script: "chown -R conan ${sourcedir}")
+                        def command = "su - conan -c \"" \
+                                        + "export USE_UNSUPPORTED_CONAN_WITH_PYTHON_2=1 && " \
+                                        + "export PYENV_ROOT=${pyenvdir} && " \
+                                        + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
+                                        + "pyenv local \$PY36 \$PY38 \$PY39 \$PY27 && " \
+                                        + pipInstalls \
+                                        + "python .ci/last_conan_version.py && " \
+                                        + "python -m tox\""
+                        sh(script: command)
                     }
-                    finally {}
                 }
-                else if (nodeName == 'Macos') {
+                else if (nodeName=="Macos") {
+                    def localDir = "/Users/jenkins"
+                    withEnv(["PY36=3.6.12", "PY38=3.8.6", "PY39=3.9.0",
+                            "PYENV_ROOT=${localDir}/.pyenv", "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
+                            def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
+                            def configVenv =  "${pythonLocation} -m virtualenv --python ${pythonLocation} ${venvName} && " \
+                                            + "source ${venvName}/bin/activate && python --version && "
+                            def launchCommand = configVenv + pipInstalls + "python .ci/last_conan_version.py && python -m tox"
+                            sh(script: launchCommand)
+                    }
                 }
-                else if (nodeName == 'Windows') {
+                else if (nodeName=="Windows") {
+                    withEnv(["PY36=Python36", "PY38=Python38-64","TOXENV=py36-conandev"]) {
+                        def pythonVersion = "PY36"
+                        def pythonLocation = "C:/%${pythonVersion}%/python.exe"
+                        def pythonWrapperCmd = """
+                        (
+                            echo @echo off
+                            echo REM python3.6.bat
+                            echo @C:/%${pythonVersion}%/python.exe %*
+                        ) > python3.6.bat && type python3.6.bat && python3.6 --version
+                        """
+                        bat(script: pythonWrapperCmd)
+                        def configVenv =  "virtualenv --python ${pythonLocation} ${env.WORKSPACE}/${venvName} && " \
+                                        + "${env.WORKSPACE}/${venvName}/Scripts/activate && python --version && "
+                        def launchCommand = configVenv + pipInstalls + "python .ci/last_conan_version.py && python -m tox"
+                        bat(script: launchCommand)
+                    }
                 }
+                cleanWs()
             }
         }
     }
@@ -52,7 +76,7 @@ try {
     echo "branchName: ${branchName}"
     echo "jobName: ${jobName}"
 
-    def nodes = ['Linux']
+    def nodes = ['Windows']
     def paralellRuns = [:]
     nodes.each { node ->
         paralellRuns["${node}"] = runTests(node)
