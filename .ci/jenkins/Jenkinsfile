@@ -46,13 +46,6 @@ private Closure runTests(String nodeName) {
                     withEnv(["PY36=Python36", "PY38=Python38-64","TOXENV=py36-conandev"]) {
                         def pythonVersion = "PY36"
                         def pythonLocation = "C:/%${pythonVersion}%/python.exe"
-                        def pythonWrapperCmd = """
-                        (
-                            echo @echo off
-                            echo REM python3.6.bat
-                            echo @C:/%${pythonVersion}%/python.exe %*
-                        ) > python3.6.bat && type python3.6.bat && python3.6 --version
-                        """
                         bat(script: pythonWrapperCmd)
                         def configVenv =  "virtualenv --python ${pythonLocation} ${env.WORKSPACE}/${venvName} && " \
                                         + "${env.WORKSPACE}/${venvName}/Scripts/activate && python --version && "

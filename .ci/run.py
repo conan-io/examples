@@ -190,9 +190,9 @@ def run_scripts(scripts):
             except:
                 pass
  
-            with ensure_python_environment_preserved():
-                with ensure_cache_preserved():
-                    result = subprocess.call(build_script, env=env)
+            #with ensure_python_environment_preserved():
+            with ensure_cache_preserved():
+                result = subprocess.call(build_script, env=env)
                 
             results[script] = result
             if result != 0 and FAIL_FAST:
