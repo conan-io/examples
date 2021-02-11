@@ -1,9 +1,46 @@
 void cancelPrevious() {
-    stage("Cancelling previous") {
+    stage('Cancelling previous') {
         def buildNumber = env.BUILD_NUMBER as int
         if (buildNumber > 1) milestone(buildNumber - 1)
         milestone(buildNumber)
     }
+}
+
+private Closure runTests(String nodeName) {
+    def ret = {
+        node(nodeName) {
+            stage("${nodeName}") {
+                def scmVars = checkout scm
+                if (nodeName == 'Linux') {
+                    try {
+                        def pipInstalls = 'pip install tox tox-venv requests && '
+                        def dockerImage = 'conanio/ci-functional'
+                        docker.image(dockerImage).inside('--entrypoint=') {
+                            def sourcedir = '/home/conan/'
+                            def pyenvdir = "${sourcedir}.pyenv"
+                            sh(script: "cp -R ./ ${sourcedir}")
+                            sh(script: "chown -R conan ${sourcedir}")
+                            def command = "su - conan -c \"" \
+                                          + "export USE_UNSUPPORTED_CONAN_WITH_PYTHON_2=1 && " \
+                                          + "export PYENV_ROOT=${pyenvdir} && " \
+                                          + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
+                                          + "pyenv global \$PY38 && " \
+                                          + pipInstalls \
+                                          + "python .ci/last_conan_version.py && " \
+                                          + "tox\""
+                            sh(script: command)
+                        }
+                    }
+                    finally {}
+                }
+                else if (nodeName == 'Macos') {
+                }
+                else if (nodeName == 'Windows') {
+                }
+            }
+        }
+    }
+    return ret
 }
 
 try {
@@ -15,8 +52,14 @@ try {
     echo "branchName: ${branchName}"
     echo "jobName: ${jobName}"
 
+    def nodes = ['Linux']
+    def paralellRuns = [:]
+    nodes.each { node ->
+        paralellRuns["${node}"] = runTests(node)
+    }
+    parallel(paralellRuns)
 }
-catch(e){
+catch (e) {
     echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
     throw e
 }
