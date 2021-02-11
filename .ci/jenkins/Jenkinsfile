@@ -24,7 +24,7 @@ private Closure runTests(String nodeName) {
                                           + "export USE_UNSUPPORTED_CONAN_WITH_PYTHON_2=1 && " \
                                           + "export PYENV_ROOT=${pyenvdir} && " \
                                           + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
-                                          + "pyenv global \$PY38 && " \
+                                          + "pyenv local \$PY36 \$PY38 \$PY39 \$PY27 && " \
                                           + pipInstalls \
                                           + "python .ci/last_conan_version.py && " \
                                           + "tox\""
