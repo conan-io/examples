@@ -46,7 +46,6 @@ private Closure runTests(String nodeName) {
                     withEnv(["PY36=Python36", "PY38=Python38-64","TOXENV=py36-conandev"]) {
                         def pythonVersion = "PY36"
                         def pythonLocation = "C:/%${pythonVersion}%/python.exe"
-                        bat(script: pythonWrapperCmd)
                         def configVenv =  "virtualenv --python ${pythonLocation} ${env.WORKSPACE}/${venvName} && " \
                                         + "${env.WORKSPACE}/${venvName}/Scripts/activate && python --version && "
                         def launchCommand = configVenv + pipInstalls + "python .ci/last_conan_version.py && python -m tox"
