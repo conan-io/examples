@@ -156,11 +156,11 @@ def ensure_cache_preserved():
 
 @contextmanager
 def ensure_python_environment_preserved():
-    freeze = subprocess.check_output("{} -m pip freeze".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+    freeze = subprocess.check_output("{} -m pip list".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
     try:
         yield
     finally:
-        freeze_after = subprocess.check_output("{} -m pip freeze".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+        freeze_after = subprocess.check_output("{} -m pip list".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
         if freeze != freeze_after:
             writeln_console(">>> " + colorama.Fore.RED + "This example modifies the Python dependencies!")
             removed = set(freeze.splitlines()) - set(freeze_after.splitlines())
@@ -190,9 +190,9 @@ def run_scripts(scripts):
             except:
                 pass
  
-            #with ensure_python_environment_preserved():
-            with ensure_cache_preserved():
-                result = subprocess.call(build_script, env=env)
+            with ensure_python_environment_preserved():
+                with ensure_cache_preserved():
+                    result = subprocess.call(build_script, env=env)
                 
             results[script] = result
             if result != 0 and FAIL_FAST:
