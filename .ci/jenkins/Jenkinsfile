@@ -1,0 +1,22 @@
+void cancelPrevious() {
+    stage("Cancelling previous") {
+        def buildNumber = env.BUILD_NUMBER as int
+        if (buildNumber > 1) milestone(buildNumber - 1)
+        milestone(buildNumber)
+    }
+}
+
+try {
+    cancelPrevious()
+
+    def branchName = env.BRANCH_NAME
+    def jobName = env.JOB_NAME
+
+    echo "branchName: ${branchName}"
+    echo "jobName: ${jobName}"
+
+}
+catch(e){
+    echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    throw e
+}
