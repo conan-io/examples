@@ -12,7 +12,7 @@ private Closure runTests(String nodeName) {
             stage("${nodeName}") {
                 def scmVars = checkout scm
                 def venvName = "examples_venv"
-                def pipInstalls = 'python -m pip install tox tox-venv requests && '
+                def pipInstalls = 'python -m pip install tox tox-venv requests importlib-metadata && '
                 if (nodeName == 'Linux') {
                     def dockerImage = 'conanio/ci-functional'
                     docker.image(dockerImage).inside('--entrypoint=') {
