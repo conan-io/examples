@@ -43,7 +43,7 @@ private Closure runTests(String nodeName) {
                     }
                 }
                 else if (nodeName=="Windows") {
-                    withEnv(["PY36=Python36", "PY38=Python38-64","TOXENV=py36-conandev"]) {
+                    withEnv(["PY36=Python36", "PY38=Python38-64"]) {
                         def pythonVersion = "PY36"
                         def pythonLocation = "C:/%${pythonVersion}%/python.exe"
                         def configVenv =  "virtualenv --python ${pythonLocation} ${env.WORKSPACE}/${venvName} && " \
@@ -68,7 +68,7 @@ try {
     echo "branchName: ${branchName}"
     echo "jobName: ${jobName}"
 
-    def nodes = ['Windows']
+    def nodes = ['Windows', 'Macos', 'Linux']
     def paralellRuns = [:]
     nodes.each { node ->
         paralellRuns["${node}"] = runTests(node)
