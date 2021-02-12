@@ -156,13 +156,11 @@ def ensure_cache_preserved():
 
 @contextmanager
 def ensure_python_environment_preserved():
-    output = subprocess.check_output("pwd", stderr=subprocess.STDOUT, shell=True).decode()
-    print(output)
-    freeze = subprocess.check_output("{} list_modules.py".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+    freeze = subprocess.Popen(["{}".format(sys.executable), "-m", "pip", "freeze"], stdout=subprocess.PIPE).communicate()[0].decode()
     try:
         yield
     finally:
-        freeze_after = subprocess.check_output("{} list_modules.py".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+        freeze_after = subprocess.Popen(["{}".format(sys.executable), "-m", "pip", "freeze"], stdout=subprocess.PIPE).communicate()[0].decode()
         if freeze != freeze_after:
             writeln_console(">>> " + colorama.Fore.RED + "This example modifies the Python dependencies!")
             removed = set(freeze.splitlines()) - set(freeze_after.splitlines())
