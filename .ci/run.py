@@ -156,7 +156,7 @@ def ensure_cache_preserved():
 
 @contextmanager
 def ensure_python_environment_preserved():
-    freeze = subprocess.check_output("python list_modules.py", stderr=subprocess.STDOUT, shell=True).decode()
+    freeze = subprocess.check_output("pwd && python list_modules.py", stderr=subprocess.STDOUT, shell=True).decode()
     try:
         yield
     finally:
