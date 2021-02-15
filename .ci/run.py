@@ -24,12 +24,6 @@ LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
 
-def is_appveyor():
-    return os.getenv("APPVEYOR", False)
-
-def appveyor_image():
-    return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
-    
 
 @contextmanager
 def chdir(dir_path):
@@ -63,11 +57,11 @@ def get_examples_to_skip(current_version):
             skip.extend(examples)
 
     # Some binaries are not available # TODO: All the examples should have binaries available
-    if is_appveyor():  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
+    if platform.system() == "Windows":  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
         skip.extend(['./libraries/folly/basic', ])
         skip.extend(['./features/makefiles', ])
         # waf does not support Visual Studio 2019 for 2.0.19
-        if appveyor_image() == "Visual Studio 2019":
+        if os.environ["CMAKE_GENERATOR"] == "Visual Studio 2019":
             skip.extend(['./features/integrate_build_system', ])
 
     return [os.path.normpath(it) for it in skip]
