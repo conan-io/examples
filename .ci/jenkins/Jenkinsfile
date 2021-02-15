@@ -24,7 +24,7 @@ private Closure runTests(String nodeName) {
                                         + "export USE_UNSUPPORTED_CONAN_WITH_PYTHON_2=1 && " \
                                         + "export PYENV_ROOT=${pyenvdir} && " \
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
-                                        + "pyenv local \$PY36 \$PY38 \$PY39 \$PY27 && " \
+                                        + "pyenv local \$PY36 \$PY38 \$PY39 && " \
                                         + pipInstalls \
                                         + "python .ci/last_conan_version.py && " \
                                         + "python -m tox\""
@@ -36,7 +36,7 @@ private Closure runTests(String nodeName) {
                     withEnv(["PY36=3.6.12", "PY38=3.8.6", "PY39=3.9.0",
                             "PYENV_ROOT=${localDir}/.pyenv", "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                             def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
-                            def configVenv =  "${pythonLocation} -m virtualenv --python ${pythonLocation} ${venvName} && " \
+                            def configVenv =  "pyenv local \$PY36 \$PY38 \$PY39 && ${pythonLocation} -m virtualenv --python ${pythonLocation} ${venvName} && " \
                                             + "source ${venvName}/bin/activate && python --version && "
                             def launchCommand = configVenv + pipInstalls + "python .ci/last_conan_version.py && python -m tox"
                             sh(script: launchCommand)
