@@ -26,7 +26,7 @@ private Closure runTests(String nodeName) {
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
                                         + pipInstalls \
                                         + "python .ci/last_conan_version.py && " \
-                                        + "python -m tox --parallel\""
+                                        + "python -m tox\""
                         sh(script: command)
                     }
                 }
