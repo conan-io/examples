@@ -22,7 +22,6 @@ def update_tox(last_version):
     minor_prev_prev = str(int(minor)-2)
 
     conan_prev = conan_prev.format(major=major, minor=minor, minor_prev=minor_prev, minor_prev_prev=minor_prev_prev)
-    conan_prev_prev = conan_prev_prev.format(major=major, minor=minor, minor_prev=minor_prev, minor_prev_prev=minor_prev_prev)
     sys.stdout.write(" - prev is {major}.{minor_prev}\n".format(major=major, minor_prev=minor_prev, minor_prev_prev=minor_prev_prev))
 
     # Replace in 'tox.ini' file
