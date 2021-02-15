@@ -26,13 +26,13 @@ private Closure runTests(String nodeName) {
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
                                         + pipInstalls \
                                         + "python .ci/last_conan_version.py && " \
-                                        + "python -m tox\""
+                                        + "python -m tox --parallel\""
                         sh(script: command)
                     }
                 }
-                else if (nodeName=="Macos") {
-                    def localDir = "/Users/jenkins"
-                    withEnv(["PY36=3.6.12", "PY38=3.8.6", "PY39=3.9.0",
+                else if (nodeName=='Macos') {
+                    def localDir = '/Users/jenkins'
+                    withEnv(['PY36=3.6.12', 'PY38=3.8.6', 'PY39=3.9.0','TOX_SKIP_ENV=py38.*',
                             "PYENV_ROOT=${localDir}/.pyenv", "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                             def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
                             def configPyenv =  "pyenv local \$PY36 \$PY38 \$PY39 && "
@@ -40,8 +40,8 @@ private Closure runTests(String nodeName) {
                             sh(script: launchCommand)
                     }
                 }
-                else if (nodeName=="Windows") {
-                    withEnv(['PY36=Python36', 'PY38=Python38-64', 'CMAKE_GENERATOR=Visual Studio 15 2017 Win64']) {
+                else if (nodeName=='Windows') {
+                    withEnv(['PY36=Python36', 'PY38=Python38-64', 'CMAKE_GENERATOR=Visual Studio 15 2017 Win64','TOX_SKIP_ENV=py38.*']) {
                         def pythonVersion = "PY36"
                         def pythonLocation = "C:/%${pythonVersion}%/python.exe"
                         def launchCommand = pipInstalls + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox"
