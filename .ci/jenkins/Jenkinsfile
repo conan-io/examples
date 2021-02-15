@@ -21,7 +21,6 @@ private Closure runTests(String nodeName) {
                         sh(script: "cp -R ./ ${sourcedir}")
                         sh(script: "chown -R conan ${sourcedir}")
                         def command = "su - conan -c \"" \
-                                        + "export USE_UNSUPPORTED_CONAN_WITH_PYTHON_2=1 && " \
                                         + "export PYENV_ROOT=${pyenvdir} && " \
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
@@ -36,9 +35,8 @@ private Closure runTests(String nodeName) {
                     withEnv(["PY36=3.6.12", "PY38=3.8.6", "PY39=3.9.0",
                             "PYENV_ROOT=${localDir}/.pyenv", "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                             def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
-                            def configVenv =  "pyenv local \$PY36 \$PY38 \$PY39 && ${pythonLocation} -m virtualenv --python ${pythonLocation} ${venvName} && " \
-                                            + "source ${venvName}/bin/activate && python --version && "
-                            def launchCommand = configVenv + pipInstalls + "python .ci/last_conan_version.py && python -m tox"
+                            def configPyenv =  "pyenv local \$PY36 \$PY38 \$PY39 && "
+                            def launchCommand = configPyenv + pipInstalls + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox"
                             sh(script: launchCommand)
                     }
                 }
@@ -46,9 +44,7 @@ private Closure runTests(String nodeName) {
                     withEnv(["PY36=Python36", "PY38=Python38-64"]) {
                         def pythonVersion = "PY36"
                         def pythonLocation = "C:/%${pythonVersion}%/python.exe"
-                        def configVenv =  "virtualenv --python ${pythonLocation} ${env.WORKSPACE}/${venvName} && " \
-                                        + "${env.WORKSPACE}/${venvName}/Scripts/activate && python --version && "
-                        def launchCommand = configVenv + pipInstalls + "python .ci/last_conan_version.py && python -m tox"
+                        def launchCommand = pipInstalls + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox"
                         bat(script: launchCommand)
                     }
                 }
