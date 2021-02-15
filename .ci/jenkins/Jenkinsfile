@@ -41,7 +41,7 @@ private Closure runTests(String nodeName) {
                     }
                 }
                 else if (nodeName=="Windows") {
-                    withEnv(["PY36=Python36", "PY38=Python38-64"]) {
+                    withEnv(['PY36=Python36', 'PY38=Python38-64', 'CMAKE_GENERATOR="Visual Studio 2019"']) {
                         def pythonVersion = "PY36"
                         def pythonLocation = "C:/%${pythonVersion}%/python.exe"
                         def launchCommand = pipInstalls + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox"
