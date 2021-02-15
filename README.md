@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/conan-io/examples.svg?branch=master)](https://travis-ci.org/conan-io/examples)
-[![Build Status AppVeyor](https://ci.appveyor.com/api/projects/status/github/conan-io/examples?svg=true)](https://ci.appveyor.com/project/ConanOrgCI/examples)
+[![Build Status](https://ci.conan.io/buildStatus/icon?job=Examples/master)](https://ci.conan.io/job/Examples/job/master/)
 
 # Conan Examples
 
