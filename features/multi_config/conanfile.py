@@ -28,7 +28,7 @@ class HelloConan(ConanFile):
 
     def build(self):
         # Alternative 1: Use always default runtime (MD/MDd)
-        cmake_release = CMake(self, build_type="Release")
+        cmake_release = CMake(self, build_type="Debug")
         # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
         # cmake_release.defintions["CONAN_LINK_RUNTIME_MULTI"] = cmake_release.definitions["CONAN_LINK_RUNTIME"]
         # cmake_release.definitions["CONAN_LINK_RUNTIME"] = False
@@ -36,9 +36,9 @@ class HelloConan(ConanFile):
         cmake_release.build()
 
         if self.settings.os != "Windows":
-            print_strings(self, "lib/libhello.a", "RELEASE")
+            print_strings(self, "lib/libhello_d.a", "DEBUG")
 
-        cmake_debug = CMake(self, build_type="Debug")
+        cmake_debug = CMake(self, build_type="Release")
         # Alternative 2: if you want to keep MD-MDd/MT-MTd configuration (uncomment section in CMakeLists.txt)
         # cmake_debug.defintions["CONAN_LINK_RUNTIME_MULTI"] = cmake_release.definitions["CONAN_LINK_RUNTIME"]
         # cmake_debug.definitions["CONAN_LINK_RUNTIME"] = False
@@ -46,7 +46,7 @@ class HelloConan(ConanFile):
         cmake_debug.build()
 
         if self.settings.os != "Windows":
-            print_strings(self, "lib/libhello_d.a", "DEBUG")
+            print_strings(self, "lib/libhello.a", "RELEASE")
 
     def package(self):
         self.copy("*.h", dst="include")
@@ -61,7 +61,7 @@ class HelloConan(ConanFile):
         self.cpp_info.debug.libs = ["hello_d"]
 
 def print_strings(conanfile, library, build_type):
-    # This function is printing the strings contained in the binary
+    # This function is printing the strings contained in the binary
     #  trying to add insights about a issue related to the multi_config
     #  generator in Mac CI
     conanfile.output.info("*"*30)
