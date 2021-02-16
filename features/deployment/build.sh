@@ -8,7 +8,7 @@ PREFIX=${PWD}/install
 mkdir -p build
 pushd build
 
-conan install .. -s build_type=Release --build=missing
+conan install .. -s build_type=Release
 cmake .. \
   -DCMAKE_PREFIX_PATH=${PWD} \
   -DCMAKE_BUILD_TYPE=Release \
