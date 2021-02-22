@@ -1,13 +1,13 @@
 ## Conan Dear ImGui example
 
 1. Install conan: https://docs.conan.io/en/latest/installation.html
-2. Clone this repo: `git clone https://github.com/czoido/dear-imgui-conan-example.git`
+2. Clone this repo: `git clone https://github.com/conan-io/examples.git`
 3. Install dependencies, compile and run
 
 ## Windows with Visual Studio:
 
 ```bash
-cd dear-imgui-conan-example
+cd examples/libraries/dear-imgui/basic
 mkdir build
 cd build
 conan install .. -s build_type=Release
@@ -21,7 +21,7 @@ dear-imgui-conan
 ## Linux:
 
 ```bash
-cd dear-imgui-conan-example
+cd examples/libraries/dear-imgui/basic
 mkdir build
 cd build
 conan install .. -s build_type=Release
