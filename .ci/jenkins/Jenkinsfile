@@ -11,7 +11,7 @@ private Closure runTests(String nodeName) {
         node(nodeName) {
             stage("${nodeName}") {
                 try {
-                    def scmVars = checkout scm
+                    checkout scm
                     if (nodeName == 'Linux') {
                         def dockerImage = 'conanio/ci-functional'
                         docker.image(dockerImage).inside('--entrypoint=') {
