@@ -24,12 +24,6 @@ LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
 
-def is_appveyor():
-    return os.getenv("APPVEYOR", False)
-
-def appveyor_image():
-    return os.getenv("APPVEYOR_BUILD_WORKER_IMAGE","")
-    
 
 @contextmanager
 def chdir(dir_path):
@@ -63,11 +57,11 @@ def get_examples_to_skip(current_version):
             skip.extend(examples)
 
     # Some binaries are not available # TODO: All the examples should have binaries available
-    if is_appveyor():  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
+    if platform.system() == "Windows":  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
         skip.extend(['./libraries/folly/basic', ])
         skip.extend(['./features/makefiles', ])
         # waf does not support Visual Studio 2019 for 2.0.19
-        if appveyor_image() == "Visual Studio 2019":
+        if os.environ["CMAKE_GENERATOR"] == "Visual Studio 2019":
             skip.extend(['./features/integrate_build_system', ])
 
     return [os.path.normpath(it) for it in skip]
@@ -78,7 +72,7 @@ def get_build_list():
 
     builds = []
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox']]
+    skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox', 'examples_venv', '.pyenv']]
     for root, dirs, files in os.walk('.'):
         root = os.path.normpath(root)
         if root in skip_folders:
@@ -156,11 +150,11 @@ def ensure_cache_preserved():
 
 @contextmanager
 def ensure_python_environment_preserved():
-    freeze = subprocess.check_output("{} -m pip freeze".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+    freeze = subprocess.Popen(["{}".format(sys.executable), "-m", "pip", "freeze"], stdout=subprocess.PIPE).communicate()[0].decode()
     try:
         yield
     finally:
-        freeze_after = subprocess.check_output("{} -m pip freeze".format(sys.executable), stderr=subprocess.STDOUT, shell=True).decode()
+        freeze_after = subprocess.Popen(["{}".format(sys.executable), "-m", "pip", "freeze"], stdout=subprocess.PIPE).communicate()[0].decode()
         if freeze != freeze_after:
             writeln_console(">>> " + colorama.Fore.RED + "This example modifies the Python dependencies!")
             removed = set(freeze.splitlines()) - set(freeze_after.splitlines())

@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/conan-io/examples.svg?branch=master)](https://travis-ci.org/conan-io/examples)
-[![Build Status AppVeyor](https://ci.appveyor.com/api/projects/status/github/conan-io/examples?svg=true)](https://ci.appveyor.com/project/ConanOrgCI/examples)
+[![Build Status](https://ci.conan.io/buildStatus/icon?job=Examples/master)](https://ci.conan.io/job/Examples/job/master/)
 
 # Conan Examples
 
@@ -97,12 +96,7 @@ Documentation: https://docs.conan.io/en/laters/integrations/deployment.html
 ## How can I reproduce the build steps?
 
 All our examples can be built on Windows, Linux and Mac. If you are interested to reproduce
-the examples in your environment, please follow the CI scripts:
-
-* Linux / MacOS: [travis.yml](.travis.yml)
-* Windows: [appveyor](appveyor.yml)
-
-In addition, you should be able to inspect our logs by clicking on the badges at the top of this file.
+the examples in your environment, please check the scripts inside every example folder.
 
 ## LICENSE
 [MIT](LICENSE)

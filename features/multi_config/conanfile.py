@@ -61,7 +61,7 @@ class HelloConan(ConanFile):
         self.cpp_info.debug.libs = ["hello_d"]
 
 def print_strings(conanfile, library, build_type):
-    # This function is printing the strings contained in the binary
+    # This function is printing the strings contained in the binary
     #  trying to add insights about a issue related to the multi_config
     #  generator in Mac CI
     conanfile.output.info("*"*30)
