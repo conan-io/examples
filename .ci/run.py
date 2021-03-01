@@ -111,15 +111,11 @@ def get_conan_env(script):
 
 
 def configure_profile(env):
-    subprocess.check_output("conan profile new default --detect",
-                            stderr=subprocess.STDOUT,
-                            shell=True,
-                            env=env)
+    subprocess.Popen(["conan", "profile", "new", "default", "--detect"], stderr=subprocess.STDOUT, 
+                     shell=True, env=env)
     if platform.system() == "Linux":
-        subprocess.check_output("conan profile update settings.compiler.libcxx=libstdc++11 default",
-                                stderr=subprocess.STDOUT,
-                                shell=True,
-                                env=env)
+        subprocess.Popen(["conan", "profile", "update", "settings.compiler.libcxx=libstdc++11", "default"],
+                          stderr=subprocess.STDOUT, shell=True, env=env)
 
 
 def print_build(script):
