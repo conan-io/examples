@@ -64,7 +64,7 @@ def get_examples_to_skip(current_version):
         if os.environ["CMAKE_GENERATOR"] == "Visual Studio 2019":
             skip.extend(['./features/integrate_build_system', ])
     if platform.system() == "Darwin":
-        skip.extend(['./features/multi_config', ]) # randomly failing in Macos
+        skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
 
     return [os.path.normpath(it) for it in skip]
 
