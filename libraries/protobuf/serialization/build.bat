@@ -9,7 +9,7 @@ else (
     PUSHD build
 
     conan install ..
-    cmake .. -G "%CMAKE_GENERATOR%"
+    cmake .. 
     cmake --build . --config Release
 
     bin\sensor.exe
