@@ -1,5 +1,6 @@
 [requires]
 folly/2019.10.21.00
+openssl/1.1.1k
 
 [generators]
 cmake
