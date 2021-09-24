@@ -21,9 +21,12 @@ MKDIR "hello/build"
 PUSHD "hello/build"
 
 conan install ..
-cmake ../src/
+cmake ../src/ -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build . --config Release
 
 "bin/hello.exe"
+
+POPD
+POPD
 
 conan editable remove say/0.1@user/channel

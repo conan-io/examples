@@ -3,3 +3,4 @@ say/build
 conanbuildinfo.txt
 conaninfo.txt
 graph_info.json
+conan.lock
