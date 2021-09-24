@@ -5,18 +5,22 @@ RMDIR /Q /S hello\build
 
 REM Put say package in editable mode, and build it
 conan editable add say/ say/0.1@user/channel
-MKDIR "say/build"
-PUSHD "say/build"
-conan install ..
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+
+PUSHD "say"
+conan install . -s build_type=Release
+conan install . -s build_type=Debug
+MKDIR "build"
+PUSHD "build"
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan/conan_toolchain.cmake
 cmake --build . --config Release
 cmake --build . --config Debug
+POPD
 POPD
 
 REM Build hello consumer
 MKDIR "hello/build"
 PUSHD "hello/build"
-conan install ..
+conan install .. -s build_type=Release
 conan install .. -s build_type=Debug
 cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build . --config Release
