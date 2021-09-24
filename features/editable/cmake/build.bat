@@ -21,7 +21,7 @@ MKDIR "hello/build"
 PUSHD "hello/build"
 
 conan install ..
-cmake ../src/ -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build . --config Release
 
 "bin/hello.exe"
