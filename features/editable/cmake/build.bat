@@ -3,22 +3,23 @@
 RMDIR /Q /S say/build
 RMDIR /Q /S hello/build
 
-MKDIR "say/build/Release"
-MKDIR "hello/build"
 
-conan export say/ say/0.1@user/channel
-conan editable add say/ say/0.1@user/channel --layout=layout_vs
+conan editable add say/ say/0.1@user/channel
 
-PUSHD "say/build/Release"
+PUSHD "say"
 
-conan install ../..
-cmake ../../src
+conan install .
+
+PUSHD "build"
+cmake ..
 cmake --build . --config Release
 
 POPD
+POPD
+
 PUSHD "hello/build"
 
-conan install .. 
+conan install ..
 cmake ../src/
 cmake --build . --config Release
 
