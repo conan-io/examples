@@ -27,7 +27,7 @@ POPD
 
 REM Do a modification in the source code of the editable say
 PUSHD "say/build"
-COPY ../src/say2.cpp ../src/say.cpp
+COPY ..\src\say2.cpp ..\src\say.cpp /Y
 cmake --build . --config Release
 cmake --build . --config Debug
 POPD
