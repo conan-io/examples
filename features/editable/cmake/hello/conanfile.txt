@@ -2,4 +2,5 @@
 say/0.1@user/channel
 
 [generators]
-cmake
+CMakeToolchain
+CMakeDeps

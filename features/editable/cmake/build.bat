@@ -17,6 +17,7 @@ cmake --build . --config Release
 POPD
 POPD
 
+MKDIR "hello/build"
 PUSHD "hello/build"
 
 conan install ..
