@@ -7,6 +7,8 @@ REM Put say package in editable mode, and build it
 conan editable add say/ say/0.1@user/channel
 
 PUSHD "say"
+REM It is very important to install 2 configurations, if you are building later the 2 configs, so the toolchain is multi-config (runtime libs)
+REM There is a bug in 1.40, this needs to be done in the root folder
 conan install . -s build_type=Release
 conan install . -s build_type=Debug
 MKDIR "build"
