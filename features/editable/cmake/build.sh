@@ -12,7 +12,7 @@ conan editable add say/ say/0.1@user/channel
 pushd say
 conan install .
 pushd cmake-build-release
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build .
 popd
 popd

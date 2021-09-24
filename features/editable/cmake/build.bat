@@ -8,7 +8,7 @@ conan editable add say/ say/0.1@user/channel
 MKDIR "say/build"
 PUSHD "say/build"
 conan install ..
-cmake ..
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build . --config Release
 cmake --build . --config Debug
 POPD
