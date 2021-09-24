@@ -3,27 +3,38 @@
 set -e
 set -x
 
-rm -rf say/build
-mkdir -p say/build/Release
-rm -rf hello/build
-mkdir hello/build
+rm -rf say/cmake-build-release
+rm -rf hello/cmake-build-release
 
-conan export say/ say/0.1@user/channel
-conan editable add say/ say/0.1@user/channel --layout=layout_gcc
 
-pushd say/build/Release
+conan editable add say/ say/0.1@user/channel
 
-conan install ../..
-cmake ../../src -DCMAKE_BUILD_TYPE=Release
+pushd say
+conan install .
+pushd cmake-build-release
+cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
-
 popd
-pushd hello/build
+popd
 
+mkdir hello/cmake-build-release
+pushd hello/cmake-build-release
 conan install ..
-cmake ../src/ -DCMAKE_BUILD_TYPE=Release
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build .
+./hello
+popd
+
+# Modification to code
+pushd say/cmake-build-release
+cp ../src/say2.cpp ../src/say.cpp
+cmake --build .
+popd
+
+# build consumer again
+pushd hello/cmake-build-release
+cmake --build .
+./hello
+popd
 
 conan editable remove say/0.1@user/channel
-
-bin/hello
