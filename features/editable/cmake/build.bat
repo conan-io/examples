@@ -1,32 +1,43 @@
 @ECHO ON
 
-RMDIR /Q /S say/build
-RMDIR /Q /S hello/build
+RMDIR /Q /S say\build
+RMDIR /Q /S hello\build
 
-
+REM Put say package in editable mode, and build it
 conan editable add say/ say/0.1@user/channel
-
-PUSHD "say"
-
-conan install .
-
-PUSHD "build"
+PUSHD "say/build"
+conan install ..
 cmake ..
 cmake --build . --config Release
-
+cmake --build . --config Debug
 POPD
-POPD
 
+REM Build hello consumer
 MKDIR "hello/build"
 PUSHD "hello/build"
-
 conan install ..
+conan install .. -s build_type=Debug
 cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build . --config Release
-
-"bin/hello.exe"
-
+cmake --build . --config Debug
+"Release/hello.exe"
+"Debug/hello.exe"
 POPD
+
+REM Do a modification in the source code of the editable say
+PUSHD "say/build"
+MOVE ../src/say2.cpp ../src/say.cpp
+cmake --build . --config Release
+cmake --build . --config Debug
 POPD
+
+REM Build and execute the consumer depending on the editable
+PUSHD "hello/build"
+cmake --build . --config Release
+cmake --build . --config Debug
+"Release/hello.exe"
+"Debug/hello.exe"
+POPD
+
 
 conan editable remove say/0.1@user/channel
