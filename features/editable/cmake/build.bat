@@ -5,6 +5,7 @@ RMDIR /Q /S hello\build
 
 REM Put say package in editable mode, and build it
 conan editable add say/ say/0.1@user/channel
+MKDIR "say/build"
 PUSHD "say/build"
 conan install ..
 cmake ..
@@ -26,7 +27,7 @@ POPD
 
 REM Do a modification in the source code of the editable say
 PUSHD "say/build"
-MOVE ../src/say2.cpp ../src/say.cpp
+COPY ../src/say2.cpp ../src/say.cpp
 cmake --build . --config Release
 cmake --build . --config Debug
 POPD
