@@ -12,6 +12,21 @@ private Closure runTests(String nodeName) {
             stage("${nodeName}") {
                 try {
                     checkout scm
+                    def current_branch = env.BRANCH_NAME
+                    echo "Current branch is: '${current_branch}'"
+                    current_branch = "master" // force to test in ci
+                    test_prev_dev_command = ""
+                    if (current_branch=="master") {
+                        if (nodeName == 'Linux') {
+                            test_prev_dev_command = "python .ci/add_prev_and_dev_to_tox.py && "
+                        }
+                        if (nodeName == 'Macos') {
+                            test_prev_dev_command = "${pythonLocation} .ci/add_prev_and_dev_to_tox.py && "
+                        }
+                        if (nodeName == 'Windows') {
+                            test_prev_dev_command = "${pythonLocation} .ci/add_prev_and_dev_to_tox.py && "
+                        }
+                    }
                     if (nodeName == 'Linux') {
                         def dockerImage = 'conanio/ci-functional'
                         docker.image(dockerImage).inside('--entrypoint=') {
@@ -24,7 +39,7 @@ private Closure runTests(String nodeName) {
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
                                         + "python -m pip install tox tox-venv requests && " \
-                                        + "python .ci/last_conan_version.py && " \
+                                        + test_prev_dev_command \
                                         + "python -m tox --verbose\""
                             sh(script: command)
                         }
@@ -36,14 +51,14 @@ private Closure runTests(String nodeName) {
                                 "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                                 def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
                                 def launchCommand = "pyenv local \$PY36 \$PY38 \$PY39 && " \
-                                                  + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox --verbose"
+                                                  + test_prev_dev_command + "${pythonLocation} -m tox --verbose"
                                 sh(script: launchCommand)
                         }
                     }
                     else if (nodeName=='Windows') {
                         withEnv(['CMAKE_GENERATOR=Visual Studio 15 2017 Win64']) {
                             def pythonLocation = "C:/Python36/python.exe"
-                            def launchCommand = "${pythonLocation} .ci/last_conan_version.py && tox -vv"
+                            def launchCommand = test_prev_dev_command + "tox -vv"
                             bat(script: launchCommand)
                         }
                     }
