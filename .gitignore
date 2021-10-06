@@ -55,3 +55,4 @@ libraries/poco/md5/build/*
 .ropeproject/*
 
 .tox
+.python-version
