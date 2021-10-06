@@ -43,7 +43,9 @@ private Closure runTests(String nodeName) {
                     else if (nodeName=='Windows') {
                         withEnv(['CMAKE_GENERATOR=Visual Studio 15 2017 Win64']) {
                             def pythonLocation = "C:/Python36/python.exe"
-                            def launchCommand = "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox --verbose"
+                            def launchCommand = "${pythonLocation} .ci/last_conan_version.py && " \
+                                                "${pythonLocation} -m pip install tox tox-venv && " \
+                                                " ${pythonLocation} -m tox --verbose"
                             bat(script: launchCommand)
                         }
                     }
