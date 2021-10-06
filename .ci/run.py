@@ -19,7 +19,7 @@ from tabulate import tabulate
 from conans import __version__ as conan_version
 
 
-FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
+FAIL_FAST = os.getenv("FAIL_FAST", "1").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
@@ -65,6 +65,9 @@ def get_examples_to_skip(current_version):
             skip.extend(['./features/integrate_build_system', ])
     if platform.system() == "Darwin":
         skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
+
+    skip.extend(['./features/emscripten', ]) # FIXME, TODO: Update emscripten example
+    skip.extend(['./features/emscripten', ]) # FIXME, TODO: Update protobuf example
 
     return [os.path.normpath(it) for it in skip]
 
