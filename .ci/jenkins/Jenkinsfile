@@ -14,7 +14,6 @@ private Closure runTests(String nodeName) {
                     checkout scm
                     def current_branch = env.BRANCH_NAME
                     echo "Current branch is: '${current_branch}'"
-                    current_branch = "master" // force to test in ci
                     test_prev_dev_command = ""
                     if (nodeName == 'Linux') {
                         def dockerImage = 'conanio/ci-functional'
