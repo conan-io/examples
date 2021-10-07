@@ -33,8 +33,6 @@ def update_tox(last_version):
 
     content = content.replace('conanprev: conan-unknown', 'conanprev: {}'.format(conan_prev))
 
-    content = content.replace('conancurrent: conan', more_versions)
-
     with open(tox_file, 'w') as f:
         f.write(content)
     
