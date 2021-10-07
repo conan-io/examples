@@ -29,9 +29,9 @@ def update_tox(last_version):
     with open(tox_file, 'r') as f:
         content = f.read()
 
-    more_versions = """conancurrent: conan
-    conandev: git+https://github.com/conan-io/conan.git@develop
-    conanprev: {}""".format(conan_prev)
+    assert 'conanprev: conan-unknown' in content, "Unexpected tox.ini content"
+
+    content = content.replace('conanprev: conan-unknown', 'conanprev: {}'.format(conan_prev))
 
     content = content.replace('conancurrent: conan', more_versions)
 
