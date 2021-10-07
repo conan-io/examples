@@ -66,8 +66,6 @@ def get_examples_to_skip(current_version):
     if platform.system() == "Darwin":
         skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
 
-    skip.extend(['./features/emscripten', ]) # FIXME: emscripten is using clang 14 so it won't work
-
     return [os.path.normpath(it) for it in skip]
 
 
@@ -164,9 +162,16 @@ def ensure_python_environment_preserved():
                 writeln_console("+ " + it)
             raise Exception("Example modifies Python environment!")
 
+def run(cmd):
+    result = subprocess.run([c for c in  cmd.split()], stdout=subprocess.PIPE)
+    print("running: '{}'".format(cmd))
+    result = result.stdout.decode('utf-8')
+    print("result: '{}'".format(result))
+    return result.strip()
 
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
+    base_dir = os.getcwd()
     for script in scripts:
         chmod_x(script)
         abspath = os.path.abspath(script)
@@ -175,14 +180,7 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
-            
-            # Need to initialize the cache with default files if they are not already there
-            try:
-                subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env,
-                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            except:
-                pass
- 
+            run("conan config install {} --type=file".format(os.path.join(base_dir, "conf", "settings.yml"))) # for emscripten, needs clang 14
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
                     result = subprocess.call(build_script, env=env)
