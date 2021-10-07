@@ -67,7 +67,6 @@ def get_examples_to_skip(current_version):
         skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
 
     skip.extend(['./features/emscripten', ]) # FIXME, TODO: Update emscripten example
-    skip.extend(['./libraries/protobuf', ]) # FIXME, TODO: Update protobuf example
 
     return [os.path.normpath(it) for it in skip]
 
