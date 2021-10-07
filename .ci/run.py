@@ -19,7 +19,7 @@ from tabulate import tabulate
 from conans import __version__ as conan_version
 
 
-FAIL_FAST = os.getenv("FAIL_FAST", "0").lower() in ["1", "y", "yes", "true"]
+FAIL_FAST = os.getenv("FAIL_FAST", "1").lower() in ["1", "y", "yes", "true"]
 LOGGING_LEVEL = int(os.getenv("CONAN_LOGGING_LEVEL", logging.INFO))
 logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', level=LOGGING_LEVEL)
 
@@ -60,6 +60,7 @@ def get_examples_to_skip(current_version):
     if platform.system() == "Windows":  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
         skip.extend(['./libraries/folly/basic', ])
         skip.extend(['./features/makefiles', ])
+        skip.extend(['./features/emscripten', ]) # FIXME: building for windows fails
         # waf does not support Visual Studio 2019 for 2.0.19
         if os.environ["CMAKE_GENERATOR"] == "Visual Studio 2019":
             skip.extend(['./features/integrate_build_system', ])
@@ -162,9 +163,16 @@ def ensure_python_environment_preserved():
                 writeln_console("+ " + it)
             raise Exception("Example modifies Python environment!")
 
+def run(cmd):
+    result = subprocess.run([c for c in  cmd.split()], stdout=subprocess.PIPE)
+    print("running: '{}'".format(cmd))
+    result = result.stdout.decode('utf-8')
+    print("result: '{}'".format(result))
+    return result.strip()
 
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
+    base_dir = os.getcwd()
     for script in scripts:
         chmod_x(script)
         abspath = os.path.abspath(script)
@@ -173,14 +181,7 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
-            
-            # Need to initialize the cache with default files if they are not already there
-            try:
-                subprocess.call(['conan', 'install', 'foobar/foobar@conan/stable'], env=env,
-                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            except:
-                pass
- 
+            run("conan config install {} --type=file".format(os.path.join(base_dir, "conf", "settings.yml"))) # for emscripten, needs clang 14
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
                     result = subprocess.call(build_script, env=env)

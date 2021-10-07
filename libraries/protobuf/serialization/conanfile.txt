@@ -1,8 +1,5 @@
-[build_requires]
-protoc_installer/3.6.1@bincrafters/stable
-
 [requires]
-protobuf/3.6.1@bincrafters/stable
+protobuf/3.17.1
 
 [generators]
 cmake
