@@ -66,6 +66,8 @@ def get_examples_to_skip(current_version):
     if platform.system() == "Darwin":
         skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
 
+    skip.extend(['./features/emscripten', ]) # FIXME: emscripten is using clang 14 so it won't work
+
     return [os.path.normpath(it) for it in skip]
 
 
