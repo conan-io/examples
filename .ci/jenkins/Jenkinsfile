@@ -24,7 +24,7 @@ private Closure runTests(String nodeName) {
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
                                         + "python -m pip install tox tox-venv requests && " \
-                                        + "python .ci/add_prev_and_dev_to_tox.py && " \
+                                        + "python .ci/last_conan_version.py && " \
                                         + "python -m tox --verbose\""
                             sh(script: command)
                         }
@@ -36,7 +36,7 @@ private Closure runTests(String nodeName) {
                                 "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                                 def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
                                 def launchCommand = "pyenv local \$PY36 \$PY38 \$PY39 && " \
-                                                  + "${pythonLocation} .ci/add_prev_and_dev_to_tox.py && " 
+                                                  + "${pythonLocation} .ci/last_conan_version.py && " 
                                                   + "${pythonLocation} -m tox --verbose"
                                 sh(script: launchCommand)
                         }
@@ -44,7 +44,7 @@ private Closure runTests(String nodeName) {
                     else if (nodeName=='Windows') {
                         withEnv(['CMAKE_GENERATOR=Visual Studio 15 2017 Win64']) {
                             def pythonLocation = "C:/Python36/python.exe"
-                            def launchCommand = "${pythonLocation} .ci/add_prev_and_dev_to_tox.py && tox -vv"
+                            def launchCommand = "${pythonLocation} .ci/last_conan_version.py && tox -vv"
                             bat(script: launchCommand)
                         }
                     }
