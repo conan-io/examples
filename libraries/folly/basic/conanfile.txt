@@ -1,6 +1,0 @@
-[requires]
-folly/2020.08.10.00
-openssl/1.1.1k
-
-[generators]
-cmake
