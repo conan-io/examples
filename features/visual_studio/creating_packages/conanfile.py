@@ -7,7 +7,7 @@ class HelloConan(ConanFile):
     name = "Hello"
     version = "0.1"
     license = "MIT"
-    url = "https://github.com/memsharded/hello_vs"
+    url = "https://github.com/conan-io/examples"
     settings = "os", "compiler", "build_type", "arch"
     exports_sources = "src/*", "build/*.vcxproj*", "build/*.sln*"
 
