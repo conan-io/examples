@@ -12,6 +12,12 @@ How to create packages with Visual Studio.
 
 Documentation: https://docs.conan.io/en/latest/integrations/visual_studio/creating_packages.html
 
+### [Reusing packages with Visual Studio](features/visual_studio/chat)
+
+How to use existing packages directly from Visual Studio.
+
+Documentation: https://docs.conan.io/en/latest/integrations/visual_studio/creating_packages.html#reusing-packages
+
 ## How can I reproduce the build steps?
 
 All our examples can be built on Windows, Linux and Mac. If you are interested to reproduce
