@@ -48,24 +48,16 @@ def get_examples_to_skip(current_version):
     skip = []
     # Given the Conan version, some examples are skipped
     required_conan = {
-        version.parse("1.29.0"): [
-            './libraries/dear-imgui/basic', # solved bug for system packages and components
-            ],
-        }
+        # version.parse("1.29.0"): [
+        #     './libraries/dear-imgui/basic', # solved bug for system packages and components
+        #     ],
+    }
     for v, examples in required_conan.items():
         if current_version < v:
             skip.extend(examples)
 
-    # Some binaries are not available # TODO: All the examples should have binaries available
-    if platform.system() == "Windows":  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
-        skip.extend(['./libraries/folly/basic', ])
-        skip.extend(['./features/makefiles', ])
-        skip.extend(['./features/emscripten', ]) # FIXME: building for windows fails
-        # waf does not support Visual Studio 2019 for 2.0.19
-        if os.environ["CMAKE_GENERATOR"] == "Visual Studio 2019":
-            skip.extend(['./features/integrate_build_system', ])
-    if platform.system() == "Darwin":
-        skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
+    if platform.system() != "Windows":
+        skip.extend(['./features/visual_studio'])
 
     return [os.path.normpath(it) for it in skip]
 
