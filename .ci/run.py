@@ -124,7 +124,8 @@ def ensure_cache_preserved():
 
     git = Git(folder=cache_directory)
     with open(os.path.join(cache_directory, '.gitignore'), 'w') as gitignore:
-        gitignore.write(".conan2/p/")
+        gitignore.write(".conan2/p/\n")
+        gitignore.write("*.sqlite3\n")
     git.run("init .")
     git.run("add .")
 
