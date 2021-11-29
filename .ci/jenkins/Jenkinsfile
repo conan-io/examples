@@ -23,7 +23,7 @@ private Closure runTests(String nodeName) {
                                         + "export PYENV_ROOT=${pyenvdir} && " \
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
-                                        + "python -m pip install tox tox-venv && " \
+                                        + "python -m pip install tox && " \
                                         + "python -m tox --verbose\""
                             sh(script: command)
                         }
@@ -35,6 +35,7 @@ private Closure runTests(String nodeName) {
                                 "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                                 def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
                                 def launchCommand = "pyenv local \$PY36 \$PY38 \$PY39 && " \
+                                                  + "${pythonLocation} -m pip install tox && " \
                                                   + "${pythonLocation} -m tox --verbose"
                                 sh(script: launchCommand)
                         }
