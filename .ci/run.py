@@ -48,24 +48,16 @@ def get_examples_to_skip(current_version):
     skip = []
     # Given the Conan version, some examples are skipped
     required_conan = {
-        version.parse("1.29.0"): [
-            './libraries/dear-imgui/basic', # solved bug for system packages and components
-            ],
-        }
+        # version.parse("1.29.0"): [
+        #     './libraries/dear-imgui/basic', # solved bug for system packages and components
+        #     ],
+    }
     for v, examples in required_conan.items():
         if current_version < v:
             skip.extend(examples)
 
-    # Some binaries are not available # TODO: All the examples should have binaries available
-    if platform.system() == "Windows":  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
-        skip.extend(['./libraries/folly/basic', ])
-        skip.extend(['./features/makefiles', ])
-        skip.extend(['./features/emscripten', ]) # FIXME: building for windows fails
-        # waf does not support Visual Studio 2019 for 2.0.19
-        if os.environ["CMAKE_GENERATOR"] == "Visual Studio 2019":
-            skip.extend(['./features/integrate_build_system', ])
-    if platform.system() == "Darwin":
-        skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
+    if platform.system() != "Windows":
+        skip.extend(['./features/visual_studio'])
 
     return [os.path.normpath(it) for it in skip]
 
@@ -75,7 +67,7 @@ def get_build_list():
 
     builds = []
     script = "build.bat" if platform.system() == "Windows" else "build.sh"
-    skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox', 'examples_venv', '.pyenv']]
+    skip_folders = [os.path.normpath(it) for it in ['./.ci', './.git', './.tox', '.local', 'examples_venv', '.pyenv', 'venv']]
     for root, dirs, files in os.walk('.'):
         root = os.path.normpath(root)
         if root in skip_folders:
@@ -132,7 +124,8 @@ def ensure_cache_preserved():
 
     git = Git(folder=cache_directory)
     with open(os.path.join(cache_directory, '.gitignore'), 'w') as gitignore:
-        gitignore.write(".conan/data/")
+        gitignore.write(".conan2/p/\n")
+        gitignore.write("*.sqlite3\n")
     git.run("init .")
     git.run("add .")
 
@@ -181,7 +174,6 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
-            run("conan config install {} --type=file".format(os.path.join(base_dir, "conf", "settings.yml"))) # for emscripten, needs clang 14
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
                     result = subprocess.call(build_script, env=env)
