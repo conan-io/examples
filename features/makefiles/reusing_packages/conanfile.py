@@ -8,7 +8,7 @@ class AppConan(ConanFile):
     version = "0.1"
     settings = "os", "compiler", "build_type", "arch"
     exports_sources = "src/*"
-    requires = "hello/0.1@user/testing"
+    requires = "hello/0.1@demo/testing"
     generators = "AutotoolsDeps", "AutotoolsToolchain"
 
     def build(self):

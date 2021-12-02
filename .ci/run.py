@@ -165,7 +165,6 @@ def run(cmd):
 
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
-    base_dir = os.getcwd()
     for script in scripts:
         chmod_x(script)
         abspath = os.path.abspath(script)
