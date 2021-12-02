@@ -10,6 +10,7 @@ class HelloConan(ConanFile):
     url = "https://github.com/conan-io/examples"
     settings = "os", "compiler", "build_type", "arch"
     exports_sources = "src/*", "build/*.vcxproj*", "build/*.sln*"
+    generators = "MSBuildToolchain"
 
     def build(self):
         msbuild = MSBuild(self)
