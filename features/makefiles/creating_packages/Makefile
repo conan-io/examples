@@ -1,6 +1,6 @@
-SRC = hello.cpp
+SRC = src/hello.cpp
 OBJ = $(SRC:.cpp=.o)
-OUT = libhello.a
+OUT = src/libhello.a
 INCLUDES = -I.
 
 .SUFFIXES: .cpp

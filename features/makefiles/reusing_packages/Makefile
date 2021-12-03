@@ -1,6 +1,6 @@
-SRC = app.cpp
+SRC = src/app.cpp
 OBJ = $(SRC:.cpp=.o)
-OUT = app
+OUT = src/app
 INCLUDES = -I.
 
 .SUFFIXES: .cpp
