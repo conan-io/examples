@@ -17,7 +17,7 @@ class HelloConan(ConanFile):
         atools.make()
 
     def package(self):
-        self.copy("*.h", dst="include", src="src")
+        self.copy("*.h", dst="include")
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
