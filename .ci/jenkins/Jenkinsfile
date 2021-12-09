@@ -23,27 +23,27 @@ private Closure runTests(String nodeName) {
                                         + "export PYENV_ROOT=${pyenvdir} && " \
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
-                                        + "python -m pip install tox tox-venv requests && " \
-                                        + "python .ci/last_conan_version.py && " \
+                                        + "python -m pip install tox && " \
                                         + "python -m tox --verbose\""
                             sh(script: command)
                         }
                     }
                     else if (nodeName=='Macos') {
                         def localDir = '/Users/jenkins'
-                        withEnv(['PY36=3.6.12', 'PY38=3.8.6', 'PY39=3.9.0',
+                        withEnv(['PY36=3.6.13', 'PY38=3.8.6', 'PY39=3.9.0',
                                 "PYENV_ROOT=${localDir}/.pyenv", 
                                 "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                                 def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
                                 def launchCommand = "pyenv local \$PY36 \$PY38 \$PY39 && " \
-                                                  + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox --verbose"
+                                                  + "${pythonLocation} -m pip install tox && " \
+                                                  + "${pythonLocation} -m tox --verbose"
                                 sh(script: launchCommand)
                         }
                     }
                     else if (nodeName=='Windows') {
                         withEnv(['CMAKE_GENERATOR=Visual Studio 15 2017 Win64']) {
                             def pythonLocation = "C:/Python36/python.exe"
-                            def launchCommand = "${pythonLocation} .ci/last_conan_version.py && tox -vv"
+                            def launchCommand = "tox -vv"
                             bat(script: launchCommand)
                         }
                     }
