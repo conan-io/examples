@@ -181,7 +181,6 @@ def run_scripts(scripts):
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
-            run("conan config install {} --type=file".format(os.path.join(base_dir, "conf", "settings.yml"))) # for emscripten, needs clang 14
             with ensure_python_environment_preserved():
                 with ensure_cache_preserved():
                     result = subprocess.call(build_script, env=env)
