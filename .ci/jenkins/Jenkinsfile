@@ -6,6 +6,8 @@ void cancelPrevious() {
     }
 }
 
+boolean isMaster = env.BRANCH_NAME == masterBranch
+
 private Closure runTests(String nodeName) {
     def ret = {
         node(nodeName) {
@@ -67,6 +69,10 @@ try {
     parallel(paralellRuns)
 }
 catch (e) {
-    echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    if (isMaster) {
+        def subject = "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+        def summary = "${subject} (${env.BUILD_URL})"
+        slackSend (color: '#FF0000', message: summary)
+    }
     throw e
 }
