@@ -59,7 +59,6 @@ def get_examples_to_skip(current_version):
     # Some binaries are not available # TODO: All the examples should have binaries available
     if platform.system() == "Windows":  # Folly is not availble!! and appveyor_image() == "Visual Studio 2019":
         skip.extend(['./libraries/folly/basic', ])
-        skip.extend(['./libraries/dear-imgui/basic', ])
         skip.extend(['./features/makefiles', ])
         skip.extend(['./features/emscripten', ]) # FIXME: building for windows fails
         # waf does not support Visual Studio 2019 for 2.0.19
