@@ -14,7 +14,6 @@ from contextlib import contextmanager
 from packaging import version
 
 import colorama
-from conans.client.tools.scm import Git
 from tabulate import tabulate
 from conans import __version__ as conan_version
 
@@ -130,17 +129,13 @@ def print_build(script):
 def ensure_cache_preserved():
     cache_directory = os.environ["CONAN_USER_HOME"]
 
-    git = Git(folder=cache_directory)
-    with open(os.path.join(cache_directory, '.gitignore'), 'w') as gitignore:
-        gitignore.write(".conan/data/")
-    git.run("init .")
-    git.run("add .")
+    md5_before = run("find -s '{}' -not -path '*data*'  -type f -exec md5 {} \; | md5".format(cache_directory))
 
     try:
         yield
     finally:
-        r = git.run("diff")
-        if r:
+        md5_after = run("find -s '{}' -not -path '*data*'  -type f -exec md5 {} \; | md5".format(cache_directory))
+        if md5_after != md5_before:
             writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the cache!")
             writeln_console(r)
             raise Exception("Example modifies cache!")
@@ -170,6 +165,10 @@ def run(cmd):
     print("result: '{}'".format(result))
     return result.strip()
 
+@contextmanager
+def nullcontext(enter_result=None):
+    yield enter_result
+
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
     base_dir = os.getcwd()
@@ -182,7 +181,7 @@ def run_scripts(scripts):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
             with ensure_python_environment_preserved():
-                with ensure_cache_preserved():
+                with ensure_cache_preserved() if platform.system() == "Linux" else nullcontext:
                     result = subprocess.call(build_script, env=env)
                 
             results[script] = result
