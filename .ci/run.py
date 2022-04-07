@@ -134,7 +134,7 @@ def ensure_cache_preserved():
     try:
         yield
     finally:
-        md5_after = run("find -s '{}' -not -path '*data*'  -type f -exec md5 {} \; | md5".format(cache_directory))
+        md5_after = run("find -s '{folder}' -not -path '*data*'  -type f -exec md5 {folder} \; | md5".format(folder=cache_directory))
         if md5_after != md5_before:
             writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the cache!")
             raise Exception("Example modifies cache!")
