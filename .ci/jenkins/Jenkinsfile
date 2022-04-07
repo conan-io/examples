@@ -31,7 +31,7 @@ private Closure runTests(String nodeName) {
                     }
                     else if (nodeName=='Macos') {
                         def localDir = '/Users/jenkins'
-                        withEnv(['PY36=3.6.12', 'PY38=3.8.6', 'PY39=3.9.0',
+                        withEnv(['PY36=3.6.13', 'PY38=3.8.6', 'PY39=3.9.0',
                                 "PYENV_ROOT=${localDir}/.pyenv", 
                                 "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                                 def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
