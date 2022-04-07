@@ -14,6 +14,7 @@ from contextlib import contextmanager
 from packaging import version
 
 import colorama
+from conans.client.tools.scm import Git
 from tabulate import tabulate
 from conans import __version__ as conan_version
 
@@ -129,15 +130,19 @@ def print_build(script):
 def ensure_cache_preserved():
     cache_directory = os.environ["CONAN_USER_HOME"]
 
-    check_folder_md5 = "find -s '{folder}' -not -path '*data*'  -type f -exec md5sum {folder} \; | md5sum".format(folder=cache_directory)
-    md5_before = run(check_folder_md5)
+    git = Git(folder=cache_directory)
+    with open(os.path.join(cache_directory, '.gitignore'), 'w') as gitignore:
+        gitignore.write(".conan/data/")
+    git.run("init .")
+    git.run("add .")
 
     try:
         yield
     finally:
-        md5_after = run(check_folder_md5)
-        if md5_after != md5_before:
+        r = git.run("diff")
+        if r:
             writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the cache!")
+            writeln_console(r)
             raise Exception("Example modifies cache!")
 
 
@@ -158,28 +163,12 @@ def ensure_python_environment_preserved():
                 writeln_console("+ " + it)
             raise Exception("Example modifies Python environment!")
 
-def run(cmd, error=False):
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    out, err = process.communicate()
-    out = out.decode("utf-8")
-    err = err.decode("utf-8")
-    ret = process.returncode
-
-    output = err + out
-    print("------------")
-    print("Running: {}".format(cmd))
-    print(output)
-    print("------------")
-    if ret != 0 and not error:
-        raise Exception("Failed cmd: {}\n{}".format(cmd, output))
-    if ret == 0 and error:
-        raise Exception(
-            "Cmd succeded (failure expected): {}\n{}".format(cmd, output))
-    return 
-
-@contextmanager
-def no_op():
-    yield
+def run(cmd):
+    result = subprocess.run([c for c in  cmd.split()], stdout=subprocess.PIPE)
+    print("running: '{}'".format(cmd))
+    result = result.stdout.decode('utf-8')
+    print("result: '{}'".format(result))
+    return result.strip()
 
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
@@ -193,8 +182,7 @@ def run_scripts(scripts):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
             with ensure_python_environment_preserved():
-                # ensure that it does not modify the cache in Linux is enought for the moment
-                with ensure_cache_preserved() if platform.system() == "Linux" else no_op():
+                with ensure_cache_preserved():
                     result = subprocess.call(build_script, env=env)
                 
             results[script] = result
