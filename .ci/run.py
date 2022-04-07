@@ -158,12 +158,24 @@ def ensure_python_environment_preserved():
                 writeln_console("+ " + it)
             raise Exception("Example modifies Python environment!")
 
-def run(cmd):
-    result = subprocess.run([c for c in  cmd.split()], stdout=subprocess.PIPE)
-    print("running: '{}'".format(cmd))
-    result = result.stdout.decode('utf-8')
-    print("result: '{}'".format(result))
-    return result.strip()
+def run(cmd, error=False):
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = process.communicate()
+    out = out.decode("utf-8")
+    err = err.decode("utf-8")
+    ret = process.returncode
+
+    output = err + out
+    print("------------")
+    print("Running: {}".format(cmd))
+    print(output)
+    print("------------")
+    if ret != 0 and not error:
+        raise Exception("Failed cmd: {}\n{}".format(cmd, output))
+    if ret == 0 and error:
+        raise Exception(
+            "Cmd succeded (failure expected): {}\n{}".format(cmd, output))
+    return 
 
 @contextmanager
 def no_op():
