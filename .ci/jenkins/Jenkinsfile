@@ -36,7 +36,7 @@ private Closure runTests(String nodeName) {
                                 "PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                                 def pythonLocation = "${localDir}/.pyenv/versions/\$PY36/bin/python"
                                 def launchCommand = "pyenv local \$PY36 \$PY38 \$PY39 && " \
-                                                  + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox --verbose"
+                                                  + "${pythonLocation} .ci/last_conan_version.py && ${pythonLocation} -m tox"
                                 sh(script: launchCommand)
                         }
                     }
