@@ -8,6 +8,6 @@ if "%CMAKE_GENERATOR%"=="" (
     PUSHD build
 
     conan install ..
-    cmake .. -G "%CMAKE_GENERATOR%"
+    cmake .. -G "%CMAKE_GENERATOR%" -A "Win32"
     cmake --build . --config Release
 )
