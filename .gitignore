@@ -56,3 +56,10 @@ libraries/poco/md5/build/*
 
 .tox
 **/cmake-build-release/**
+**/conan.lock
+**/environment.ps1.env
+**/environment.sh.env
+**/graph_info.json
+**/CMakeFiles/**
+**/deploy_manifest.txt
+features/makefiles/helloapp/bin/app
