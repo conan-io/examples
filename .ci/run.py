@@ -166,8 +166,8 @@ def run(cmd):
     return result.strip()
 
 @contextmanager
-def nullcontext(enter_result=None):
-    yield enter_result
+def no_op():
+    yield
 
 def run_scripts(scripts):
     results = OrderedDict.fromkeys(scripts, '')
@@ -181,7 +181,8 @@ def run_scripts(scripts):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath
             with ensure_python_environment_preserved():
-                with ensure_cache_preserved() if platform.system() == "Linux" else nullcontext:
+                # ensure that it does not modify the cache in Linux is enought for the moment
+                with ensure_cache_preserved() if platform.system() == "Linux" else no_op():
                     result = subprocess.call(build_script, env=env)
                 
             results[script] = result
