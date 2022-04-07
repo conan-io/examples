@@ -1,7 +1,7 @@
 [requires]
 imgui/1.74
-glfw/3.3.2
-glew/2.1.0
+glfw/3.3.6
+glew/2.2.0
 
 [generators]
 cmake_find_package_multi

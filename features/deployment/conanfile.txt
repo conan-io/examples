@@ -3,7 +3,7 @@ cmake_find_package_multi
 json
 
 [requires]
-poco/1.9.4
+poco/1.11.1
 
 [options]
 *:shared=True
