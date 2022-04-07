@@ -6,7 +6,7 @@ void cancelPrevious() {
     }
 }
 
-boolean isMaster = env.BRANCH_NAME == masterBranch
+boolean isMaster = env.BRANCH_NAME == 'master'
 
 private Closure runTests(String nodeName) {
     def ret = {
