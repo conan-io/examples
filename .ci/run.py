@@ -129,12 +129,13 @@ def print_build(script):
 def ensure_cache_preserved():
     cache_directory = os.environ["CONAN_USER_HOME"]
 
-    md5_before = run("find -s '{}' -not -path '*data*'  -type f -exec md5 {} \; | md5".format(cache_directory))
+    check_folder_md5 = "find -s '{folder}' -not -path '*data*'  -type f -exec md5sum {folder} \; | md5sum".format(folder=cache_directory)
+    md5_before = run(check_folder_md5)
 
     try:
         yield
     finally:
-        md5_after = run("find -s '{folder}' -not -path '*data*'  -type f -exec md5 {folder} \; | md5".format(folder=cache_directory))
+        md5_after = run(check_folder_md5)
         if md5_after != md5_before:
             writeln_console(">>> " + colorama.Fore.RED + "This is example modifies the cache!")
             raise Exception("Example modifies cache!")
