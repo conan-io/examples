@@ -28,6 +28,7 @@ class SayConan(ConanFile):
 
     def layout(self):
         cmake_layout(self)
+        self.cpp.source.includedirs = ["src"]
 
     def generate(self):
         tc = CMakeToolchain(self)
