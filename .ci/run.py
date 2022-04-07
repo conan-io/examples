@@ -66,6 +66,7 @@ def get_examples_to_skip(current_version):
             skip.extend(['./features/integrate_build_system', ])
     if platform.system() == "Darwin":
         skip.extend(['./features/multi_config', ]) # FIXME: it fails randomly, need to investigate
+        skip.extend(['./libraries/folly/basic', ])
 
     return [os.path.normpath(it) for it in skip]
 
