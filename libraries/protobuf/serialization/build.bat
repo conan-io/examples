@@ -8,7 +8,7 @@ if "%CMAKE_GENERATOR%"=="" (
     PUSHD build
 
     conan install ..
-    cmake .. -G "%CMAKE_GENERATOR%"
+    cmake .. -G "%CMAKE_GENERATOR%" -A "%CMAKE_GENERATOR_PLATFORM%"
     cmake --build . --config Release
 
     bin\sensor.exe
