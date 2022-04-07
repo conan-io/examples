@@ -24,7 +24,6 @@ private Closure runTests(String nodeName) {
                                         + "export PATH=\"${pyenvdir}/bin:\$PATH\" && " \
                                         + "pyenv local \$PY36 \$PY38 \$PY39 && " \
                                         + "python -m pip install tox tox-venv requests && " \
-                                        + "python .ci/last_conan_version.py && " \
                                         + "python -m tox --verbose\""
                             sh(script: command)
                         }
