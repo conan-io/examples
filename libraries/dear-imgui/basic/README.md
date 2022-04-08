@@ -12,7 +12,7 @@ mkdir build
 cd build
 conan install .. -s build_type=Release
 conan install .. -s build_type=Debug
-cmake .. -G "Visual Studio 15 2017" -A "x64"
+cmake .. -G "Visual Studio 16 2019" -A "x64"
 cmake --build . --config Release
 cd Release
 dear-imgui-conan
