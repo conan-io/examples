@@ -96,7 +96,6 @@ def get_build_list():
             builds.append(os.path.join(root, build[0]))
             dirs[:] = []
             continue
-    builds.reverse()
     return builds
 
 
@@ -117,6 +116,9 @@ def configure_profile(env):
     subprocess.Popen(["conan", "profile", "new", "default", "--detect"], stderr=subprocess.STDOUT, env=env).communicate()
     if platform.system() == "Linux":
         subprocess.Popen(["conan", "profile", "update", "settings.compiler.libcxx=libstdc++11", "default"],
+                          stderr=subprocess.STDOUT, env=env).communicate()
+    elif platform.system() == "Windows":
+        subprocess.Popen(["conan", "profile", "update", "compiler.version=16", "default"],
                           stderr=subprocess.STDOUT, env=env).communicate()
 
 
