@@ -117,9 +117,6 @@ def configure_profile(env):
     if platform.system() == "Linux":
         subprocess.Popen(["conan", "profile", "update", "settings.compiler.libcxx=libstdc++11", "default"],
                           stderr=subprocess.STDOUT, env=env).communicate()
-    elif platform.system() == "Windows":
-        subprocess.Popen(["conan", "profile", "update", "compiler.version=16", "default"],
-                          stderr=subprocess.STDOUT, env=env).communicate()
 
 
 def print_build(script):
