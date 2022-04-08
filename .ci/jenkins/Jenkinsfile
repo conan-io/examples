@@ -6,6 +6,8 @@ void cancelPrevious() {
     }
 }
 
+boolean isMaster = env.BRANCH_NAME == 'master'
+
 private Closure runTests(String nodeName) {
     def ret = {
         node(nodeName) {
@@ -40,7 +42,7 @@ private Closure runTests(String nodeName) {
                         }
                     }
                     else if (nodeName=='Windows') {
-                        withEnv(['CMAKE_GENERATOR=Visual Studio 15 2017 Win64']) {
+                        withEnv(['CMAKE_GENERATOR=Visual Studio 15 2017', 'CMAKE_GENERATOR_PLATFORM=x64']) {
                             def pythonLocation = "C:/Python36/python.exe"
                             def launchCommand = "tox -vv"
                             bat(script: launchCommand)
@@ -67,6 +69,10 @@ try {
     parallel(paralellRuns)
 }
 catch (e) {
-    echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    if (isMaster) {
+        def subject = "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+        def summary = "${subject} (${env.BUILD_URL})"
+        slackSend (color: '#FF0000', message: summary)
+    }
     throw e
 }
