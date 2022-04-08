@@ -96,7 +96,8 @@ def get_build_list():
             builds.append(os.path.join(root, build[0]))
             dirs[:] = []
             continue
-    return builds.reverse()
+    builds.reverse()
+    return builds
 
 
 def chmod_x(script):
