@@ -118,6 +118,8 @@ def configure_profile(env):
         subprocess.Popen(["conan", "profile", "update", "settings.compiler.libcxx=libstdc++11", "default"],
                           stderr=subprocess.STDOUT, env=env).communicate()
 
+def configure_remotes(env):
+    subprocess.Popen(["conan", "remote", "list"], stderr=subprocess.STDOUT, env=env).communicate()
 
 def print_build(script):
     dir_name = os.path.dirname(script)
@@ -179,6 +181,7 @@ def run_scripts(scripts):
         abspath = os.path.abspath(script)
         env = get_conan_env(script)
         configure_profile(env)
+        configure_remotes(env)
         with chdir(os.path.dirname(script)):
             print_build(script)
             build_script = [sys.executable, abspath] if abspath.endswith(".py") else abspath

@@ -13,7 +13,5 @@ if "%CMAKE_GENERATOR%"=="" (
 
     bin\sensor.exe
 
-    pip install protobuf
     python ../main.py
-    pip uninstall -y protobuf
 )

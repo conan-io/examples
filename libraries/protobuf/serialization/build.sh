@@ -13,6 +13,4 @@ cmake --build .
 
 bin/sensor
 
-pip install protobuf
 python ../main.py
-pip uninstall -y protobuf
