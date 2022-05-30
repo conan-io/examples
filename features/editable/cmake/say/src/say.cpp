@@ -3,9 +3,9 @@
 
 void say(){
     #ifdef NDEBUG
-    std::cout << "say/0.1: Bye World Release!\n";
+    std::cout << "say/0.1: Hello World Release!\n";
     #else
-    std::cout << "say/0.1: Bye World Debug!\n";
+    std::cout << "say/0.1: Hello World Debug!\n";
     #endif
 
     // ARCHITECTURES

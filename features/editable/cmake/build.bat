@@ -13,7 +13,7 @@ conan install . -s build_type=Release
 conan install . -s build_type=Debug
 MKDIR "build"
 PUSHD "build"
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan/conan_toolchain.cmake
+cmake .. -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake
 cmake --build . --config Release
 cmake --build . --config Debug
 POPD
