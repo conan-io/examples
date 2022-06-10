@@ -21,7 +21,7 @@ popd
 mkdir -p hello/build/release
 pushd hello/build/release
 conan install ../..
-cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../generators/conan_toolchain.cmake
 cmake --build .
 ./hello
 popd
