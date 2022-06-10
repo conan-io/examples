@@ -11,15 +11,15 @@ conan editable add say/ say/0.1@user/channel
 
 pushd say
 conan install .
-mkdir -p build/release
-pushd build/release
+mkdir -p build/Release
+pushd build/Release
 cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../generators/conan_toolchain.cmake
 cmake --build .
 popd
 popd
 
-mkdir -p hello/build/release
-pushd hello/build/release
+mkdir -p hello/build/Release
+pushd hello/build/Release
 conan install ../..
 cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../generators/conan_toolchain.cmake
 cmake --build .
@@ -27,13 +27,13 @@ cmake --build .
 popd
 
 # Modification to code (Changes the message 'hello' with 'bye')
-pushd say/build/release
+pushd say/build/Release
 cp ../../src/say2.cpp ../../src/say.cpp
 cmake --build .
 popd
 
 # build consumer again
-pushd hello/build/release
+pushd hello/build/Release
 cmake --build .
 # This should print 'bye' instead of 'hello'
 ./hello
