@@ -24,7 +24,7 @@ MKDIR "hello/build"
 PUSHD "hello/build"
 conan install .. -s build_type=Release
 conan install .. -s build_type=Debug
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+cmake .. -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake
 cmake --build . --config Release
 cmake --build . --config Debug
 "Release/hello.exe"
@@ -49,3 +49,6 @@ POPD
 
 
 conan editable remove say/0.1@user/channel
+
+# Restore the say.cpp file to keep the repo unchanged
+COPY say\src\original_say.cpp say\src\say.cpp /Y
