@@ -49,3 +49,6 @@ POPD
 
 
 conan editable remove say/0.1@user/channel
+
+# Restore the say.cpp file to keep the repo unchanged
+cp say\src\original_say.cpp say\src\say.cpp
