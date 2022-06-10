@@ -51,7 +51,10 @@ def get_examples_to_skip(current_version):
         version.parse("1.29.0"): [
             './libraries/dear-imgui/basic', # solved bug for system packages and components
             ],
-        }
+        version.parse("1.50.0"): [
+            './features/editable/cmake',  # Changed layout, so min 1.50.0 can be used
+        ]
+    }
     for v, examples in required_conan.items():
         if current_version < v:
             skip.extend(examples)
