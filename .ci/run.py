@@ -120,6 +120,9 @@ def configure_profile(env):
     if platform.system() == "Linux":
         subprocess.Popen(["conan", "profile", "update", "settings.compiler.libcxx=libstdc++11", "default"],
                           stderr=subprocess.STDOUT, env=env).communicate()
+        subprocess.Popen(["echo", "'[conf]\ntools.system.package_manager:mode=install\ntools.system.package_manager:sudo=True\n'", " >>", "default"],
+                          stderr=subprocess.STDOUT, env=env).communicate()        
+
 
 def configure_remotes(env):
     subprocess.Popen(["conan", "remote", "list"], stderr=subprocess.STDOUT, env=env).communicate()
