@@ -13,7 +13,7 @@ pushd say
 conan install .
 mkdir -p build/Release
 pushd build/Release
-cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../generators/conan_toolchain.cmake
+cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake
 cmake --build .
 popd
 popd
@@ -21,7 +21,7 @@ popd
 mkdir -p hello/build/Release
 pushd hello/build/Release
 conan install ../..
-cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../generators/conan_toolchain.cmake
+cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake
 cmake --build .
 ./hello
 popd
