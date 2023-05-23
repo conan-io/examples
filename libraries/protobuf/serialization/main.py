@@ -1,10 +1,10 @@
 import os
-from build.sensor_pb2 import Sensor
+from sensor_pb2 import Sensor
 
 if __name__ == "__main__":
     with open("sensor.data", 'rb') as file:
         content = file.read()
-        
+
     print("Retrieve Sensor object from sensor.data")
     sensor = Sensor()
     sensor.ParseFromString(content)
