@@ -7,10 +7,10 @@ rm -rf build
 mkdir build
 pushd build
 
-conan install .. --build=missing
-cmake .. -DCMAKE_BUILD_TYPE=Release
+conan install .. -pr:h=default -pr:b=default --build=missing
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
 cmake --build .
 
-bin/sensor
+./sensor
 
 python ../main.py

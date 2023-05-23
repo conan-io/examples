@@ -1,13 +1,13 @@
 syntax = "proto3";
 
 message Sensor {
-  required string name = 1;
-  required double temperature = 2;
-  required int32 humidity = 3;
+  string name = 1;
+  double temperature = 2;
+  int32 humidity = 3;
 
   enum SwitchLevel {
     CLOSED = 0;
     OPEN = 1;
   }
-  required SwitchLevel door = 4;
+  SwitchLevel door = 4;
 }
