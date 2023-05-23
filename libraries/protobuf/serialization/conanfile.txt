@@ -1,5 +1,6 @@
 [requires]
-protobuf/3.20.0
+protobuf/3.21.9
 
 [generators]
-cmake
+CMakeToolchain
+CMakeDeps

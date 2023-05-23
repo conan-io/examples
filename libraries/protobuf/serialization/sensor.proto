@@ -1,4 +1,5 @@
-syntax = "proto2";
+syntax = "proto3";
+
 message Sensor {
   required string name = 1;
   required double temperature = 2;
@@ -10,4 +11,3 @@ message Sensor {
   }
   required SwitchLevel door = 4;
 }
-
