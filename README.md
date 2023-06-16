@@ -1,8 +1,12 @@
 [![Build Status](https://ci.conan.io/buildStatus/icon?job=Examples/master)](https://ci.conan.io/job/Examples/job/master/)
 
-# Conan Examples
+> :warning: **Important**: These examples are for Conan 1.X. For the latest version of the
+> examples, compatible with Conan 2.X, please refer to the [new
+> repository](https://github.com/conan-io/examples2).
 
-Several Conan examples to complement the documentation and blog.
+# Conan 1.X Examples
+
+Several Conan 1.X examples to complement the documentation and blog.
 
 ## Examples
 
