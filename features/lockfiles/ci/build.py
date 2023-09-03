@@ -74,7 +74,10 @@ def ci_pipeline():
             "--user=user --channel=testing --lockfile-out=../locks/libb_deps_base.lock --base")
 
     # Even if liba gets a new 0.2 version, the lockfile will avoid it
+    # For example, one could run:
     run("conan create liba liba/0.2@user/testing")
+    # ... and we'd still be using liba/0.1 below.
+    
     with chdir("libb"):
         # This will be useful to capture the revision
         run("conan export . libb/0.2@user/testing --lockfile=../locks/libb_deps_base.lock "
