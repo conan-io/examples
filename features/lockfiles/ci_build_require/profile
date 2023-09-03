@@ -1,0 +1,3 @@
+[build_requires]
+tool1/0.1@user/testing
+tool2/0.1@user/testing
