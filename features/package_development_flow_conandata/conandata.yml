@@ -1,0 +1,4 @@
+sources:
+  "1.0":
+    sha256: 07035d79713b5c1499cc4167701dc997da6ea8fcee170aecd08c68dd176c55d3
+    url: https://github.com/conan-io/hello/archive/7160a88d4f4b0a7282b599ad5161e598d7d7993b.zip

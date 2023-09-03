@@ -22,6 +22,13 @@ Example how to use Conan commands to develop a package recipe.
 
 Documentation: https://docs.conan.io/en/latest/developing_packages/package_dev_flow.html
 
+### [Package development flow with conandata.yml](features/package_development_flow_conandata)
+
+Example how to use Conan commands to develop a package recipe which requires a conandata.yml.
+
+Documentation: https://docs.conan.io/en/latest/developing_packages/package_dev_flow.html
+               https://docs.conan.io/en/latest/reference/config_files/conandata.yml.html
+
 ### [Workspace](features/workspace)
 
 Example how to use Conan Workspaces.
